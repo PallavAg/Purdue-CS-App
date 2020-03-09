@@ -9,7 +9,7 @@
     - Uses GCal to parse events
 2) Announcements/Events
     - Oppurtunity Update with date prioritization (Including Companies)
-    - Ping website ever 24(?) hours and if there is a change, send a notification and add it
+    - Ping website every 24(?) hours and if there is a change, send a notification and add it
         - https://www.cs.purdue.edu/corporate/opportunity_update.html
 3) Classes
     - Tableview of all the classes
