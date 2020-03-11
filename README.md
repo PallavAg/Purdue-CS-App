@@ -32,6 +32,8 @@ Science at Purdue. Allows students to be aware of upcoming events, company recru
     - Oppurtunity Update with date prioritization (Including Companies)
     - Ping website ever 24(?) hours and if there is a change, send a notification and add it
         - https://www.cs.purdue.edu/corporate/opportunity_update.html
+    - The tableview is sectioned off by the headers on the oppurtunity update and can be collapsed by the header
+        - The items in the sections are sorted by when they were last added. 
 3) **Resources**
     - Get Key Fob
     - Get CS Merch
