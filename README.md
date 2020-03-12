@@ -75,7 +75,7 @@ Science at Purdue. Allows students to be aware of upcoming events, company recru
    * Tab bar button showing the settings page to subscribe to more orgs
 
 ## Wireframes
-<img src="https://i.imgur.com/K8bIj7I.png" width=600>
+<img src="https://i.imgur.com/1U3d4xt.png" width=600>
 
 ### [BONUS] Digital Wireframes & Mockups
 
