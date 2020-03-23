@@ -80,10 +80,6 @@ Science at Purdue. Allows students to be aware of upcoming events, company recru
 ## Wireframes
 <img src="https://i.imgur.com/1U3d4xt.png" width=600>
 
-### [BONUS] Digital Wireframes & Mockups
-
-### [BONUS] Interactive Prototype
-
 ## Schema 
 
 ### Networking
