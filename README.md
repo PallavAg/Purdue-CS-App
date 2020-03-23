@@ -66,6 +66,7 @@ Science at Purdue. Allows students to be aware of upcoming events, company recru
 
 * Announcements
 * Organizations
+* Resources
 
 **Flow Navigation** (Screen to Screen)
 
@@ -73,6 +74,8 @@ Science at Purdue. Allows students to be aware of upcoming events, company recru
    * Detail view of a webview with information about the announcement
 * **Organizations**
    * Tab bar button showing the settings page to subscribe to more orgs
+* **Resources**
+   * A page with resources
 
 ## Wireframes
 <img src="https://i.imgur.com/1U3d4xt.png" width=600>
