@@ -94,6 +94,46 @@ Science at Purdue. Allows students to be aware of upcoming events, company recru
 - purdue.io API to parse classes
 - WKWebView for displaying websites https://developer.apple.com/documentation/webkit/wkwebview
 
+## Schema 
+### Models
+#### Post
+
+   | Property      | Type     | Description |
+   | ------------- | -------- | ------------|
+   | Title      | String   | Title of opportunity update |
+   | Date      | Date   | The date the update was updated|
+   | Section      | String   | Which section the update corresponds to|
+   | Organization      | String   | unique id for the user post (default field) |
+   | Event Title    | String| The title of the event |
+   | Event Description         | String     | A description of the event |
+   | Event Time       | Time   | The event time in your local time zone, offset by the local time zone offset from UTC|
+   | Event Date | Date   | number of comments that has been posted to an image |
+   | Resource URL   | URL   | The URL of resources |
+   
+### Networking
+#### List of network requests by screen
+   - Announcements
+      - (Read/GET) Get info from Opportunity Update site for sections
+   - Organizations
+      - (Read/GET) Get events from Google Calendar based on existing URLs
+   - Resources
+      - (Read/GET) Get corresponding websites
+
+#### Existing API Endpoints
+##### Oppurtunity Update Website
+- Website:
+
+   HTTP Verb | Endpoint| Description
+   ----------|----------|------------
+    `GET`    | [URL](https://www.cs.purdue.edu/corporate/opportunity_update.html)        | Get all hyperlinks and sections
+
+##### Google Calendar
+- Base URL - [https://developers.google.com/calendar](https://developers.google.com/calendar)
+
+   HTTP Verb | Endpoint| Description
+   ----------|----------|------------
+    `GET`    | /Title | Get event title
+
 ## Extra Notes
 ## Three views
 - Admins - the devs
