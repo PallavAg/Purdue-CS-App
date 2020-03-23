@@ -85,7 +85,6 @@ Science at Purdue. Allows students to be aware of upcoming events, company recru
 ### [BONUS] Interactive Prototype
 
 ## Schema 
-<b>under construction... ⚠️</b>
 
 ### Networking
 <!-- - [Add list of network requests by screen ]
