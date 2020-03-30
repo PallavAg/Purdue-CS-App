@@ -10,7 +10,7 @@
         <!--Resources-->
         <scene sceneID="QKW-P2-Yy4">
             <objects>
-                <viewController id="8bA-2L-3U1" sceneMemberID="viewController">
+                <viewController id="8bA-2L-3U1" customClass="ResourcesViewController" customModule="Purdue_CS_App" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Khn-3T-lxe">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -36,7 +36,7 @@
         <!--Organizations-->
         <scene sceneID="dG5-v2-Fep">
             <objects>
-                <viewController id="FUq-Dw-Bwi" sceneMemberID="viewController">
+                <viewController id="FUq-Dw-Bwi" customClass="OrgsViewController" customModule="Purdue_CS_App" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="za4-Cd-6Zk">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -67,7 +67,7 @@
         <!--Announcements-->
         <scene sceneID="JXf-1X-q9G">
             <objects>
-                <viewController id="jcY-qx-kHH" customClass="ViewController" customModule="Purdue_CS_App" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="jcY-qx-kHH" customClass="AnnouncementsViewController" customModule="Purdue_CS_App" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Gl8-ws-e2o">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
