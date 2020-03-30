@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		76728B5C240DCD480017EE2A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76728B5B240DCD480017EE2A /* AppDelegate.swift */; };
 		76728B5E240DCD480017EE2A /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76728B5D240DCD480017EE2A /* SceneDelegate.swift */; };
-		76728B60240DCD480017EE2A /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76728B5F240DCD480017EE2A /* ViewController.swift */; };
 		76728B63240DCD480017EE2A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 76728B61240DCD480017EE2A /* Main.storyboard */; };
 		76728B65240DCD4A0017EE2A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 76728B64240DCD4A0017EE2A /* Assets.xcassets */; };
 		76728B68240DCD4A0017EE2A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 76728B66240DCD4A0017EE2A /* LaunchScreen.storyboard */; };
@@ -24,7 +23,6 @@
 		76728B58240DCD480017EE2A /* Purdue-CS-App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Purdue-CS-App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		76728B5B240DCD480017EE2A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		76728B5D240DCD480017EE2A /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		76728B5F240DCD480017EE2A /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		76728B62240DCD480017EE2A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		76728B64240DCD4A0017EE2A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		76728B67240DCD4A0017EE2A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -79,7 +77,6 @@
 			children = (
 				76728B5B240DCD480017EE2A /* AppDelegate.swift */,
 				76728B5D240DCD480017EE2A /* SceneDelegate.swift */,
-				76728B5F240DCD480017EE2A /* ViewController.swift */,
 				76728B61240DCD480017EE2A /* Main.storyboard */,
 				76D6445E2432A5DE001B2792 /* ResourcesViewController.swift */,
 				76D6445C2432A5CA001B2792 /* OrgsViewController.swift */,
@@ -97,7 +94,6 @@
 				EA304180F142A2153F91881F /* Pods-Purdue-CS-App.debug.xcconfig */,
 				0A66F716B71037198E2CE375 /* Pods-Purdue-CS-App.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -200,7 +196,6 @@
 			files = (
 				76D6445F2432A5DE001B2792 /* ResourcesViewController.swift in Sources */,
 				76D6445D2432A5CA001B2792 /* OrgsViewController.swift in Sources */,
-				76728B60240DCD480017EE2A /* ViewController.swift in Sources */,
 				76728B5C240DCD480017EE2A /* AppDelegate.swift in Sources */,
 				76728B5E240DCD480017EE2A /* SceneDelegate.swift in Sources */,
 				76D6445B2432A5A9001B2792 /* AnnouncementsViewController.swift in Sources */,
