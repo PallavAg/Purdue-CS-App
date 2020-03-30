@@ -16,9 +16,11 @@
 		76D6445B2432A5A9001B2792 /* AnnouncementsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76D6445A2432A5A9001B2792 /* AnnouncementsViewController.swift */; };
 		76D6445D2432A5CA001B2792 /* OrgsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76D6445C2432A5CA001B2792 /* OrgsViewController.swift */; };
 		76D6445F2432A5DE001B2792 /* ResourcesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76D6445E2432A5DE001B2792 /* ResourcesViewController.swift */; };
+		9158AE26AA49F09780C01EDB /* Pods_Purdue_CS_App.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C7AC5279F2020BDFA2FA41D6 /* Pods_Purdue_CS_App.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0A66F716B71037198E2CE375 /* Pods-Purdue-CS-App.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Purdue-CS-App.release.xcconfig"; path = "Target Support Files/Pods-Purdue-CS-App/Pods-Purdue-CS-App.release.xcconfig"; sourceTree = "<group>"; };
 		76728B58240DCD480017EE2A /* Purdue-CS-App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Purdue-CS-App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		76728B5B240DCD480017EE2A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		76728B5D240DCD480017EE2A /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -30,6 +32,8 @@
 		76D6445A2432A5A9001B2792 /* AnnouncementsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnnouncementsViewController.swift; sourceTree = "<group>"; };
 		76D6445C2432A5CA001B2792 /* OrgsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrgsViewController.swift; sourceTree = "<group>"; };
 		76D6445E2432A5DE001B2792 /* ResourcesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResourcesViewController.swift; sourceTree = "<group>"; };
+		C7AC5279F2020BDFA2FA41D6 /* Pods_Purdue_CS_App.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Purdue_CS_App.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		EA304180F142A2153F91881F /* Pods-Purdue-CS-App.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Purdue-CS-App.debug.xcconfig"; path = "Target Support Files/Pods-Purdue-CS-App/Pods-Purdue-CS-App.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -37,17 +41,28 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9158AE26AA49F09780C01EDB /* Pods_Purdue_CS_App.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		26EFF28AE85232B5F05925C2 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				C7AC5279F2020BDFA2FA41D6 /* Pods_Purdue_CS_App.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		76728B4F240DCD480017EE2A = {
 			isa = PBXGroup;
 			children = (
 				76728B5A240DCD480017EE2A /* Purdue-CS-App */,
 				76728B59240DCD480017EE2A /* Products */,
+				D6F1464146AB4FB3C3D66B98 /* Pods */,
+				26EFF28AE85232B5F05925C2 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -76,6 +91,16 @@
 			path = "Purdue-CS-App";
 			sourceTree = "<group>";
 		};
+		D6F1464146AB4FB3C3D66B98 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				EA304180F142A2153F91881F /* Pods-Purdue-CS-App.debug.xcconfig */,
+				0A66F716B71037198E2CE375 /* Pods-Purdue-CS-App.release.xcconfig */,
+			);
+			name = Pods;
+			path = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -83,6 +108,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 76728B6C240DCD4A0017EE2A /* Build configuration list for PBXNativeTarget "Purdue-CS-App" */;
 			buildPhases = (
+				78CD64B1B84675EC26F3A1B9 /* [CP] Check Pods Manifest.lock */,
 				76728B54240DCD480017EE2A /* Sources */,
 				76728B55240DCD480017EE2A /* Frameworks */,
 				76728B56240DCD480017EE2A /* Resources */,
@@ -141,6 +167,31 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		78CD64B1B84675EC26F3A1B9 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Purdue-CS-App-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		76728B54240DCD480017EE2A /* Sources */ = {
@@ -294,6 +345,7 @@
 		};
 		76728B6D240DCD4A0017EE2A /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = EA304180F142A2153F91881F /* Pods-Purdue-CS-App.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -311,6 +363,7 @@
 		};
 		76728B6E240DCD4A0017EE2A /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 0A66F716B71037198E2CE375 /* Pods-Purdue-CS-App.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
