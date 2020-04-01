@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SafariServices
 
 struct cellData {
     var opened = Bool()
@@ -15,7 +16,7 @@ struct cellData {
     var link = [String]()
 }
 
-class AnnouncementsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class AnnouncementsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, SFSafariViewControllerDelegate {
     
     @IBOutlet weak var tableView: UITableView!
     var tableViewData = [cellData]()
@@ -96,28 +97,22 @@ class AnnouncementsViewController: UIViewController, UITableViewDelegate, UITabl
                 tableView.reloadSections(sections, with: .none)
             }
         } else {
-            //Subcell tapped. Open webview here.
+            //Subcell tapped. Web View is opened here.
+            let selectedItemLink = tableViewData[indexPath.section].link[indexPath.row - 1]
+
+            if let url = URL(string: selectedItemLink) {
+                tableView.deselectRow(at: indexPath, animated: true)
+                let vc = SFSafariViewController(url: url)
+                vc.delegate = self
+                present(vc, animated: true)
+            }
         }
         
     }
     
-    //Pass information to detail web view
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        
-        let cell = sender as! UITableViewCell
-        let indexPath = tableView.indexPath(for: cell)!
-        
-        let selectedItemLink = tableViewData[indexPath.section].link[indexPath.row - 1]
-        
-        //Setup Segue to pass data
-        let detailScreen = segue.destination as! WebDetailViewController
-        
-        //Pass link to next screen
-        detailScreen.link = selectedItemLink
-        
-        tableView.deselectRow(at: indexPath, animated: true)
-        
-        
+    //For dismissing safari view
+    func safariViewControllerDidFinish(_ controller: SFSafariViewController) {
+        dismiss(animated: true)
     }
     
 }
