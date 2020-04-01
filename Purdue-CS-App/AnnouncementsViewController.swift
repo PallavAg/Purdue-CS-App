@@ -32,11 +32,12 @@ class AnnouncementsViewController: UIViewController, UITableViewDelegate, UITabl
         
     }
     
-    //Number of sections
+    //Number of sections (Oppurtunity Update Categories)
     func numberOfSections(in tableView: UITableView) -> Int {
         return tableViewData.count
     }
 
+    //Setup each section with either just title count (1) or subcells count too
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if tableViewData[section].opened == true {
             
@@ -48,6 +49,7 @@ class AnnouncementsViewController: UIViewController, UITableViewDelegate, UITabl
         }
     }
     
+    //Setup each table row's text and properties
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let dataIndex = indexPath.row - 1
         if indexPath.row == 0 {
@@ -57,10 +59,17 @@ class AnnouncementsViewController: UIViewController, UITableViewDelegate, UITabl
             //Title is the section index title
             cell.textLabel?.text = tableViewData[indexPath.section].title
             
+            //Setup Change in collapsible icon
+            if tableViewData[indexPath.section].opened == true {
+                cell.detailTextLabel?.text = "-"
+            } else {
+                cell.detailTextLabel?.text = "+"
+            }
+            
             return cell
         } else {
-            //Use different cell identifier here for subsections. Cell is subsection.
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: "cell") else {return UITableViewCell()}
+            //Using different cell identifier here for subsections. Cell is subsection.
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: "SubCell") else {return UITableViewCell()}
             
             //Text is the section's sectionData at the row
             cell.textLabel?.text = tableViewData[indexPath.section].sectionData[dataIndex]
@@ -69,6 +78,7 @@ class AnnouncementsViewController: UIViewController, UITableViewDelegate, UITabl
         }
     }
     
+    //Process expanding and collapsing cells on tap
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         if indexPath.row == 0 {
