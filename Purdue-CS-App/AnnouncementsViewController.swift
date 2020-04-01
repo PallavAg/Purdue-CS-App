@@ -11,9 +11,9 @@ import SafariServices
 
 struct cellData {
     var opened = Bool()
-    var title = String()
-    var sectionData = [String]()
-    var link = [String]()
+    var title = String() //Title of Section
+    var sectionData = [String]() //Titles of Updates in subcells
+    var link = [String]() //Link to update
 }
 
 class AnnouncementsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, SFSafariViewControllerDelegate {
@@ -23,15 +23,15 @@ class AnnouncementsViewController: UIViewController, UITableViewDelegate, UITabl
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         tableView.delegate = self
         tableView.dataSource = self
         
         //MARK: Populate the data here:
         //Each index is the section index with sectionData containing the sub elements gotten with 
         tableViewData = [cellData(opened: false, title: "Career", sectionData: ["Update 1", "Update 2", "Update 3"], link: ["https://apple.com", "https://google.com", "https://apple.com"]),
-                         cellData(opened: false, title: "Employment", sectionData: ["Update 1", "Update 2", "Update 3"], link: ["https://apple.com", "https://apple.com", "https://apple.com"]),
-                         cellData(opened: false, title: "Announcement", sectionData: ["Update 1", "Update 2", "Update 3"], link: ["https://apple.com", "https://apple.com", "https://apple.com"])]
+                         cellData(opened: false, title: "Employment", sectionData: ["Update 4", "Update 5", "Update 6"], link: ["https://apple.com", "https://apple.com", "https://apple.com"]),
+                         cellData(opened: false, title: "Announcement", sectionData: ["Update 7", "Update 8", "Update 9"], link: ["https://apple.com", "https://apple.com", "https://apple.com"]), cellData(opened: false, title: "Announcement", sectionData: ["Update 7", "Update 8", "Update 9"], link: ["https://apple.com", "https://apple.com", "https://apple.com"])]
         
     }
     
@@ -39,7 +39,7 @@ class AnnouncementsViewController: UIViewController, UITableViewDelegate, UITabl
     func numberOfSections(in tableView: UITableView) -> Int {
         return tableViewData.count
     }
-
+    
     //Setup each section with either just title count (1) or subcells count too
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if tableViewData[section].opened == true {
@@ -99,7 +99,7 @@ class AnnouncementsViewController: UIViewController, UITableViewDelegate, UITabl
         } else {
             //Subcell tapped. Web View is opened here.
             let selectedItemLink = tableViewData[indexPath.section].link[indexPath.row - 1]
-
+            
             if let url = URL(string: selectedItemLink) {
                 tableView.deselectRow(at: indexPath, animated: true)
                 let vc = SFSafariViewController(url: url)
