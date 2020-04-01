@@ -15,9 +15,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="OpN-fR-RSU">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="OpN-fR-RSU">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="cell" textLabel="ZQK-Ex-DGR" detailTextLabel="EL8-mR-41y" style="IBUITableViewCellStyleValue1" id="14W-9M-RWD" userLabel="TitleCell">
@@ -61,11 +60,20 @@
                                                 </label>
                                             </subviews>
                                         </tableViewCellContentView>
+                                        <connections>
+                                            <segue destination="fbo-ms-HTm" kind="presentation" id="dln-xU-vt5"/>
+                                        </connections>
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstItem="OpN-fR-RSU" firstAttribute="top" secondItem="Gl8-ws-e2o" secondAttribute="top" id="ZcO-fQ-47U"/>
+                            <constraint firstAttribute="bottom" secondItem="OpN-fR-RSU" secondAttribute="bottom" id="fzv-jc-gHA"/>
+                            <constraint firstItem="OpN-fR-RSU" firstAttribute="trailing" secondItem="zfN-ij-hKA" secondAttribute="trailing" id="kjf-Fi-S9o"/>
+                            <constraint firstItem="OpN-fR-RSU" firstAttribute="leading" secondItem="zfN-ij-hKA" secondAttribute="leading" id="nrl-eK-aw0"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="zfN-ij-hKA"/>
                     </view>
                     <navigationItem key="navigationItem" title="Announcements" largeTitleDisplayMode="always" id="FgS-t2-fmK"/>
@@ -77,17 +85,16 @@
             </objects>
             <point key="canvasLocation" x="431.8840579710145" y="395.75892857142856"/>
         </scene>
-        <!--View Controller-->
+        <!--Web Detail View Controller-->
         <scene sceneID="VeL-tE-Sdh">
             <objects>
-                <viewController id="fbo-ms-HTm" sceneMemberID="viewController">
+                <viewController id="fbo-ms-HTm" customClass="WebDetailViewController" customModule="Purdue_CS_App" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="UqK-Nr-w9r">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <wkWebView contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gcd-M2-p03">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <wkWebView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gcd-M2-p03">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
                                 <color key="backgroundColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <wkWebViewConfiguration key="configuration">
                                     <audiovisualMediaTypes key="mediaTypesRequiringUserActionForPlayback" none="YES"/>
@@ -96,12 +103,21 @@
                             </wkWebView>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstItem="gcd-M2-p03" firstAttribute="leading" secondItem="2hi-Mj-P1W" secondAttribute="leading" id="2Ls-af-sGl"/>
+                            <constraint firstItem="gcd-M2-p03" firstAttribute="trailing" secondItem="2hi-Mj-P1W" secondAttribute="trailing" id="60t-cG-E9x"/>
+                            <constraint firstAttribute="bottom" secondItem="gcd-M2-p03" secondAttribute="bottom" id="70p-yt-rr0"/>
+                            <constraint firstItem="gcd-M2-p03" firstAttribute="top" secondItem="2hi-Mj-P1W" secondAttribute="top" id="fhc-7Z-dMx"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="2hi-Mj-P1W"/>
                     </view>
+                    <connections>
+                        <outlet property="webView" destination="gcd-M2-p03" id="7Le-ZF-Sj1"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4T5-oy-soo" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="432" y="1120"/>
+            <point key="canvasLocation" x="431.8840579710145" y="1119.6428571428571"/>
         </scene>
         <!--Announcements-->
         <scene sceneID="Trp-XQ-GZc">

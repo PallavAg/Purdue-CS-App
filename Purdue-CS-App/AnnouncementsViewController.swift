@@ -12,6 +12,7 @@ struct cellData {
     var opened = Bool()
     var title = String()
     var sectionData = [String]()
+    var link = [String]()
 }
 
 class AnnouncementsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
@@ -25,10 +26,11 @@ class AnnouncementsViewController: UIViewController, UITableViewDelegate, UITabl
         tableView.delegate = self
         tableView.dataSource = self
         
+        //MARK: Populate the data here:
         //Each index is the section index with sectionData containing the sub elements gotten with 
-        tableViewData = [cellData(opened: false, title: "Career", sectionData: ["Update 1", "Update 2", "Update 3"]),
-                         cellData(opened: false, title: "Employment", sectionData: ["Update 1", "Update 2", "Update 3"]),
-                         cellData(opened: false, title: "Announcement", sectionData: ["Update 1", "Update 2", "Update 3"])]
+        tableViewData = [cellData(opened: false, title: "Career", sectionData: ["Update 1", "Update 2", "Update 3"], link: ["https://apple.com", "https://google.com", "https://apple.com"]),
+                         cellData(opened: false, title: "Employment", sectionData: ["Update 1", "Update 2", "Update 3"], link: ["https://apple.com", "https://apple.com", "https://apple.com"]),
+                         cellData(opened: false, title: "Announcement", sectionData: ["Update 1", "Update 2", "Update 3"], link: ["https://apple.com", "https://apple.com", "https://apple.com"])]
         
     }
     
@@ -96,6 +98,25 @@ class AnnouncementsViewController: UIViewController, UITableViewDelegate, UITabl
         } else {
             //Subcell tapped. Open webview here.
         }
+        
+    }
+    
+    //Pass information to detail web view
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
+        let cell = sender as! UITableViewCell
+        let indexPath = tableView.indexPath(for: cell)!
+        
+        let selectedItemLink = tableViewData[indexPath.section].link[indexPath.row - 1]
+        
+        //Setup Segue to pass data
+        let detailScreen = segue.destination as! WebDetailViewController
+        
+        //Pass link to next screen
+        detailScreen.link = selectedItemLink
+        
+        tableView.deselectRow(at: indexPath, animated: true)
+        
         
     }
     

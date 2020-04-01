@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		765A127A2434383800BB7BBC /* WebDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 765A12792434383800BB7BBC /* WebDetailViewController.swift */; };
 		765FFBE32432B0DB005FB5E4 /* Announcements.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 765FFBE22432B0DB005FB5E4 /* Announcements.storyboard */; };
 		765FFBE62432B116005FB5E4 /* Resources.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 765FFBE42432B116005FB5E4 /* Resources.storyboard */; };
 		76728B5C240DCD480017EE2A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76728B5B240DCD480017EE2A /* AppDelegate.swift */; };
@@ -22,6 +23,7 @@
 
 /* Begin PBXFileReference section */
 		0A66F716B71037198E2CE375 /* Pods-Purdue-CS-App.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Purdue-CS-App.release.xcconfig"; path = "Target Support Files/Pods-Purdue-CS-App/Pods-Purdue-CS-App.release.xcconfig"; sourceTree = "<group>"; };
+		765A12792434383800BB7BBC /* WebDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebDetailViewController.swift; sourceTree = "<group>"; };
 		765FFBE22432B0DB005FB5E4 /* Announcements.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Announcements.storyboard; sourceTree = "<group>"; };
 		765FFBE52432B116005FB5E4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Resources.storyboard; sourceTree = "<group>"; };
 		76728B58240DCD480017EE2A /* Purdue-CS-App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Purdue-CS-App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -87,6 +89,7 @@
 				76D6445E2432A5DE001B2792 /* ResourcesViewController.swift */,
 				76D6445C2432A5CA001B2792 /* OrgsViewController.swift */,
 				76D6445A2432A5A9001B2792 /* AnnouncementsViewController.swift */,
+				765A12792434383800BB7BBC /* WebDetailViewController.swift */,
 				76728B64240DCD4A0017EE2A /* Assets.xcassets */,
 				76728B66240DCD4A0017EE2A /* LaunchScreen.storyboard */,
 				76728B69240DCD4A0017EE2A /* Info.plist */,
@@ -204,6 +207,7 @@
 			files = (
 				76D6445F2432A5DE001B2792 /* ResourcesViewController.swift in Sources */,
 				76D6445D2432A5CA001B2792 /* OrgsViewController.swift in Sources */,
+				765A127A2434383800BB7BBC /* WebDetailViewController.swift in Sources */,
 				76728B5C240DCD480017EE2A /* AppDelegate.swift in Sources */,
 				76728B5E240DCD480017EE2A /* SceneDelegate.swift in Sources */,
 				76D6445B2432A5A9001B2792 /* AnnouncementsViewController.swift in Sources */,
