@@ -29,72 +29,68 @@ class AnnouncementsViewController: UIViewController, UITableViewDelegate, UITabl
         
         let opportunity_url = URL(string: "https://www.cs.purdue.edu/corporate/opportunity_update.html")
         let html = try! String(contentsOf: opportunity_url!, encoding: .utf8)
-           
+        
         // arrays to be used within tableViewData
         
         var opport_sections = [String: [String: String]]()
-    
-           do {
-               let doc: Document = try SwiftSoup.parseBodyFragment(html)
-               
-               // my body
-               let body = doc.body()
-               
-               // a with href
-               let links: Elements? = try body?.select("a[href]") // a with href
-               
-               
-               // Need to parse links with the following prefix
-               // careers/
-               // employment/
-               // announcements/
-               // events/
-               // internships/
-               // scholarships/
-               
+        
+        do {
+            let doc: Document = try SwiftSoup.parseBodyFragment(html)
+            
+            // my body
+            let body = doc.body()
+            
+            // a with href
+            let links: Elements? = try body?.select("a[href]") // a with href
+            
+            // Need to parse links with the following prefix
+            // careers/
+            // employment/
+            // announcements/
+            // events/
+            // internships/
+            // scholarships/
+            
             let base_url: String = "https://www.cs.purdue.edu/corporate/"
-               for link in links! {
-                   let linkHref: String = try! link.attr("href")
-                   let prefix = linkHref.components(separatedBy: "/")[0]
-                   let linkText: String = try! link.text()
-                   switch prefix {
-                   case "careers":
+            for link in links! {
+                let linkHref: String = try! link.attr("href")
+                let prefix = linkHref.components(separatedBy: "/")[0]
+                let linkText: String = try! link.text()
+                switch prefix {
+                case "careers":
                     var dict = opport_sections["Careers"]
                     dict?[linkText] = base_url + linkHref
                     opport_sections.updateValue(dict ?? [:], forKey: "Careers")
-        
-                   case "employment":
-                   var dict = opport_sections["Employment"]
-                   dict?[linkText] = base_url + linkHref
+                case "employment":
+                    var dict = opport_sections["Employment"]
+                    dict?[linkText] = base_url + linkHref
                     opport_sections.updateValue(dict ?? [:], forKey: "Employment")
-                   case "announcements":
+                case "announcements":
                     var dict = opport_sections["Announcements"]
                     dict?[linkText] = base_url + linkHref
-                     opport_sections.updateValue(dict ?? [:], forKey: "Announcements")
-                    
-                   case "events":
-                   var dict = opport_sections["Events"]
+                    opport_sections.updateValue(dict ?? [:], forKey: "Announcements")
+                case "events":
+                    var dict = opport_sections["Events"]
                     dict?[linkText] = base_url + linkHref
-                     opport_sections.updateValue(dict ?? [:], forKey: "Events")
-                   case "internships":
-                   var dict = opport_sections["Internships"]
+                    opport_sections.updateValue(dict ?? [:], forKey: "Events")
+                case "internships":
+                    var dict = opport_sections["Internships"]
                     dict?[linkText] = base_url + linkHref
-                     opport_sections.updateValue(dict ?? [:], forKey: "Internships")
-                   case "scholarships":
+                    opport_sections.updateValue(dict ?? [:], forKey: "Internships")
+                case "scholarships":
                     var dict = opport_sections["Scholarships"]
                     dict?[linkText] = base_url + linkHref
-                     opport_sections.updateValue(dict ?? [:], forKey: "Scholarships")
-                   default:
-                       print("")
-                   }
-               }
+                    opport_sections.updateValue(dict ?? [:], forKey: "Scholarships")
+                default: continue
+                }
+            }
+            
+        } catch Exception.Error(let type, let message) {
+            print("Type: \(type) \n\nMessage: \(message)")
+        } catch {
+            print("error")
+        }
         
-           } catch Exception.Error(let type, let message) {
-               print("Type: \(type) \n\nMessage: \(message)")
-           } catch {
-               print("error")
-           }
-
         
         //MARK: Populate the data here:
         //Each index is the section index with sectionData containing the sub elements gotten with
@@ -102,11 +98,24 @@ class AnnouncementsViewController: UIViewController, UITableViewDelegate, UITabl
         
         for (title, dict) in opport_sections {
             let titles = Array(dict.keys)
-            let links = Array(dict.values)
+            var links = Array(dict.values)
+            
+            //Fix blank cells
+            for index in 0..<links.count {
+                links[index] = links[index].replacingOccurrences(of: " ", with: "%20")
+                if links[index].contains("index.html") {
+                    //Remove
+                }
+            }
+            
             let entry = cellData(opened: false, title: title, sectionData: titles, link: links)
             tableViewData.append(entry)
         }
-    
+        
+        //Sort by Title
+        tableViewData.sort {
+            $0.title < $1.title
+        }
         
     }
     
