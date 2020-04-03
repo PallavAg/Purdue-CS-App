@@ -36,7 +36,6 @@ class AnnouncementsViewController: UIViewController, UITableViewDelegate, UITabl
     
            do {
                let doc: Document = try SwiftSoup.parseBodyFragment(html)
-               let headerTitle = try doc.title()
                
                // my body
                let body = doc.body()
@@ -45,7 +44,7 @@ class AnnouncementsViewController: UIViewController, UITableViewDelegate, UITabl
                let links: Elements? = try body?.select("a[href]") // a with href
                
                
-               // need to parse links with the following prefix
+               // Need to parse links with the following prefix
                // careers/
                // employment/
                // announcements/
@@ -91,7 +90,7 @@ class AnnouncementsViewController: UIViewController, UITableViewDelegate, UITabl
                }
         
            } catch Exception.Error(let type, let message) {
-               print("Message: \(message)")
+               print("Type: \(type) \n\nMessage: \(message)")
            } catch {
                print("error")
            }
@@ -102,10 +101,9 @@ class AnnouncementsViewController: UIViewController, UITableViewDelegate, UITabl
         
         
         for (title, dict) in opport_sections {
-            
-            var titles = Array(dict.keys)
-            var links = Array(dict.values)
-            var entry = cellData(opened: false, title: title, sectionData: titles, link: links)
+            let titles = Array(dict.keys)
+            let links = Array(dict.values)
+            let entry = cellData(opened: false, title: title, sectionData: titles, link: links)
             tableViewData.append(entry)
         }
     
@@ -179,7 +177,11 @@ class AnnouncementsViewController: UIViewController, UITableViewDelegate, UITabl
             
             if let url = URL(string: selectedItemLink) {
                 tableView.deselectRow(at: indexPath, animated: true)
-                let vc = SFSafariViewController(url: url)
+                
+                let config = SFSafariViewController.Configuration()
+                config.entersReaderIfAvailable = true
+                
+                let vc = SFSafariViewController(url: url, configuration: config)
                 vc.delegate = self
                 present(vc, animated: true)
             }
