@@ -6,5 +6,6 @@ target 'Purdue-CS-App' do
   use_frameworks!
 
   # Pods for Purdue-CS-App
+  pod 'SwiftSoup'
 
 end
