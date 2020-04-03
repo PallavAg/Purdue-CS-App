@@ -5,9 +5,9 @@
 //  Created by Pallav Agarwal on 3/30/20.
 //  Copyright © 2020 Pallav Agarwal. All rights reserved.
 //
-
 import UIKit
 import SafariServices
+import SwiftSoup
 
 struct cellData {
     var opened = Bool()
@@ -27,11 +27,88 @@ class AnnouncementsViewController: UIViewController, UITableViewDelegate, UITabl
         tableView.delegate = self
         tableView.dataSource = self
         
+        let opportunity_url = URL(string: "https://www.cs.purdue.edu/corporate/opportunity_update.html")
+        let html = try! String(contentsOf: opportunity_url!, encoding: .utf8)
+           
+        // arrays to be used within tableViewData
+        
+        var opport_sections = [String: [String: String]]()
+    
+           do {
+               let doc: Document = try SwiftSoup.parseBodyFragment(html)
+               let headerTitle = try doc.title()
+               
+               // my body
+               let body = doc.body()
+               
+               // a with href
+               let links: Elements? = try body?.select("a[href]") // a with href
+               
+               
+               // need to parse links with the following prefix
+               // careers/
+               // employment/
+               // announcements/
+               // events/
+               // internships/
+               // scholarships/
+               
+            let base_url: String = "https://www.cs.purdue.edu/corporate/"
+               for link in links! {
+                   let linkHref: String = try! link.attr("href")
+                   let prefix = linkHref.components(separatedBy: "/")[0]
+                   let linkText: String = try! link.text()
+                   switch prefix {
+                   case "careers":
+                    var dict = opport_sections["Careers"]
+                    dict?[linkText] = base_url + linkHref
+                    opport_sections.updateValue(dict ?? [:], forKey: "Careers")
+        
+                   case "employment":
+                   var dict = opport_sections["Employment"]
+                   dict?[linkText] = base_url + linkHref
+                    opport_sections.updateValue(dict ?? [:], forKey: "Employment")
+                   case "announcements":
+                    var dict = opport_sections["Announcements"]
+                    dict?[linkText] = base_url + linkHref
+                     opport_sections.updateValue(dict ?? [:], forKey: "Announcements")
+                    
+                   case "events":
+                   var dict = opport_sections["Events"]
+                    dict?[linkText] = base_url + linkHref
+                     opport_sections.updateValue(dict ?? [:], forKey: "Events")
+                   case "internships":
+                   var dict = opport_sections["Internships"]
+                    dict?[linkText] = base_url + linkHref
+                     opport_sections.updateValue(dict ?? [:], forKey: "Internships")
+                   case "scholarships":
+                    var dict = opport_sections["Scholarships"]
+                    dict?[linkText] = base_url + linkHref
+                     opport_sections.updateValue(dict ?? [:], forKey: "Scholarships")
+                   default:
+                       print("")
+                   }
+               }
+        
+           } catch Exception.Error(let type, let message) {
+               print("Message: \(message)")
+           } catch {
+               print("error")
+           }
+
+        
         //MARK: Populate the data here:
-        //Each index is the section index with sectionData containing the sub elements gotten with 
-        tableViewData = [cellData(opened: false, title: "Career", sectionData: ["Update 1", "Update 2", "Update 3"], link: ["https://apple.com", "https://google.com", "https://apple.com"]),
-                         cellData(opened: false, title: "Employment", sectionData: ["Update 4", "Update 5", "Update 6"], link: ["https://apple.com", "https://apple.com", "https://apple.com"]),
-                         cellData(opened: false, title: "Announcement", sectionData: ["Update 7", "Update 8", "Update 9"], link: ["https://apple.com", "https://apple.com", "https://apple.com"]), cellData(opened: false, title: "Announcement", sectionData: ["Update 7", "Update 8", "Update 9"], link: ["https://apple.com", "https://apple.com", "https://apple.com"])]
+        //Each index is the section index with sectionData containing the sub elements gotten with
+        
+        
+        for (title, dict) in opport_sections {
+            
+            var titles = Array(dict.keys)
+            var links = Array(dict.values)
+            var entry = cellData(opened: false, title: title, sectionData: titles, link: links)
+            tableViewData.append(entry)
+        }
+    
         
     }
     

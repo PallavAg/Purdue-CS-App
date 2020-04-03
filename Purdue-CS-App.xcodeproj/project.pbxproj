@@ -114,6 +114,7 @@
 				76728B54240DCD480017EE2A /* Sources */,
 				76728B55240DCD480017EE2A /* Frameworks */,
 				76728B56240DCD480017EE2A /* Resources */,
+				57B40A160BCEC59B7BB8B406 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -173,6 +174,23 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		57B40A160BCEC59B7BB8B406 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Purdue-CS-App/Pods-Purdue-CS-App-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Purdue-CS-App/Pods-Purdue-CS-App-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Purdue-CS-App/Pods-Purdue-CS-App-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		78CD64B1B84675EC26F3A1B9 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
