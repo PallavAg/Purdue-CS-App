@@ -1,6 +1,0 @@
-framework module Pods_Purdue_CS_App {
-  umbrella header "Pods-Purdue-CS-App-umbrella.h"
-
-  export *
-  module * { export * }
-}
