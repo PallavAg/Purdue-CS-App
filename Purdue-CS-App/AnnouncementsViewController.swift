@@ -32,7 +32,7 @@ class AnnouncementsViewController: UIViewController, UITableViewDelegate, UITabl
         
         // arrays to be used within tableViewData
         
-        var opport_sections = [String: [String: String]]()
+        var opport_sections = [String: [String: String]]() //[Section Title: [Subtitle : Link]]
         
         do {
             let doc: Document = try SwiftSoup.parseBodyFragment(html)
@@ -97,15 +97,17 @@ class AnnouncementsViewController: UIViewController, UITableViewDelegate, UITabl
         
         
         for (title, dict) in opport_sections {
-            let titles = Array(dict.keys)
+            var titles = Array(dict.keys)
             var links = Array(dict.values)
             
-            //Fix blank cells
-            for index in 0..<links.count {
+            //Fix blank cells and remove index.html links
+            for (index, _) in links.enumerated().reversed() {
                 links[index] = links[index].replacingOccurrences(of: " ", with: "%20")
                 if links[index].contains("index.html") {
-                    //Remove
+                    links.remove(at: index)
+                    titles.remove(at: index)
                 }
+                
             }
             
             let entry = cellData(opened: false, title: title, sectionData: titles, link: links)
