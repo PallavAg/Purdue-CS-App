@@ -140,3 +140,9 @@ Science at Purdue. Allows students to be aware of upcoming events, company recru
     - Allows for special posts for people such as Patricia Morgan who could make notifications for important CS announcements
 - Student 
     - Can subscribe to certain notifications from orgs (think Robinhood watchlist)
+
+## Video Walkthrough
+### Milestone 1
+Milestone 1 implemented user story:
+
+<img src='http://g.recordit.co/KJuLa5O1Yd.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
