@@ -42,7 +42,7 @@
                                                 </label>
                                             </subviews>
                                         </tableViewCellContentView>
-                                        <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <color key="backgroundColor" systemColor="systemGrayColor" red="0.5568627451" green="0.5568627451" blue="0.57647058819999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="blue" accessoryType="disclosureIndicator" indentationLevel="2" indentationWidth="10" reuseIdentifier="SubCell" textLabel="ddG-qG-Pzy" style="IBUITableViewCellStyleDefault" id="fyA-mZ-Ot3" userLabel="UpdatesSubCell">
                                         <rect key="frame" x="0.0" y="71.5" width="414" height="43.5"/>

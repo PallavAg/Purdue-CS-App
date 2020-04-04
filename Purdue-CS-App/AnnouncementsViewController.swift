@@ -31,7 +31,6 @@ class AnnouncementsViewController: UIViewController, UITableViewDelegate, UITabl
         let html = try! String(contentsOf: opportunity_url!, encoding: .utf8)
         
         // arrays to be used within tableViewData
-        
         var opport_sections = [String: [String: String]]() //[Section Title: [Subtitle : Link]]
         
         do {
@@ -52,37 +51,27 @@ class AnnouncementsViewController: UIViewController, UITableViewDelegate, UITabl
             // scholarships/
             
             let base_url: String = "https://www.cs.purdue.edu/corporate/"
+            
+            let sectionTitles = ["Careers", "Employment", "Announcements", "Events", "Internships", "Scholarships"]
+            
+            for title in sectionTitles {
+                opport_sections.updateValue([:], forKey: title)
+            }
+            
             for link in links! {
                 let linkHref: String = try! link.attr("href")
                 let prefix = linkHref.components(separatedBy: "/")[0]
                 let linkText: String = try! link.text()
-                switch prefix {
-                case "careers":
-                    var dict = opport_sections["Careers"]
-                    dict?[linkText] = base_url + linkHref
-                    opport_sections.updateValue(dict ?? [:], forKey: "Careers")
-                case "employment":
-                    var dict = opport_sections["Employment"]
-                    dict?[linkText] = base_url + linkHref
-                    opport_sections.updateValue(dict ?? [:], forKey: "Employment")
-                case "announcements":
-                    var dict = opport_sections["Announcements"]
-                    dict?[linkText] = base_url + linkHref
-                    opport_sections.updateValue(dict ?? [:], forKey: "Announcements")
-                case "events":
-                    var dict = opport_sections["Events"]
-                    dict?[linkText] = base_url + linkHref
-                    opport_sections.updateValue(dict ?? [:], forKey: "Events")
-                case "internships":
-                    var dict = opport_sections["Internships"]
-                    dict?[linkText] = base_url + linkHref
-                    opport_sections.updateValue(dict ?? [:], forKey: "Internships")
-                case "scholarships":
-                    var dict = opport_sections["Scholarships"]
-                    dict?[linkText] = base_url + linkHref
-                    opport_sections.updateValue(dict ?? [:], forKey: "Scholarships")
-                default: continue
+                
+                for title in sectionTitles {
+                    if prefix == title.lowercased() {
+                        var dict = opport_sections[title]
+                        dict?[linkText] = base_url + linkHref
+                        opport_sections.updateValue(dict ?? [:], forKey: title)
+                        break;
+                    }
                 }
+                
             }
             
         } catch Exception.Error(let type, let message) {
@@ -91,11 +80,7 @@ class AnnouncementsViewController: UIViewController, UITableViewDelegate, UITabl
             print("error")
         }
         
-        
-        //MARK: Populate the data here:
-        //Each index is the section index with sectionData containing the sub elements gotten with
-        
-        
+        //Populate tableViewData
         for (title, dict) in opport_sections {
             var titles = Array(dict.keys)
             var links = Array(dict.values)
