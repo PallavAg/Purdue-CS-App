@@ -1,16 +1,20 @@
 PODS:
+  - FeedKit (9.1.1)
   - SwiftSoup (2.3.1)
 
 DEPENDENCIES:
+  - FeedKit
   - SwiftSoup
 
 SPEC REPOS:
   trunk:
+    - FeedKit
     - SwiftSoup
 
 SPEC CHECKSUMS:
+  FeedKit: d14591dcacfea79648306c1c2b7e419d7072812a
   SwiftSoup: e5af192bc99be8398d5f93e15ff6a3c80ba81de1
 
-PODFILE CHECKSUM: f9bef759d3355477c457193850ae633c94e748d8
+PODFILE CHECKSUM: 5fb301f3d1900b64dcca3656be22ed1c7f8688da
 
-COCOAPODS: 1.8.4
+COCOAPODS: 1.9.1
