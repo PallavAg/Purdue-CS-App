@@ -24,17 +24,18 @@ Science at Purdue. Allows students to be aware of upcoming events, company recru
 ### 1. User Stories (Required and Optional)
 
 **Required Must-have Stories**
-1) **Organization + CS events**
-    - Subscribing to organizations
-    - Viewing org events
-    - Uses GCal to parse events
-2) **Announcements/Events**
+- [x] 1) **Announcements/Events**
     - Oppurtunity Update with date prioritization (Including Companies)
-    - Ping website ever 24(?) hours and if there is a change, send a notification and add it
+    - Ping website on load and add update to table
         - https://www.cs.purdue.edu/corporate/opportunity_update.html
     - The tableview is sectioned off by the headers on the oppurtunity update and can be collapsed by the header
         - The items in the sections are sorted by when they were last added. 
-3) **Resources**
+- [ ] 2) **Organization + CS events**
+    - Subscribing to organizations
+    - Viewing org events
+    - Uses GCal to parse events
+
+- [ ] 3) **Resources**
     - Get Key Fob
     - Get CS Merch
     - Key Resources
