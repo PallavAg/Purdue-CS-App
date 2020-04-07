@@ -34,14 +34,27 @@ struct CalendarEvents: Decodable {
     
 }
 
-class OrgsViewController: UIViewController {
+extension Date {
+    func toString(dateFormat format: String) -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = format
+        return dateFormatter.string(from: self)
+    }
+}
+
+class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+    
+    @IBOutlet weak var tableView: UITableView!
     
     var calendars = ["Purdue CS" : "https://www.googleapis.com/calendar/v3/calendars/sodicmhprbq87022es0t74blk8@group.calendar.google.com/events?maxResults=15&key=AIzaSyCP_s1sWWfoUpEVKUHjZoGVyAgCjNr1Ghw"]
+    var tableEvents: [CalendarEvents.Items]? //Each event in calendar
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        var tableEvents: [CalendarEvents.Items]? //Each event in calendar
+        tableView.dataSource = self
+        tableView.delegate = self
+        tableView.rowHeight = 193
         
         let url = URL(string: calendars["Purdue CS"]!)!
 
@@ -51,7 +64,7 @@ class OrgsViewController: UIViewController {
             if let data = data {
                 do {
                     let events = try JSONDecoder().decode(CalendarEvents.self, from: data)
-                    tableEvents = events.items
+                    self.tableEvents = events.items
                 } catch let error {
                     print(error)
                 }
@@ -61,18 +74,69 @@ class OrgsViewController: UIViewController {
         
         semaphore.wait()
         
-        for event in tableEvents! {
-            print(event.summary!)
-        }
-        
     }
     
-    func convertToDateTime(dateString: String) -> Date {
-        let isoDate = dateString
+    
+    
+    func convertToDateTime(dateString: String) -> (String, String) {
+        
+        //Convert Input
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
-        let date = dateFormatter.date(from:isoDate)!
-        return date
+        dateFormatter.locale = Locale(identifier: "en_US_POSIX")
+        dateFormatter.timeZone = NSTimeZone.system
+        
+        let date = dateFormatter.date(from:dateString)!
+        
+        let stringTime = date.toString(dateFormat: "h:mm a")
+        let stringDate = date.toString(dateFormat: "E, MMM d, yyyy")
+        
+        return (stringTime, stringDate)
+    }
+    
+    func convertToDate(dateString: String) -> String {
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        let date = dateFormatter.date(from:dateString)!
+        
+        let resultString = date.toString(dateFormat: "E, MMM d, yyyy")
+        
+        return resultString
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return tableEvents?.count ?? 0
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "EventCell") as! EventCell
+        
+        let event = tableEvents![indexPath.row]
+        
+        //Title
+        cell.titleLabel.text = event.summary
+    
+        
+        //Date and Time
+        if event.start.dateTime != nil {
+            let startTime = convertToDateTime(dateString: event.start.dateTime!).0
+            let endTime = convertToDateTime(dateString: event.end.dateTime!).0
+            cell.timeLabel.text = startTime + " - " + endTime
+            
+            cell.dateLabel.text = convertToDateTime(dateString: event.start.dateTime!).1
+        } else {
+            cell.timeLabel.text = "All Day"
+            cell.dateLabel.text = convertToDate(dateString: event.start.date!)
+        }
+        
+        //Description
+        cell.descriptionLabel.text = event.description
+        
+        //Organization
+        cell.orgLabel.text = "Purdue Hackers"
+        
+        return cell
     }
     
     
