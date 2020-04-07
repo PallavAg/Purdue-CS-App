@@ -36,12 +36,14 @@ Science at Purdue. Allows students to be aware of upcoming events, company recru
     - Uses GCal to parse events
 
 - [ ] 3) **Resources**
-    - Get Key Fob
+    - Get Key Fob instructions
     - Get CS Merch
-    - Key Resources
     - Lawson Map
     - CS News Link
-    - CS Concern Form
+    - CS Concern Form (USB website)
+    - Purdue.io
+    - Oppurtunity update
+    - About us
 
 **Optional Nice-to-have Stories**
 1) **Classes**
