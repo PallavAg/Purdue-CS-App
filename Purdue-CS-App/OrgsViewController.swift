@@ -7,24 +7,73 @@
 //
 
 import UIKit
+import Foundation
 
-class OrgsViewController: UIViewController {
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+struct CalendarEvents: Decodable {
+    
+    struct Items: Decodable {
+        let id: String
+        let summary: String? //Title
+        let description: String?
+        let location: String?
+        
+        struct Start: Decodable {
+            let dateTime: String?
+            let date: String?
+        }
+        struct End: Decodable {
+            let dateTime: String?
+            let date: String?
+        }
+        
+        let start: Start
+        let end: End
     }
     
+    var items: [Items]
+    
+}
 
-    /*
-    // MARK: - Navigation
+class OrgsViewController: UIViewController {
+    
+    var calendars = ["Purdue CS" : "https://www.googleapis.com/calendar/v3/calendars/sodicmhprbq87022es0t74blk8@group.calendar.google.com/events?maxResults=15&key=AIzaSyCP_s1sWWfoUpEVKUHjZoGVyAgCjNr1Ghw"]
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        var tableEvents: [CalendarEvents.Items]? //Each event in calendar
+        
+        let url = URL(string: calendars["Purdue CS"]!)!
 
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+        let semaphore = DispatchSemaphore(value: 0)
+        
+        URLSession.shared.dataTask(with: url) { data, response, error in
+            if let data = data {
+                do {
+                    let events = try JSONDecoder().decode(CalendarEvents.self, from: data)
+                    tableEvents = events.items
+                } catch let error {
+                    print(error)
+                }
+            }
+            semaphore.signal()
+        }.resume()
+        
+        semaphore.wait()
+        
+        for event in tableEvents! {
+            print(event.summary!)
+        }
+        
     }
-    */
-
+    
+    func convertToDateTime(dateString: String) -> Date {
+        let isoDate = dateString
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
+        let date = dateFormatter.date(from:isoDate)!
+        return date
+    }
+    
+    
 }

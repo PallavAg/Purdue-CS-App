@@ -7,6 +7,5 @@ target 'Purdue-CS-App' do
 
   # Pods for Purdue-CS-App
   pod 'SwiftSoup'
-  pod 'FeedKit'
 
 end

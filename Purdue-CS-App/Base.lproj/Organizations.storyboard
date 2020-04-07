@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16096" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="gcc-W6-vBM">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16086"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Organizations-->
+        <scene sceneID="dG5-v2-Fep">
+            <objects>
+                <viewController id="FUq-Dw-Bwi" customClass="OrgsViewController" customModule="Purdue_CS_App" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="za4-Cd-6Zk">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <viewLayoutGuide key="safeArea" id="lqF-0C-Ky4"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="Organizations" largeTitleDisplayMode="always" id="Big-4d-BBM">
+                        <barButtonItem key="rightBarButtonItem" title="Item" image="plus" catalog="system" id="6KD-Ik-pMj">
+                            <connections>
+                                <segue destination="KPy-NE-KCW" kind="show" id="neY-Gu-UdW"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="1jz-89-n56" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1361" y="396"/>
+        </scene>
+        <!--View Controller-->
+        <scene sceneID="LVF-56-yxG">
+            <objects>
+                <viewController id="KPy-NE-KCW" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="mk0-YW-Ps9">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <searchBar contentMode="redraw" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dMD-zg-bDJ">
+                                <rect key="frame" x="0.0" y="88" width="600" height="44"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </searchBar>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <viewLayoutGuide key="safeArea" id="gGn-Sl-OrF"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="v2H-Yd-HlU"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="AtZ-bJ-G6C" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1361" y="1120"/>
+        </scene>
+        <!--Orgs-->
+        <scene sceneID="3bh-wl-5AB">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="gcc-W6-vBM" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Orgs" image="house" catalog="system" id="fjh-CA-yq8"/>
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" largeTitles="YES" id="9EZ-K3-Ggd">
+                        <rect key="frame" x="0.0" y="44" width="375" height="96"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="FUq-Dw-Bwi" kind="relationship" relationship="rootViewController" id="dcJ-Tp-dVH"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="j2e-1i-BeB" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1361" y="-318"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="house" catalog="system" width="128" height="110"/>
+        <image name="plus" catalog="system" width="128" height="113"/>
+    </resources>
+</document>
