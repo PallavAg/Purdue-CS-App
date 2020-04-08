@@ -8,6 +8,7 @@
 
 import UIKit
 import Foundation
+import UserNotifications
 
 struct CalendarEvents: Decodable {
     
@@ -76,9 +77,34 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
         
     }
     
+    func setupNotification(dateInput: Date, event: CalendarEvents.Items) {
+        
+        let center = UNUserNotificationCenter.current()
+        let content = UNMutableNotificationContent()
+        
+        content.title = event.summary ?? "No Title"
+        content.subtitle = "Starting in 30 minutes"
+        content.body = "Location: " + (event.location ?? "") + "\n" + (event.description ?? "")
+        content.sound = UNNotificationSound.default
+        content.threadIdentifier = "local-notifications temp"
+        
+        let date = Date(timeIntervalSinceNow: dateInput.timeIntervalSinceNow - 1800)
+        print("\(event.summary ?? " "): \(date.timeIntervalSinceNow)")
+        let dateComponents = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute, .second], from: date)
+        
+        let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: false)
+        
+        let request = UNNotificationRequest(identifier: "content", content: content, trigger: trigger)
+        
+        center.add(request) { (error) in
+            if error != nil {
+                print(error!)
+            }
+        }
+
+    }
     
-    
-    func convertToDateTime(dateString: String) -> (String, String) {
+    func convertToDateTime(dateString: String) -> Date {
         
         //Convert Input
         let dateFormatter = DateFormatter()
@@ -88,21 +114,20 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         let date = dateFormatter.date(from:dateString)!
         
-        let stringTime = date.toString(dateFormat: "h:mm a")
-        let stringDate = date.toString(dateFormat: "E, MMM d, yyyy")
+        return date
         
-        return (stringTime, stringDate)
     }
     
-    func convertToDate(dateString: String) -> String {
+    func convertToDate(dateString: String) -> Date {
         
+        //Convert Input
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
+        dateFormatter.locale = Locale(identifier: "en_US_POSIX")
+        
         let date = dateFormatter.date(from:dateString)!
         
-        let resultString = date.toString(dateFormat: "E, MMM d, yyyy")
-        
-        return resultString
+        return date
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -117,17 +142,25 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
         //Title
         cell.titleLabel.text = event.summary
     
-        
         //Date and Time
         if event.start.dateTime != nil {
-            let startTime = convertToDateTime(dateString: event.start.dateTime!).0
-            let endTime = convertToDateTime(dateString: event.end.dateTime!).0
-            cell.timeLabel.text = startTime + " - " + endTime
             
-            cell.dateLabel.text = convertToDateTime(dateString: event.start.dateTime!).1
+            let startDateTime = convertToDateTime(dateString: event.start.dateTime!)
+            let endDateTime = convertToDateTime(dateString: event.end.dateTime!)
+            
+            let startTime = startDateTime.toString(dateFormat: "h:mm a")
+            let endTime = endDateTime.toString(dateFormat: "h:mm a")
+            
+            cell.timeLabel.text = startTime + " - " + endTime
+            cell.dateLabel.text = startDateTime.toString(dateFormat: "E, MMM d, yyyy")
+            
+            setupNotification(dateInput: startDateTime, event: event)
+            
         } else {
             cell.timeLabel.text = "All Day"
-            cell.dateLabel.text = convertToDate(dateString: event.start.date!)
+            
+            let startDate = convertToDate(dateString: event.start.date!)
+            cell.dateLabel.text = startDate.toString(dateFormat: "E, MMM d, yyyy")
         }
         
         //Description
