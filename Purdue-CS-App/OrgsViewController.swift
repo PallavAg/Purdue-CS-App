@@ -56,7 +56,7 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
     // Clubs and their IDS
     // TODO
     // Modify this based on what clubs the users want
-    var calendar_ids: [String: String] = ["Purude CS" : "sodicmhprbq87022es0t74blk8@group.calendar.google.com", "Purdue Hackers" : "purduehackers@gmail.com" ]
+    var calendar_ids: [String: String] = ["Purdue CS" : "sodicmhprbq87022es0t74blk8@group.calendar.google.com", "Purdue Hackers" : "purduehackers@gmail.com" ]
     
     var calendars = [String:String]()
 
@@ -71,6 +71,7 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
         tableView.rowHeight = 193
         
         for (calendar_name, id) in calendar_ids  {
+            
             calendars[calendar_name] = calendarIDUrl(calendar_id: id)
         }
         
