@@ -10,6 +10,7 @@ import UIKit
 import Foundation
 import UserNotifications
 
+
 struct CalendarEvents: Decodable {
     
     struct Items: Decodable {
@@ -47,12 +48,14 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     @IBOutlet weak var tableView: UITableView!
     
-    var calendars = ["Purdue CS" : "https://www.googleapis.com/calendar/v3/calendars/sodicmhprbq87022es0t74blk8@group.calendar.google.com/events?maxResults=15&key=AIzaSyCP_s1sWWfoUpEVKUHjZoGVyAgCjNr1Ghw"]
+    
+    var calendars = ["Purdue CS" : calendarIDURL(calendar_id: "sodicmhprbq87022es0t74blk8@group.calendar.google.com"), "Purdue Hackers" : calendarIDURL(calendar_id: "purduehackers@gmail.com")]
     var tableEvents: [CalendarEvents.Items]? //Each event in calendar
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        var a:String = "hi"
         tableView.dataSource = self
         tableView.delegate = self
         tableView.rowHeight = 193
@@ -75,6 +78,13 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         semaphore.wait()
         
+        
+        
+    }
+    
+    func calendarIDUrl(calendar_id: String) -> String {
+        let url = "https://www.googleapis.com/calendar/v3/calendars/" + calendar_id + "/events?maxResults=15&key=" + API.API_KEY
+        return url
     }
     
     func setupNotification(dateInput: Date, event: CalendarEvents.Items) {
