@@ -7,6 +7,6 @@
 //
 
 struct API {
-    static let API_KEY = "AIzaSyCbVvw_nInsVr9w8SCBnu63Oc5OTzvrmu4"
+    static let API_KEY = "AIzaSyCaMNr65LMSxDSFHGlNNEydKQusEtQoT1Y"
 }
 

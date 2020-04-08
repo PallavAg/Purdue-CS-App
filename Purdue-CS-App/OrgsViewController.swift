@@ -44,21 +44,35 @@ extension Date {
     }
 }
 
+func calendarIDUrl(calendar_id: String) -> String {
+          let url = "https://www.googleapis.com/calendar/v3/calendars/" + calendar_id + "/events?maxResults=15&key=" + API.API_KEY
+          return url
+}
+
 class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     @IBOutlet weak var tableView: UITableView!
     
+    // Clubs and their IDS
+    // TODO
+    // Modify this based on what clubs the users want
+    var calendar_ids: [String: String] = ["Purude CS" : "sodicmhprbq87022es0t74blk8@group.calendar.google.com", "Purdue Hackers" : "purduehackers@gmail.com" ]
     
-    var calendars = ["Purdue CS" : calendarIDURL(calendar_id: "sodicmhprbq87022es0t74blk8@group.calendar.google.com"), "Purdue Hackers" : calendarIDURL(calendar_id: "purduehackers@gmail.com")]
+    var calendars = [String:String]()
+
+ 
     var tableEvents: [CalendarEvents.Items]? //Each event in calendar
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        var a:String = "hi"
         tableView.dataSource = self
         tableView.delegate = self
         tableView.rowHeight = 193
+        
+        for (calendar_name, id) in calendar_ids  {
+            calendars[calendar_name] = calendarIDUrl(calendar_id: id)
+        }
         
         let url = URL(string: calendars["Purdue CS"]!)!
 
@@ -78,15 +92,9 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         semaphore.wait()
         
-        
-        
     }
     
-    func calendarIDUrl(calendar_id: String) -> String {
-        let url = "https://www.googleapis.com/calendar/v3/calendars/" + calendar_id + "/events?maxResults=15&key=" + API.API_KEY
-        return url
-    }
-    
+   
     func setupNotification(dateInput: Date, event: CalendarEvents.Items) {
         
         let center = UNUserNotificationCenter.current()
