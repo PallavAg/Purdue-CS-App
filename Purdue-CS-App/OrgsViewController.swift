@@ -57,7 +57,8 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
     @IBOutlet weak var tableView: UITableView!
     
     //List of calendars
-    var calendar_ids: [String: String] = ["Purdue CS" : "sodicmhprbq87022es0t74blk8@group.calendar.google.com", "Purdue Hackers" : "purduehackers@gmail.com" ]
+    //var calendar_ids: [String: String] = ["Purdue CS" : "sodicmhprbq87022es0t74blk8@group.calendar.google.com", "Purdue Hackers" : "purduehackers@gmail.com" ]
+    var calendar_ids: [String: String] = ["Purdue CS" : "sodicmhprbq87022es0t74blk8@group.calendar.google.com"]
     
     var calendars = [String:String]()
     
@@ -104,7 +105,7 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
             
             semaphore.wait()
         }
-              
+        
         //Sort items by start date
         //Remove all items scheduled for before today's date
         
@@ -132,13 +133,12 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         if timeInterval > 0 {
             
-            let date = Date(timeIntervalSinceNow: timeInterval)
-            print("\(event.summary ?? "No Title"): \(timeInterval)")
+            let date = Date(timeIntervalSinceNow: timeInterval - 1800)
             let dateComponents = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute, .second], from: date)
             
             let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: false)
             
-            let request = UNNotificationRequest(identifier: "content", content: content, trigger: trigger)
+            let request = UNNotificationRequest(identifier: event.id, content: content, trigger: trigger)
             
             center.add(request) { (error) in
                 if error != nil {
@@ -180,10 +180,12 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     //Handle Bell Icon
     @objc func bellClicked(sender:UIButton) {
-
+        
         //Save ID
         let buttonRow = sender.tag
-        let eventID = tableEvents[buttonRow].id
+        let event = tableEvents[buttonRow]
+        
+        let eventID = event.id
         let filledImage = UIImage(systemName: "bell.fill")
         let emptyImage = UIImage(systemName: "bell.slash")
         var savedIDs = defaults.object(forKey: "IDsArray") as? [String] ?? [String]()
@@ -192,14 +194,21 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
             //Remove event notification
             savedIDs.remove(at: index)
             sender.setImage(emptyImage, for: .normal)
+            UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [eventID])
         } else {
             //Set event notification
             savedIDs.append(eventID)
             sender.setImage(filledImage, for: .normal)
+            
+            if event.start.dateTime != nil {
+                setupNotification(dateInput: convertToDateTime(dateString: event.start.dateTime!), event: event)
+            } else {
+                setupNotification(dateInput: convertToDate(dateString: event.start.date!), event: event)
+            }
+            
         }
         
         defaults.set(savedIDs, forKey: "IDsArray")
-        
         
     }
     
@@ -216,6 +225,7 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
         cell.titleLabel.text = event.summary
         
         //Date and Time
+        
         if event.start.dateTime != nil {
             
             let startDateTime = convertToDateTime(dateString: event.start.dateTime!)
@@ -226,8 +236,6 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
             
             cell.timeLabel.text = startTime + " - " + endTime
             cell.dateLabel.text = startDateTime.toString(dateFormat: "E, MMM d, yyyy")
-            
-            setupNotification(dateInput: startDateTime, event: event)
             
         } else {
             cell.timeLabel.text = "All Day"
@@ -249,9 +257,19 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
         let savedIDs = defaults.object(forKey: "IDsArray") as? [String] ?? [String]()
         
         if savedIDs.firstIndex(of: eventID) != nil {
+            //Notification scheduled
             cell.bellButton.setImage(filledImage, for: .normal)
+            
+            if event.start.dateTime != nil {
+                setupNotification(dateInput: convertToDateTime(dateString: event.start.dateTime!), event: event)
+            } else {
+                setupNotification(dateInput: convertToDate(dateString: event.start.date!), event: event)
+            }
+            
         } else {
+            //Bell icon not tapped
             cell.bellButton.setImage(emptyImage, for: .normal)
+            UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [event.id])
         }
         
         cell.bellButton.tag = indexPath.row
