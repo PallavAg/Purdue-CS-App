@@ -30,6 +30,8 @@ struct CalendarEvents: Decodable {
         
         let start: Start
         let end: End
+        
+        var organization: String?
     }
     
     var items: [Items]
@@ -44,24 +46,22 @@ extension Date {
     }
 }
 
-func calendarIDUrl(calendar_id: String) -> String {
-          let url = "https://www.googleapis.com/calendar/v3/calendars/" + calendar_id + "/events?maxResults=15&key=" + API.API_KEY
-          return url
+//Calendar link to API
+func calendarIDtoAPI(calendar_id: String) -> String {
+    let url = "https://www.googleapis.com/calendar/v3/calendars/" + calendar_id + "/events?maxResults=15&key=" + API.API_KEY
+    return url
 }
 
 class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     @IBOutlet weak var tableView: UITableView!
     
-    // Clubs and their IDS
-    // TODO
-    // Modify this based on what clubs the users want
+    //List of calendars
     var calendar_ids: [String: String] = ["Purdue CS" : "sodicmhprbq87022es0t74blk8@group.calendar.google.com", "Purdue Hackers" : "purduehackers@gmail.com" ]
     
     var calendars = [String:String]()
-
- 
-    var tableEvents: [CalendarEvents.Items]? //Each event in calendar
+    
+    var tableEvents: [CalendarEvents.Items] = [] //Each event in calendar
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -71,31 +71,43 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
         tableView.rowHeight = 193
         
         for (calendar_name, id) in calendar_ids  {
-            
-            calendars[calendar_name] = calendarIDUrl(calendar_id: id)
+            calendars[calendar_name] = calendarIDtoAPI(calendar_id: id)
         }
         
-        let url = URL(string: calendars["Purdue CS"]!)!
-
-        let semaphore = DispatchSemaphore(value: 0)
-        
-        URLSession.shared.dataTask(with: url) { data, response, error in
-            if let data = data {
-                do {
-                    let events = try JSONDecoder().decode(CalendarEvents.self, from: data)
-                    self.tableEvents = events.items
-                } catch let error {
-                    print(error)
+        for (org_name, urlString) in calendars {
+            let url = URL(string: urlString)!
+            let semaphore = DispatchSemaphore(value: 0)
+            
+            URLSession.shared.dataTask(with: url) { data, response, error in
+                if let data = data {
+                    do {
+                        var events = try JSONDecoder().decode(CalendarEvents.self, from: data)
+                        
+                        for (i, _) in events.items.enumerated() {
+                            events.items[i].organization = org_name
+                        }
+                        
+                        self.tableEvents.append(contentsOf: events.items)
+                        
+                    } catch let error {
+                        print(error)
+                    }
                 }
-            }
-            semaphore.signal()
-        }.resume()
+                semaphore.signal()
+            }.resume()
+            
+            semaphore.wait()
+        }
+              
+        //Sort items by start date
+        //Remove all items scheduled for before today's date
         
-        semaphore.wait()
+        //Setup notification on bellIcon tap
+        //Setup subscription to specific calendars
         
     }
     
-   
+    
     func setupNotification(dateInput: Date, event: CalendarEvents.Items) {
         
         let center = UNUserNotificationCenter.current()
@@ -108,7 +120,7 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
         content.threadIdentifier = "local-notifications temp"
         
         let date = Date(timeIntervalSinceNow: dateInput.timeIntervalSinceNow - 1800)
-        print("\(event.summary ?? " "): \(date.timeIntervalSinceNow)")
+        print("\(event.summary ?? "No Title"): \(date.timeIntervalSinceNow)")
         let dateComponents = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute, .second], from: date)
         
         let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: false)
@@ -120,7 +132,7 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
                 print(error!)
             }
         }
-
+        
     }
     
     func convertToDateTime(dateString: String) -> Date {
@@ -150,17 +162,17 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return tableEvents?.count ?? 0
+        return tableEvents.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "EventCell") as! EventCell
         
-        let event = tableEvents![indexPath.row]
+        let event = tableEvents[indexPath.row]
         
         //Title
         cell.titleLabel.text = event.summary
-    
+        
         //Date and Time
         if event.start.dateTime != nil {
             
@@ -186,7 +198,7 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
         cell.descriptionLabel.text = event.description
         
         //Organization
-        cell.orgLabel.text = "Purdue Hackers"
+        cell.orgLabel.text = event.organization
         
         return cell
     }
