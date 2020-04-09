@@ -63,13 +63,15 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qVj-w7-GZ4">
-                                                    <rect key="frame" x="325" y="19" width="35" height="39"/>
+                                                    <rect key="frame" x="209" y="3" width="166" height="95"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <inset key="contentEdgeInsets" minX="108" minY="7" maxX="0.0" maxY="27"/>
                                                     <state key="normal" image="bell.slash" catalog="system"/>
                                                 </button>
                                             </subviews>
                                         </tableViewCellContentView>
                                         <connections>
+                                            <outlet property="bellButton" destination="qVj-w7-GZ4" id="LsG-78-1qr"/>
                                             <outlet property="dateLabel" destination="ve6-w2-zow" id="KAg-9V-a6b"/>
                                             <outlet property="descriptionLabel" destination="QV2-fq-rFS" id="xTF-eB-bMq"/>
                                             <outlet property="orgLabel" destination="h8h-8D-dZ4" id="311-u7-RGh"/>

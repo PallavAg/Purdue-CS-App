@@ -17,6 +17,8 @@ class EventCell: UITableViewCell {
     
     @IBOutlet weak var descriptionLabel: UITextView!
     
+    @IBOutlet weak var bellButton: UIButton!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
@@ -27,5 +29,6 @@ class EventCell: UITableViewCell {
 
         // Configure the view for the selected state
     }
-
+    
+    
 }

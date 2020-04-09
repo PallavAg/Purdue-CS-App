@@ -63,8 +63,14 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     var tableEvents: [CalendarEvents.Items] = [] //Each event in calendar
     
+    let defaults = UserDefaults.standard
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        if defaults.object(forKey: "IDArray") == nil {
+            defaults.set([String](), forKey: "IDArray")
+        }
         
         tableView.dataSource = self
         tableView.delegate = self
@@ -103,7 +109,10 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
         //Remove all items scheduled for before today's date
         
         //Setup notification on bellIcon tap
+        
+        
         //Setup subscription to specific calendars
+        //Cleanup Layout
         
     }
     
@@ -119,19 +128,27 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
         content.sound = UNNotificationSound.default
         content.threadIdentifier = "local-notifications temp"
         
-        let date = Date(timeIntervalSinceNow: dateInput.timeIntervalSinceNow - 1800)
-        print("\(event.summary ?? "No Title"): \(date.timeIntervalSinceNow)")
-        let dateComponents = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute, .second], from: date)
+        let timeInterval = dateInput.timeIntervalSinceNow
         
-        let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: false)
-        
-        let request = UNNotificationRequest(identifier: "content", content: content, trigger: trigger)
-        
-        center.add(request) { (error) in
-            if error != nil {
-                print(error!)
+        if timeInterval > 0 {
+            
+            let date = Date(timeIntervalSinceNow: timeInterval)
+            print("\(event.summary ?? "No Title"): \(timeInterval)")
+            let dateComponents = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute, .second], from: date)
+            
+            let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: false)
+            
+            let request = UNNotificationRequest(identifier: "content", content: content, trigger: trigger)
+            
+            center.add(request) { (error) in
+                if error != nil {
+                    print(error!)
+                }
             }
+            
         }
+        
+        //UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
         
     }
     
@@ -159,6 +176,31 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
         let date = dateFormatter.date(from:dateString)!
         
         return date
+    }
+    
+    //Handle Bell Icon
+    @objc func bellClicked(sender:UIButton) {
+
+        //Save ID
+        let buttonRow = sender.tag
+        let eventID = tableEvents[buttonRow].id
+        let filledImage = UIImage(systemName: "bell.fill")
+        let emptyImage = UIImage(systemName: "bell.slash")
+        var savedIDs = defaults.object(forKey: "IDsArray") as? [String] ?? [String]()
+        
+        if let index = savedIDs.firstIndex(of: eventID) {
+            //Remove event notification
+            savedIDs.remove(at: index)
+            sender.setImage(emptyImage, for: .normal)
+        } else {
+            //Set event notification
+            savedIDs.append(eventID)
+            sender.setImage(filledImage, for: .normal)
+        }
+        
+        defaults.set(savedIDs, forKey: "IDsArray")
+        
+        
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -199,6 +241,21 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         //Organization
         cell.orgLabel.text = event.organization
+        
+        //Notification Bell setup
+        let eventID = event.id
+        let filledImage = UIImage(systemName: "bell.fill")
+        let emptyImage = UIImage(systemName: "bell.slash")
+        let savedIDs = defaults.object(forKey: "IDsArray") as? [String] ?? [String]()
+        
+        if savedIDs.firstIndex(of: eventID) != nil {
+            cell.bellButton.setImage(filledImage, for: .normal)
+        } else {
+            cell.bellButton.setImage(emptyImage, for: .normal)
+        }
+        
+        cell.bellButton.tag = indexPath.row
+        cell.bellButton.addTarget(self, action: #selector(bellClicked(sender:)), for: .touchUpInside)
         
         return cell
     }
