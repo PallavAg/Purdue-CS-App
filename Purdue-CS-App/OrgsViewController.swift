@@ -57,8 +57,7 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
     @IBOutlet weak var tableView: UITableView!
     
     //List of calendars
-    //var calendar_ids: [String: String] = ["Purdue CS" : "sodicmhprbq87022es0t74blk8@group.calendar.google.com", "Purdue Hackers" : "purduehackers@gmail.com" ]
-    var calendar_ids: [String: String] = ["Purdue CS" : "sodicmhprbq87022es0t74blk8@group.calendar.google.com"]
+    var calendar_ids: [String: String] = ["Purdue CS" : "sodicmhprbq87022es0t74blk8@group.calendar.google.com", "Purdue Hackers" : "purduehackers@gmail.com" ]
     
     var calendars = [String:String]()
     
@@ -107,10 +106,41 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
         }
         
         //Sort items by start date
-        //Remove all items scheduled for before today's date
+        tableEvents.sort { (left, right) -> Bool in
+            
+            let leftDateTime: Date
+            let rightDateTime: Date
+            
+            if left.start.dateTime != nil {
+                leftDateTime = convertToDateTime(dateString: left.start.dateTime!)
+            } else {
+                leftDateTime = convertToDate(dateString: left.start.date!)
+            }
+            
+            if right.start.dateTime != nil {
+                rightDateTime = convertToDateTime(dateString: right.start.dateTime!)
+            } else {
+                rightDateTime = convertToDate(dateString: right.start.date!)
+            }
+            
+            return leftDateTime.timeIntervalSinceNow < rightDateTime.timeIntervalSinceNow
+            
+        }
         
-        //Setup notification on bellIcon tap
-        
+        //Remove all items more than 24hrs in the past
+        tableEvents.removeAll { (event) -> Bool in
+            
+            let leftDateTime: Date
+            
+            if event.start.dateTime != nil {
+                leftDateTime = convertToDateTime(dateString: event.start.dateTime!)
+            } else {
+                leftDateTime = convertToDate(dateString: event.start.date!)
+            }
+            
+            return leftDateTime.timeIntervalSinceNow < -86400
+            
+        }
         
         //Setup subscription to specific calendars
         //Cleanup Layout
