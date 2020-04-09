@@ -107,46 +107,36 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         //Sort items by start date
         tableEvents.sort { (left, right) -> Bool in
-            
-            let leftDateTime: Date
-            let rightDateTime: Date
-            
-            if left.start.dateTime != nil {
-                leftDateTime = convertToDateTime(dateString: left.start.dateTime!)
-            } else {
-                leftDateTime = convertToDate(dateString: left.start.date!)
-            }
-            
-            if right.start.dateTime != nil {
-                rightDateTime = convertToDateTime(dateString: right.start.dateTime!)
-            } else {
-                rightDateTime = convertToDate(dateString: right.start.date!)
-            }
-            
-            return leftDateTime.timeIntervalSinceNow < rightDateTime.timeIntervalSinceNow
-            
+            return getStartDate(event: left).timeIntervalSinceNow < getEndDate(event: left).timeIntervalSinceNow
         }
         
         //Remove all items more than 24hrs in the past
-        tableEvents.removeAll { (event) -> Bool in
-            
-            let leftDateTime: Date
-            
-            if event.start.dateTime != nil {
-                leftDateTime = convertToDateTime(dateString: event.start.dateTime!)
-            } else {
-                leftDateTime = convertToDate(dateString: event.start.date!)
-            }
-            
-            return leftDateTime.timeIntervalSinceNow < -86400
-            
-        }
+        tableEvents.removeAll (where: { getStartDate(event: $0).timeIntervalSinceNow < -86400 })
         
         //Setup subscription to specific calendars
         //Cleanup Layout
         
     }
     
+    func getStartDate(event: CalendarEvents.Items) -> Date {
+        
+        if event.start.dateTime != nil {
+            return convertToDateTime(dateString: event.start.dateTime!)
+        } else {
+            return convertToDate(dateString: event.start.date!)
+        }
+        
+    }
+    
+    func getEndDate(event: CalendarEvents.Items) -> Date {
+        
+        if event.end.dateTime != nil {
+            return convertToDateTime(dateString: event.end.dateTime!)
+        } else {
+            return convertToDate(dateString: event.end.date!)
+        }
+        
+    }
     
     func setupNotification(dateInput: Date, event: CalendarEvents.Items) {
         
@@ -230,11 +220,7 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
             savedIDs.append(eventID)
             sender.setImage(filledImage, for: .normal)
             
-            if event.start.dateTime != nil {
-                setupNotification(dateInput: convertToDateTime(dateString: event.start.dateTime!), event: event)
-            } else {
-                setupNotification(dateInput: convertToDate(dateString: event.start.date!), event: event)
-            }
+            setupNotification(dateInput: getStartDate(event: event), event: event)
             
         }
         
@@ -255,7 +241,6 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
         cell.titleLabel.text = event.summary
         
         //Date and Time
-        
         if event.start.dateTime != nil {
             
             let startDateTime = convertToDateTime(dateString: event.start.dateTime!)
@@ -289,13 +274,7 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
         if savedIDs.firstIndex(of: eventID) != nil {
             //Notification scheduled
             cell.bellButton.setImage(filledImage, for: .normal)
-            
-            if event.start.dateTime != nil {
-                setupNotification(dateInput: convertToDateTime(dateString: event.start.dateTime!), event: event)
-            } else {
-                setupNotification(dateInput: convertToDate(dateString: event.start.date!), event: event)
-            }
-            
+            setupNotification(dateInput: getStartDate(event: event), event: event)
         } else {
             //Bell icon not tapped
             cell.bellButton.setImage(emptyImage, for: .normal)
