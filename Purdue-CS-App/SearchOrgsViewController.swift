@@ -19,7 +19,7 @@ class SearchOrgsViewController: UIViewController, UITableViewDelegate, UITableVi
     var calendar_ids: [String: String] = [:]
     
     var calendars = [String]()
-    static var selectedCalendars = UserDefaults.standard.object(forKey: "OrgsArray") as! [String : String]
+    static var selectedCalendars = UserDefaults.standard.object(forKey: "OrgsArray") as? [String : String] ?? [:]
     
     typealias FinishedFillingCalendar = () -> ()
     
