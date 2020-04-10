@@ -57,7 +57,7 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
     @IBOutlet weak var tableView: UITableView!
     
     //List of calendars
-    var calendar_ids: [String: String] = ["Purdue CS": "sodicmhprbq87022es0t74blk8@group.calendar.google.com", "Purdue Hackers": "purduehackers@gmail.com" ]
+    var calendar_ids: [String: String] = ["Purdue CS": "sodicmhprbq87022es0t74blk8@group.calendar.google.com", "Purdue Hackers": "purduehackers@gmail.com", "CS Events": "256h9v68bnbnponkp0upmfq07s@group.calendar.google.com", "CS Seminars": "t3gdpe5uft0cbfsq9bipl7ofq0@group.calendar.google.com"]
     
     var calendars = [String:String]()
     
@@ -82,7 +82,7 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         tableView.dataSource = self
         tableView.delegate = self
-        tableView.rowHeight = 193
+        tableView.rowHeight = 126
         
         for (calendar_name, id) in calendar_ids  {
             calendars[calendar_name] = calendarIDtoAPI(calendar_id: id)
@@ -115,7 +115,7 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         //Sort items by start date
         tableEvents.sort { (left, right) -> Bool in
-            return getStartDate(event: left).timeIntervalSinceNow < getEndDate(event: left).timeIntervalSinceNow
+            return getStartDate(event: left).timeIntervalSinceNow < getStartDate(event: right).timeIntervalSinceNow
         }
         
         //Remove all items more than 24hrs in the past
@@ -253,6 +253,16 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         defaults.set(savedIDs, forKey: "IDsArray")
         
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        
+        if tableEvents[indexPath.row].description?.count == nil {
+            return 70;
+        } else {
+            return 126;
+        }
+         
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
