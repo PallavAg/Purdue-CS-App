@@ -94,7 +94,7 @@
                     <navigationItem key="navigationItem" title="Organizations" largeTitleDisplayMode="always" id="Big-4d-BBM">
                         <barButtonItem key="rightBarButtonItem" title="Item" image="plus" catalog="system" id="6KD-Ik-pMj">
                             <connections>
-                                <segue destination="KPy-NE-KCW" kind="show" id="neY-Gu-UdW"/>
+                                <segue destination="KPy-NE-KCW" kind="show" identifier="toOrgs" id="neY-Gu-UdW"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -106,10 +106,10 @@
             </objects>
             <point key="canvasLocation" x="1360.8" y="395.32019704433498"/>
         </scene>
-        <!--Add Organizations-->
+        <!--SearchOrgsViewController-->
         <scene sceneID="LVF-56-yxG">
             <objects>
-                <viewController id="KPy-NE-KCW" customClass="SearchOrgsViewController" customModule="Purdue_CS_App" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="SearchOrgsViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="KPy-NE-KCW" customClass="SearchOrgsViewController" customModule="Purdue_CS_App" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="mk0-YW-Ps9">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -118,7 +118,7 @@
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" accessoryType="checkmark" indentationWidth="10" reuseIdentifier="cell" textLabel="Vr2-1I-2bD" style="IBUITableViewCellStyleDefault" id="cS8-kb-UEB" customClass="OrgCell" customModule="Purdue_CS_App" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" accessoryType="checkmark" indentationWidth="10" reuseIdentifier="OrgCell" editingAccessoryType="checkmark" textLabel="Vr2-1I-2bD" style="IBUITableViewCellStyleDefault" id="cS8-kb-UEB" customClass="OrgCell" customModule="Purdue_CS_App" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="28" width="375" height="43.666667938232422"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="cS8-kb-UEB" id="bW0-Kx-Wcb">
@@ -136,6 +136,10 @@
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                 </prototypes>
+                                <connections>
+                                    <outlet property="dataSource" destination="KPy-NE-KCW" id="NaC-o9-7nl"/>
+                                    <outlet property="delegate" destination="KPy-NE-KCW" id="7OW-JP-sH4"/>
+                                </connections>
                             </tableView>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
@@ -147,7 +151,12 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="gGn-Sl-OrF"/>
                     </view>
-                    <navigationItem key="navigationItem" title="Add Organizations" id="v2H-Yd-HlU"/>
+                    <navigationItem key="navigationItem" title="Add Organizations" id="v2H-Yd-HlU">
+                        <barButtonItem key="backBarButtonItem" title="Organizations" id="ewc-4O-4cm"/>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="tableView" destination="Ovh-Kz-qF7" id="Dd4-aV-YBE"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="AtZ-bJ-G6C" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>

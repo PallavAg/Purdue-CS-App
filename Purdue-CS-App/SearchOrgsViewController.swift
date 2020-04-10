@@ -8,23 +8,63 @@
 
 import UIKit
 
-class SearchOrgsViewController: UIViewController {
+class SearchOrgsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+    
+    @IBOutlet weak var tableView: UITableView!
+
+    var calendar_ids: [String: String] = ["Purdue CS" : "sodicmhprbq87022es0t74blk8@group.calendar.google.com", "Purdue Hackers" : "purduehackers@gmail.com" ]
+    
+    var calendars = [String]()
+    var selectedCalendars = UserDefaults.standard.object(forKey: "OrgsArray") as! [String : String]
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        
+        tableView.dataSource = self
+        tableView.delegate = self
+        
+        calendars = Array(calendar_ids.keys)
+        
+        calendars.sort()
+        
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return calendars.count
     }
-    */
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "OrgCell") as! OrgCell
+        
+        cell.textLabel?.text = calendars[indexPath.row]
+        
+        let selected = UITableViewCell.AccessoryType.checkmark
+        let unselected = UITableViewCell.AccessoryType.none
+        
+        if selectedCalendars[calendars[indexPath.row]] != nil {
+            cell.accessoryType = selected
+        } else {
+            cell.accessoryType = unselected
+        }
+        
+        return cell
+        
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let selected = UITableViewCell.AccessoryType.checkmark
+        let unselected = UITableViewCell.AccessoryType.none
+        
+        if tableView.cellForRow(at: indexPath)?.accessoryType == selected {
+            tableView.cellForRow(at: indexPath)?.accessoryType = unselected
+            selectedCalendars.removeValue(forKey: calendars[indexPath.row])
+        } else {
+            tableView.cellForRow(at: indexPath)?.accessoryType = selected
+            selectedCalendars[calendars[indexPath.row]] = calendar_ids[calendars[indexPath.row]]
+        }
+        
+        UserDefaults.standard.set(selectedCalendars, forKey: "OrgsArray")
+        
+    }
 
 }
