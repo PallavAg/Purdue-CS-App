@@ -57,8 +57,8 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
     @IBOutlet weak var tableView: UITableView!
     
     //List of calendars
-    // LEAVE COMMENT FOR TESTING
-//    var calendar_ids: [String: String] = ["Purdue CS": "sodicmhprbq87022es0t74blk8@group.calendar.google.com", "Purdue Hackers": "purduehackers@gmail.com", "CS Events": "256h9v68bnbnponkp0upmfq07s@group.calendar.google.com", "CS Seminars": "t3gdpe5uft0cbfsq9bipl7ofq0@group.calendar.google.com"]
+    //LEAVE COMMENT FOR TESTING
+    //  var calendar_ids: [String: String] = ["Purdue CS": "sodicmhprbq87022es0t74blk8@group.calendar.google.com", "Purdue Hackers": "purduehackers@gmail.com", "CS Events": "256h9v68bnbnponkp0upmfq07s@group.calendar.google.com", "CS Seminars": "t3gdpe5uft0cbfsq9bipl7ofq0@group.calendar.google.com"]
     var calendar_ids = SearchOrgsViewController.selectedCalendars
     var calendars = [String:String]()
     
@@ -95,6 +95,12 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
             calendars[calendar_name] = calendarIDtoAPI(calendar_id: id)
         }
         
+        loadDidView()
+        
+    }
+    
+    func loadDidView() {
+        
         for (org_name, urlString) in calendars {
             let url = URL(string: urlString)!
             let semaphore = DispatchSemaphore(value: 0)
@@ -129,53 +135,47 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
         tableEvents.removeAll (where: { getStartDate(event: $0).timeIntervalSinceNow < -86400 })
         
         allResults = tableEvents
-        
-        //Setup subscription to specific calendars
-        //Cleanup Layout
         
     }
     
     @objc func refreshScreen(_ control: UIRefreshControl) {
         
         tableEvents.removeAll(keepingCapacity: true)
+        loadDidView()
         
-        for (org_name, urlString) in calendars {
-            let url = URL(string: urlString)!
-            let semaphore = DispatchSemaphore(value: 0)
-            
-            URLSession.shared.dataTask(with: url) { data, response, error in
-                if let data = data {
-                    do {
-                        var events = try JSONDecoder().decode(CalendarEvents.self, from: data)
-                        
-                        for (i, _) in events.items.enumerated() {
-                            events.items[i].organization = org_name
-                        }
-                        
-                        self.tableEvents.append(contentsOf: events.items)
-                        
-                    } catch let error {
-                        print(error)
-                    }
-                }
-                semaphore.signal()
-            }.resume()
-            
-            semaphore.wait()
+        for (index, event) in tableEvents.enumerated().reversed() {
+            if calendar_ids[event.organization!] == nil {
+                tableEvents.remove(at: index)
+            }
         }
         
-        //Sort items by start date
-        tableEvents.sort { (left, right) -> Bool in
-            return getStartDate(event: left).timeIntervalSinceNow < getStartDate(event: right).timeIntervalSinceNow
-        }
-        
-        //Remove all items more than 24hrs in the past
-        tableEvents.removeAll (where: { getStartDate(event: $0).timeIntervalSinceNow < -86400 })
-        
-        allResults = tableEvents
         control.endRefreshing()
         self.tableView.reloadData()
         
+    }
+    
+    //TableEvents only keeps selected items.
+    override func viewDidAppear(_ animated: Bool) {
+        let previousCals = calendar_ids
+        calendar_ids = defaults.object(forKey: "OrgsArray") as! [String : String]
+        
+        if previousCals != calendar_ids {
+            
+            for (calendar_name, id) in calendar_ids  {
+                calendars[calendar_name] = calendarIDtoAPI(calendar_id: id)
+            }
+            
+            tableEvents.removeAll(keepingCapacity: true)
+            loadDidView()
+            
+            for (index, event) in tableEvents.enumerated().reversed() {
+                if calendar_ids[event.organization!] == nil {
+                    tableEvents.remove(at: index)
+                }
+            }
+            
+            self.tableView.reloadData()
+        }
     }
     
     func getStartDate(event: CalendarEvents.Items) -> Date {
@@ -229,23 +229,6 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
         }
         
         //UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
-        
-    }
-    
-    //TableEvents only keeps selected items. 
-    override func viewWillAppear(_ animated: Bool) {
-
-        calendar_ids = defaults.object(forKey: "OrgsArray") as! [String : String]
-        
-        tableEvents = allResults
-
-        for (index, event) in tableEvents.enumerated().reversed() {
-            if calendar_ids[event.organization!] == nil {
-                tableEvents.remove(at: index)
-            }
-        }
-        
-        self.tableView.reloadData()
         
     }
     
@@ -312,7 +295,7 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
         } else {
             return 126;
         }
-         
+        
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

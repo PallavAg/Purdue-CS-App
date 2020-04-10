@@ -15,30 +15,29 @@ class SearchOrgsViewController: UIViewController, UITableViewDelegate, UITableVi
     var ref: DatabaseReference?
     
     // LEAVE COMMENT FOR TESTING PURPOSE
-//    var calendar_ids: [String: String] = ["Purdue CS": "sodicmhprbq87022es0t74blk8@group.calendar.google.com", "Purdue Hackers": "purduehackers@gmail.com", "CS Events": "256h9v68bnbnponkp0upmfq07s@group.calendar.google.com", "CS Seminars": "t3gdpe5uft0cbfsq9bipl7ofq0@group.calendar.google.com"]
+    //  var calendar_ids: [String: String] = ["Purdue CS": "sodicmhprbq87022es0t74blk8@group.calendar.google.com", "Purdue Hackers": "purduehackers@gmail.com", "CS Events": "256h9v68bnbnponkp0upmfq07s@group.calendar.google.com", "CS Seminars": "t3gdpe5uft0cbfsq9bipl7ofq0@group.calendar.google.com"]
     var calendar_ids: [String: String] = [:]
     
     var calendars = [String]()
     static var selectedCalendars = UserDefaults.standard.object(forKey: "OrgsArray") as! [String : String]
- 
+    
     typealias FinishedFillingCalendar = () -> ()
-
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
         tableView.dataSource = self
         tableView.delegate = self
-       
+        
         fillCalendarIds()
     }
     
-     func fillCalendarIds() {
-            self.ref = Database.database().reference() // Init database reference
-            let myRef = self.ref?.child("calendar_ids")
-            
-            myRef?.observeSingleEvent(of: .value, with: { (snapshot) in
+    func fillCalendarIds() {
+        self.ref = Database.database().reference() // Init database reference
+        let myRef = self.ref?.child("calendar_ids")
+        
+        myRef?.observeSingleEvent(of: .value, with: { (snapshot) in
             
             // handle data not found
             if !snapshot.exists() {
@@ -54,14 +53,12 @@ class SearchOrgsViewController: UIViewController, UITableViewDelegate, UITableVi
         })
     }
     
-  
+    
     func sortCalendarEntries() {
-          self.calendars = Array(calendar_ids.keys)
-          self.calendars.sort()
-          print("second print")
-          print(self.calendar_ids)
-          tableView.reloadData()
-      }
+        self.calendars = Array(calendar_ids.keys)
+        self.calendars.sort()
+        tableView.reloadData()
+    }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return calendars.count
@@ -100,5 +97,5 @@ class SearchOrgsViewController: UIViewController, UITableViewDelegate, UITableVi
         UserDefaults.standard.set(SearchOrgsViewController.selectedCalendars, forKey: "OrgsArray")
         
     }
-
+    
 }
