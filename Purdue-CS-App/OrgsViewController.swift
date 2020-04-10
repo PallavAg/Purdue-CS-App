@@ -183,7 +183,7 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     //TableEvents only keeps selected items. 
-    override func viewDidAppear(_ animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
 
         calendar_ids = defaults.object(forKey: "OrgsArray") as! [String : String]
         
