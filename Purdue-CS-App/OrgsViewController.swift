@@ -57,9 +57,11 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
     @IBOutlet weak var tableView: UITableView!
     
     //List of calendars
-    var calendar_ids: [String: String] = ["Purdue CS" : "sodicmhprbq87022es0t74blk8@group.calendar.google.com", "Purdue Hackers" : "purduehackers@gmail.com" ]
+    var calendar_ids: [String: String] = ["Purdue CS": "sodicmhprbq87022es0t74blk8@group.calendar.google.com", "Purdue Hackers": "purduehackers@gmail.com" ]
     
     var calendars = [String:String]()
+    
+    var allResults: [CalendarEvents.Items] = []
     
     var tableEvents: [CalendarEvents.Items] = [] //Each event in calendar
     
@@ -70,6 +72,12 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         if defaults.object(forKey: "IDArray") == nil {
             defaults.set([String](), forKey: "IDArray")
+        }
+        
+        if defaults.object(forKey: "OrgsArray") == nil {
+            defaults.set(calendar_ids, forKey: "OrgsArray")
+        } else {
+            calendar_ids = defaults.object(forKey: "OrgsArray") as! [String : String]
         }
         
         tableView.dataSource = self
@@ -112,6 +120,8 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         //Remove all items more than 24hrs in the past
         tableEvents.removeAll (where: { getStartDate(event: $0).timeIntervalSinceNow < -86400 })
+        
+        allResults = tableEvents
         
         //Setup subscription to specific calendars
         //Cleanup Layout
@@ -169,6 +179,23 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
         }
         
         //UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
+        
+    }
+    
+    //TableEvents only keeps selected items. 
+    override func viewDidAppear(_ animated: Bool) {
+
+        calendar_ids = defaults.object(forKey: "OrgsArray") as! [String : String]
+        
+        tableEvents = allResults
+
+        for (index, event) in tableEvents.enumerated().reversed() {
+            if calendar_ids[event.organization!] == nil {
+                tableEvents.remove(at: index)
+            }
+        }
+        
+        self.tableView.reloadData()
         
     }
     
