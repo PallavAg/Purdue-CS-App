@@ -7,27 +7,61 @@
 //
 
 import UIKit
+import Firebase
 
 class SearchOrgsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     @IBOutlet weak var tableView: UITableView!
-
-    var calendar_ids: [String: String] = ["Purdue CS": "sodicmhprbq87022es0t74blk8@group.calendar.google.com", "Purdue Hackers": "purduehackers@gmail.com", "CS Events": "256h9v68bnbnponkp0upmfq07s@group.calendar.google.com", "CS Seminars": "t3gdpe5uft0cbfsq9bipl7ofq0@group.calendar.google.com"]
+    var ref: DatabaseReference?
+    
+    // LEAVE COMMENT FOR TESTING PURPOSE
+//    var calendar_ids: [String: String] = ["Purdue CS": "sodicmhprbq87022es0t74blk8@group.calendar.google.com", "Purdue Hackers": "purduehackers@gmail.com", "CS Events": "256h9v68bnbnponkp0upmfq07s@group.calendar.google.com", "CS Seminars": "t3gdpe5uft0cbfsq9bipl7ofq0@group.calendar.google.com"]
+    var calendar_ids: [String: String] = [:]
     
     var calendars = [String]()
-    var selectedCalendars = UserDefaults.standard.object(forKey: "OrgsArray") as! [String : String]
+    static var selectedCalendars = UserDefaults.standard.object(forKey: "OrgsArray") as! [String : String]
+ 
+    typealias FinishedFillingCalendar = () -> ()
 
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        
         tableView.dataSource = self
         tableView.delegate = self
-        
-        calendars = Array(calendar_ids.keys)
-        
-        calendars.sort()
-        
+       
+        fillCalendarIds()
     }
+    
+     func fillCalendarIds() {
+            self.ref = Database.database().reference() // Init database reference
+            let myRef = self.ref?.child("calendar_ids")
+            
+            myRef?.observeSingleEvent(of: .value, with: { (snapshot) in
+            
+            // handle data not found
+            if !snapshot.exists() {
+                
+                return
+            }
+            
+            // data found
+            self.calendar_ids = snapshot.value as! [String: String]
+            
+            self.tableView.reloadData()
+            self.sortCalendarEntries()
+        })
+    }
+    
+  
+    func sortCalendarEntries() {
+          self.calendars = Array(calendar_ids.keys)
+          self.calendars.sort()
+          print("second print")
+          print(self.calendar_ids)
+          tableView.reloadData()
+      }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return calendars.count
@@ -41,7 +75,7 @@ class SearchOrgsViewController: UIViewController, UITableViewDelegate, UITableVi
         let selected = UITableViewCell.AccessoryType.checkmark
         let unselected = UITableViewCell.AccessoryType.none
         
-        if selectedCalendars[calendars[indexPath.row]] != nil {
+        if SearchOrgsViewController.selectedCalendars[calendars[indexPath.row]] != nil {
             cell.accessoryType = selected
         } else {
             cell.accessoryType = unselected
@@ -57,13 +91,13 @@ class SearchOrgsViewController: UIViewController, UITableViewDelegate, UITableVi
         
         if tableView.cellForRow(at: indexPath)?.accessoryType == selected {
             tableView.cellForRow(at: indexPath)?.accessoryType = unselected
-            selectedCalendars.removeValue(forKey: calendars[indexPath.row])
+            SearchOrgsViewController.selectedCalendars.removeValue(forKey: calendars[indexPath.row])
         } else {
             tableView.cellForRow(at: indexPath)?.accessoryType = selected
-            selectedCalendars[calendars[indexPath.row]] = calendar_ids[calendars[indexPath.row]]
+            SearchOrgsViewController.selectedCalendars[calendars[indexPath.row]] = calendar_ids[calendars[indexPath.row]]
         }
         
-        UserDefaults.standard.set(selectedCalendars, forKey: "OrgsArray")
+        UserDefaults.standard.set(SearchOrgsViewController.selectedCalendars, forKey: "OrgsArray")
         
     }
 
