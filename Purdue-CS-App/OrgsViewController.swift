@@ -48,13 +48,14 @@ extension Date {
 
 //Calendar link to API
 func calendarIDtoAPI(calendar_id: String) -> String {
-    let url = "https://www.googleapis.com/calendar/v3/calendars/" + calendar_id + "/events?maxResults=15&key=" + API.API_KEY
+    let url = "https://www.googleapis.com/calendar/v3/calendars/" + calendar_id + "/events?maxResults=20&key=" + API.API_KEY
     return url
 }
 
 class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var myActivityIndicator: UIActivityIndicatorView!
     
     //List of calendars
     //LEAVE COMMENT FOR TESTING
@@ -95,7 +96,19 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
             calendars[calendar_name] = calendarIDtoAPI(calendar_id: id)
         }
         
-        loadDidView()
+        self.myActivityIndicator.startAnimating()
+        tableView.isScrollEnabled = false;
+        
+        DispatchQueue.global(qos: .background).async {
+            
+            self.loadDidView()
+            
+            DispatchQueue.main.async {
+                self.myActivityIndicator.stopAnimating()
+                self.tableView.isScrollEnabled = true;
+                self.tableView.reloadData()
+            }
+        }
         
     }
     
@@ -132,7 +145,7 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
         }
         
         //Remove all items more than 24hrs in the past
-        tableEvents.removeAll (where: { getStartDate(event: $0).timeIntervalSinceNow < -86400 })
+        //tableEvents.removeAll (where: { getStartDate(event: $0).timeIntervalSinceNow < -86400 })
         
         allResults = tableEvents
         
@@ -141,6 +154,7 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
     @objc func refreshScreen(_ control: UIRefreshControl) {
         
         tableEvents.removeAll(keepingCapacity: true)
+        
         loadDidView()
         
         for (index, event) in tableEvents.enumerated().reversed() {
@@ -161,20 +175,34 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         if previousCals != calendar_ids {
             
+            tableView.isScrollEnabled = false;
+            self.myActivityIndicator.startAnimating()
+            
             for (calendar_name, id) in calendar_ids  {
                 calendars[calendar_name] = calendarIDtoAPI(calendar_id: id)
             }
             
             tableEvents.removeAll(keepingCapacity: true)
-            loadDidView()
-            
-            for (index, event) in tableEvents.enumerated().reversed() {
-                if calendar_ids[event.organization!] == nil {
-                    tableEvents.remove(at: index)
+            DispatchQueue.global(qos: .background).async {
+                
+                self.loadDidView()
+                
+                DispatchQueue.main.async {
+                    
+                    for (index, event) in self.tableEvents.enumerated().reversed() {
+                        if self.calendar_ids[event.organization!] == nil {
+                            self.tableEvents.remove(at: index)
+                        }
+                    }
+                    
+                    self.myActivityIndicator.stopAnimating()
+                    self.tableView.isScrollEnabled = true;
+                    
+                    self.tableView.reloadData()
+                    
                 }
             }
             
-            self.tableView.reloadData()
         }
     }
     
