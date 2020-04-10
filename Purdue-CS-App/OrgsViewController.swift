@@ -68,9 +68,15 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     let defaults = UserDefaults.standard
     
+    var refControl: UIRefreshControl {
+        let refresh = UIRefreshControl()
+        refresh.addTarget(self, action: #selector(refreshScreen(_:)), for: .valueChanged)
+        return refresh
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        tableView.addSubview(refControl)
         if defaults.object(forKey: "IDArray") == nil {
             defaults.set([String](), forKey: "IDArray")
         }
@@ -126,6 +132,49 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         //Setup subscription to specific calendars
         //Cleanup Layout
+        
+    }
+    
+    @objc func refreshScreen(_ control: UIRefreshControl) {
+        
+        tableEvents.removeAll(keepingCapacity: true)
+        
+        for (org_name, urlString) in calendars {
+            let url = URL(string: urlString)!
+            let semaphore = DispatchSemaphore(value: 0)
+            
+            URLSession.shared.dataTask(with: url) { data, response, error in
+                if let data = data {
+                    do {
+                        var events = try JSONDecoder().decode(CalendarEvents.self, from: data)
+                        
+                        for (i, _) in events.items.enumerated() {
+                            events.items[i].organization = org_name
+                        }
+                        
+                        self.tableEvents.append(contentsOf: events.items)
+                        
+                    } catch let error {
+                        print(error)
+                    }
+                }
+                semaphore.signal()
+            }.resume()
+            
+            semaphore.wait()
+        }
+        
+        //Sort items by start date
+        tableEvents.sort { (left, right) -> Bool in
+            return getStartDate(event: left).timeIntervalSinceNow < getStartDate(event: right).timeIntervalSinceNow
+        }
+        
+        //Remove all items more than 24hrs in the past
+        tableEvents.removeAll (where: { getStartDate(event: $0).timeIntervalSinceNow < -86400 })
+        
+        allResults = tableEvents
+        control.endRefreshing()
+        self.tableView.reloadData()
         
     }
     
