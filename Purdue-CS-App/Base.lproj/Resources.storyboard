@@ -1,47 +1,76 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16096" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="cOU-CU-upZ">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16096" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="h7s-Cg-gn3">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16086"/>
-        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
         <!--Resources-->
-        <scene sceneID="QKW-P2-Yy4">
+        <scene sceneID="Gye-hj-Eef">
             <objects>
-                <viewController id="8bA-2L-3U1" customClass="ResourcesViewController" customModule="Purdue_CS_App" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="Khn-3T-lxe">
+                <tableViewController title="Resources" id="EUP-My-HAc" customClass="ResourcesViewController" customModule="Purdue_CS_App" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="WS1-8I-NrZ">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
-                        <viewLayoutGuide key="safeArea" id="BZi-gP-QtN"/>
-                    </view>
-                    <navigationItem key="navigationItem" title="Resources" id="k6w-vz-HXS"/>
-                    <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="h9z-wd-G5T" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="ResourceCell" rowHeight="100" id="Wcq-Fo-5Ue" customClass="ResourceCell" customModule="Purdue_CS_App" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="28" width="414" height="100"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Wcq-Fo-5Ue" id="CPm-9Y-ypA">
+                                    <rect key="frame" x="0.0" y="0.0" width="414" height="100"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5gd-PJ-nJj">
+                                            <rect key="frame" x="20" y="11" width="78" height="78"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        </imageView>
+                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Q5T-2D-BgL">
+                                            <rect key="frame" x="116" y="11" width="298" height="78"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="cellText" destination="Q5T-2D-BgL" id="u8Y-dg-UCr"/>
+                                    <outlet property="imageIcon" destination="5gd-PJ-nJj" id="iJp-E9-JQ1"/>
+                                </connections>
+                            </tableViewCell>
+                        </prototypes>
+                        <sections/>
+                        <connections>
+                            <outlet property="dataSource" destination="EUP-My-HAc" id="TzX-9J-uyg"/>
+                            <outlet property="delegate" destination="EUP-My-HAc" id="UPT-xl-OL1"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" title="Resources" largeTitleDisplayMode="always" id="7m7-3s-uG4"/>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="4aV-Y6-cZZ" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3200.0000000000005" y="-318.08035714285711"/>
+            <point key="canvasLocation" x="3267" y="-67"/>
         </scene>
         <!--Resources-->
-        <scene sceneID="j0h-sL-t04">
+        <scene sceneID="WKs-K1-HIg">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="cOU-CU-upZ" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Resources" image="square.grid.2x2" catalog="system" id="LHA-9Y-oeC"/>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="h7s-Cg-gn3" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Resources" image="square.grid.2x2" catalog="system" id="fAS-ua-vCm"/>
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" largeTitles="YES" id="6TT-iu-PPh">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" largeTitles="YES" id="KoM-wp-9Xp">
                         <rect key="frame" x="0.0" y="44" width="414" height="96"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
-                        <segue destination="8bA-2L-3U1" kind="relationship" relationship="rootViewController" id="DSV-d4-VS3"/>
+                        <segue destination="EUP-My-HAc" kind="relationship" relationship="rootViewController" id="3um-Kb-K7K"/>
                     </connections>
                 </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="RPh-i2-yUk" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="YKg-yQ-dpL" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2289.8550724637685" y="-318.08035714285711"/>
+            <point key="canvasLocation" x="2290" y="-68"/>
         </scene>
     </scenes>
     <resources>
