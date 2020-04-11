@@ -7,18 +7,18 @@
 //
 
 import UIKit
+import SafariServices
 
-class ResourcesViewController: UITableViewController {
+class ResourcesViewController: UITableViewController, SFSafariViewControllerDelegate {
     
     let labels = ["Get a Lawson/Haas Key Fob", "CS Merch", "Resources","LWSN Map", "News", "Concern Form", "Feedback", "About Us"];
     let images = [UIImage(named:"antenna"), UIImage(named:"person.circle"), UIImage(named:"pencil"), UIImage(named:"map"),UIImage(named:"book"), UIImage(named:"paperplane"), UIImage(named:"mic"), UIImage(named:"person.3")];
+    let keyFobEmail = "cs-workstudy@science.purdue.edu"
     
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.rowHeight = 100;
     }
-    
-    // MARK: - Table view data source
     
     override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
@@ -32,7 +32,60 @@ class ResourcesViewController: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ResourceCell", for: indexPath) as! ResourceCell
         cell.cellText.text = labels[indexPath.row]
         cell.imageIcon.image = images[indexPath.row]
+        cell.accessoryType = .disclosureIndicator
         return cell
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let url : URL?
+        let config = SFSafariViewController.Configuration()
+        var viewController : SFSafariViewController?;
+        
+        print("Index Path is \(indexPath.count)");
+        
+        if(indexPath.count == 0){
+            tableView.deselectRow(at:indexPath, animated:true)
+            url = URL(string: "https://kedarabhyankar.me")
+            viewController = SFSafariViewController(url: url!, configuration: config)
+            viewController?.delegate = self
+            present(viewController!, animated:true)
+        } else if(indexPath.count == 1){
+            tableView.deselectRow(at:indexPath, animated:true)
+            url = URL(string: "https://kedarabhyankar.me")
+            viewController = SFSafariViewController(url: url!, configuration: config)
+            viewController?.delegate = self
+            present(viewController!, animated:true)
+        } else if(indexPath.count == 2){
+            tableView.deselectRow(at:indexPath, animated:true)
+            url = URL(string: "https://kedarabhyankar.me")
+            viewController = SFSafariViewController(url: url!, configuration: config)
+            viewController?.delegate = self
+            present(viewController!, animated:true)
+        } else if(indexPath.count == 3){
+            tableView.deselectRow(at:indexPath, animated:true)
+            url = URL(string: "https://kedarabhyankar.me")
+            viewController = SFSafariViewController(url: url!, configuration: config)
+            viewController?.delegate = self
+            present(viewController!, animated:true)
+        } else if(indexPath.count == 4){
+            tableView.deselectRow(at:indexPath, animated:true)
+            url = URL(string: "https://kedarabhyankar.me")
+            viewController = SFSafariViewController(url: url!, configuration: config)
+            viewController?.delegate = self
+            present(viewController!, animated:true)
+        } else if(indexPath.count == 5){
+            tableView.deselectRow(at:indexPath, animated:true)
+            url = URL(string: "https://kedarabhyankar.me")
+            viewController = SFSafariViewController(url: url!, configuration: config)
+            viewController?.delegate = self
+            present(viewController!, animated:true)
+        } else if(indexPath.count == 6){
+            tableView.deselectRow(at:indexPath, animated:true)
+            url = URL(string: "https://kedarabhyankar.me")
+            viewController = SFSafariViewController(url: url!, configuration: config)
+            viewController?.delegate = self
+            present(viewController!, animated:true)
+        }
     }
     
     
