@@ -3,26 +3,55 @@
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16086"/>
-        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
         <!--Resources-->
-        <scene sceneID="QKW-P2-Yy4">
+        <scene sceneID="RFS-da-zo6">
             <objects>
-                <viewController id="8bA-2L-3U1" customClass="ResourcesViewController" customModule="Purdue_CS_App" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="Khn-3T-lxe">
+                <tableViewController title="Resources" id="yIh-F7-DZ6" customClass="ResourcesViewController" customModule="Purdue_CS_App" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="4l4-Tt-dgL">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
-                        <viewLayoutGuide key="safeArea" id="BZi-gP-QtN"/>
-                    </view>
-                    <navigationItem key="navigationItem" title="Resources" id="k6w-vz-HXS"/>
-                    <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="h9z-wd-G5T" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="ResourceCell" rowHeight="100" id="sWn-Zc-d0m" customClass="ResourceCell" customModule="Purdue_CS_App" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="28" width="414" height="100"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="sWn-Zc-d0m" id="3ni-Bk-Ez1">
+                                    <rect key="frame" x="0.0" y="0.0" width="414" height="100"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qPo-sy-soq">
+                                            <rect key="frame" x="20" y="11" width="78" height="78"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        </imageView>
+                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pqS-CT-P0I">
+                                            <rect key="frame" x="116" y="11" width="298" height="78"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="cellText" destination="pqS-CT-P0I" id="v20-Wc-Geq"/>
+                                    <outlet property="imageIcon" destination="qPo-sy-soq" id="QvZ-Qo-t2w"/>
+                                </connections>
+                            </tableViewCell>
+                        </prototypes>
+                        <sections/>
+                        <connections>
+                            <outlet property="dataSource" destination="yIh-F7-DZ6" id="KoN-cB-ru7"/>
+                            <outlet property="delegate" destination="yIh-F7-DZ6" id="naj-e5-Uzb"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" title="Resources" largeTitleDisplayMode="always" id="rGI-7W-I0j"/>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="gEh-0n-aw1" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3200.0000000000005" y="-318.08035714285711"/>
+            <point key="canvasLocation" x="3266.666666666667" y="-318.08035714285711"/>
         </scene>
         <!--Resources-->
         <scene sceneID="j0h-sL-t04">
@@ -36,7 +65,7 @@
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
-                        <segue destination="8bA-2L-3U1" kind="relationship" relationship="rootViewController" id="DSV-d4-VS3"/>
+                        <segue destination="yIh-F7-DZ6" kind="relationship" relationship="rootViewController" id="o8e-Is-zgJ"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="RPh-i2-yUk" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
