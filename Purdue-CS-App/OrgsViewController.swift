@@ -46,19 +46,54 @@ extension Date {
     }
 }
 
+extension UITableView {
+    func setEmptyView(title: String, message: String) {
+         let emptyView = UIView(frame: CGRect(x: self.center.x, y: self.center.y, width: self.bounds.size.width, height: self.bounds.size.height))
+         let titleLabel = UILabel()
+         let messageLabel = UILabel()
+         titleLabel.translatesAutoresizingMaskIntoConstraints = false
+         messageLabel.translatesAutoresizingMaskIntoConstraints = false
+         titleLabel.textColor = UIColor.lightGray
+         titleLabel.font = UIFont(name: "HelveticaNeue-Bold", size: 18)
+         messageLabel.textColor = UIColor.lightGray
+         messageLabel.font = UIFont(name: "HelveticaNeue-Regular", size: 17)
+         emptyView.addSubview(titleLabel)
+         emptyView.addSubview(messageLabel)
+         titleLabel.centerYAnchor.constraint(equalTo: emptyView.centerYAnchor).isActive = true
+         titleLabel.centerXAnchor.constraint(equalTo: emptyView.centerXAnchor).isActive = true
+         messageLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 10).isActive = true
+         messageLabel.leftAnchor.constraint(equalTo: emptyView.leftAnchor, constant: 10).isActive = true
+         messageLabel.rightAnchor.constraint(equalTo: emptyView.rightAnchor, constant: -10).isActive = true
+         titleLabel.text = title
+         messageLabel.text = message
+         messageLabel.numberOfLines = 0
+         messageLabel.textAlignment = .center
+         // The only tricky part is here:
+         self.backgroundView = emptyView
+         self.separatorStyle = .none
+     }
+    
+    func restore() {
+        self.backgroundView = nil
+        self.separatorStyle = .singleLine
+    }
+}
+
 //Calendar link to API
 func calendarIDtoAPI(calendar_id: String) -> String {
-    let url = "https://www.googleapis.com/calendar/v3/calendars/" + calendar_id + "/events?maxResults=15&key=" + API.API_KEY
+    let url = "https://www.googleapis.com/calendar/v3/calendars/" + calendar_id + "/events?maxResults=20&key=" + API.API_KEY
     return url
 }
 
 class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var myActivityIndicator: UIActivityIndicatorView!
     
     //List of calendars
-    var calendar_ids: [String: String] = ["Purdue CS": "sodicmhprbq87022es0t74blk8@group.calendar.google.com", "Purdue Hackers": "purduehackers@gmail.com" ]
-    
+    //LEAVE COMMENT FOR TESTING
+    //  var calendar_ids: [String: String] = ["Purdue CS": "sodicmhprbq87022es0t74blk8@group.calendar.google.com", "Purdue Hackers": "purduehackers@gmail.com", "CS Events": "256h9v68bnbnponkp0upmfq07s@group.calendar.google.com", "CS Seminars": "t3gdpe5uft0cbfsq9bipl7ofq0@group.calendar.google.com"]
+    var calendar_ids = SearchOrgsViewController.selectedCalendars
     var calendars = [String:String]()
     
     var allResults: [CalendarEvents.Items] = []
@@ -67,9 +102,15 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     let defaults = UserDefaults.standard
     
+    var refControl: UIRefreshControl {
+        let refresh = UIRefreshControl()
+        refresh.addTarget(self, action: #selector(refreshScreen(_:)), for: .valueChanged)
+        return refresh
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        tableView.addSubview(refControl)
         if defaults.object(forKey: "IDArray") == nil {
             defaults.set([String](), forKey: "IDArray")
         }
@@ -82,11 +123,29 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         tableView.dataSource = self
         tableView.delegate = self
-        tableView.rowHeight = 193
+        tableView.rowHeight = 126
         
         for (calendar_name, id) in calendar_ids  {
             calendars[calendar_name] = calendarIDtoAPI(calendar_id: id)
         }
+        
+        self.myActivityIndicator.startAnimating()
+        tableView.isScrollEnabled = false;
+        
+        DispatchQueue.global(qos: .background).async {
+            
+            self.loadDidView()
+            
+            DispatchQueue.main.async {
+                self.myActivityIndicator.stopAnimating()
+                self.tableView.isScrollEnabled = true;
+                self.tableView.reloadData()
+            }
+        }
+        
+    }
+    
+    func loadDidView() {
         
         for (org_name, urlString) in calendars {
             let url = URL(string: urlString)!
@@ -115,7 +174,7 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         //Sort items by start date
         tableEvents.sort { (left, right) -> Bool in
-            return getStartDate(event: left).timeIntervalSinceNow < getEndDate(event: left).timeIntervalSinceNow
+            return getStartDate(event: left).timeIntervalSinceNow < getStartDate(event: right).timeIntervalSinceNow
         }
         
         //Remove all items more than 24hrs in the past
@@ -123,9 +182,62 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         allResults = tableEvents
         
-        //Setup subscription to specific calendars
-        //Cleanup Layout
+    }
+    
+    @objc func refreshScreen(_ control: UIRefreshControl) {
         
+        tableEvents.removeAll(keepingCapacity: true)
+        
+        loadDidView()
+        
+        for (index, event) in tableEvents.enumerated().reversed() {
+            if calendar_ids[event.organization!] == nil {
+                tableEvents.remove(at: index)
+            }
+        }
+        
+        control.endRefreshing()
+        self.tableView.reloadData()
+        
+    }
+    
+    //TableEvents only keeps selected items.
+    override func viewDidAppear(_ animated: Bool) {
+        let previousCals = calendar_ids
+        calendar_ids = defaults.object(forKey: "OrgsArray") as! [String : String]
+        
+        if previousCals != calendar_ids {
+            
+            tableView.isScrollEnabled = false;
+            tableView.restore()
+            self.myActivityIndicator.startAnimating()
+            
+            for (calendar_name, id) in calendar_ids  {
+                calendars[calendar_name] = calendarIDtoAPI(calendar_id: id)
+            }
+            
+            tableEvents.removeAll(keepingCapacity: true)
+            DispatchQueue.global(qos: .background).async {
+                
+                self.loadDidView()
+                
+                DispatchQueue.main.async {
+                    
+                    for (index, event) in self.tableEvents.enumerated().reversed() {
+                        if self.calendar_ids[event.organization!] == nil {
+                            self.tableEvents.remove(at: index)
+                        }
+                    }
+                    
+                    self.myActivityIndicator.stopAnimating()
+                    self.tableView.isScrollEnabled = true;
+                    
+                    self.tableView.reloadData()
+                    
+                }
+            }
+            
+        }
     }
     
     func getStartDate(event: CalendarEvents.Items) -> Date {
@@ -179,23 +291,6 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
         }
         
         //UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
-        
-    }
-    
-    //TableEvents only keeps selected items. 
-    override func viewWillAppear(_ animated: Bool) {
-
-        calendar_ids = defaults.object(forKey: "OrgsArray") as! [String : String]
-        
-        tableEvents = allResults
-
-        for (index, event) in tableEvents.enumerated().reversed() {
-            if calendar_ids[event.organization!] == nil {
-                tableEvents.remove(at: index)
-            }
-        }
-        
-        self.tableView.reloadData()
         
     }
     
@@ -255,7 +350,24 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
         
     }
     
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        
+        if tableEvents[indexPath.row].description?.count == nil {
+            return 70;
+        } else {
+            return 126;
+        }
+        
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if tableEvents.count == 0 {
+            tableView.setEmptyView(title: "No upcoming events.", message: "Tap the '+' icon to add organizations")
+        }
+        else {
+            tableView.restore()
+        }
+        
         return tableEvents.count
     }
     

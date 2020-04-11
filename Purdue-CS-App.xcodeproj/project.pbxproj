@@ -97,11 +97,13 @@
 				76C3A698243C6CC2009181F8 /* Organizations.storyboard */,
 				765FFBE42432B116005FB5E4 /* Resources.storyboard */,
 				76728B61240DCD480017EE2A /* Main.storyboard */,
+				76F81D8224402C1300D8F958 /* config.swift */,
 				76D6445A2432A5A9001B2792 /* AnnouncementsViewController.swift */,
 				76D6445C2432A5CA001B2792 /* OrgsViewController.swift */,
 				76A6B936243FDD0300C1BF51 /* SearchOrgsViewController.swift */,
 				76A6B938243FDFAD00C1BF51 /* OrgCell.swift */,
 				76013C0F243CFA3400C99A02 /* EventCell.swift */,
+				76F81D8024402ADC00D8F958 /* GoogleService-Info.plist */,
 				768D922B243E99210021405B /* config.swift */,
 				76728B64240DCD4A0017EE2A /* Assets.xcassets */,
 				76728B66240DCD4A0017EE2A /* LaunchScreen.storyboard */,
@@ -187,6 +189,7 @@
 				76728B65240DCD4A0017EE2A /* Assets.xcassets in Resources */,
 				76728B63240DCD480017EE2A /* Main.storyboard in Resources */,
 				76C3A69A243C6CC2009181F8 /* Organizations.storyboard in Resources */,
+				76F81D8124402ADC00D8F958 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -241,6 +244,7 @@
 			files = (
 				76A6B937243FDD0300C1BF51 /* SearchOrgsViewController.swift in Sources */,
 				76D6445D2432A5CA001B2792 /* OrgsViewController.swift in Sources */,
+				76F81D8324402C1300D8F958 /* config.swift in Sources */,
 				76728B5C240DCD480017EE2A /* AppDelegate.swift in Sources */,
 				76728B5E240DCD480017EE2A /* SceneDelegate.swift in Sources */,
 				768D922C243E99210021405B /* config.swift in Sources */,
