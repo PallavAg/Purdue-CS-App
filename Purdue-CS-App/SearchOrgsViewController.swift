@@ -29,6 +29,8 @@ class SearchOrgsViewController: UIViewController, UITableViewDelegate, UITableVi
         tableView.dataSource = self
         tableView.delegate = self
         
+        self.tableView.rowHeight = 70
+        
         fillCalendarIds()
     }
     

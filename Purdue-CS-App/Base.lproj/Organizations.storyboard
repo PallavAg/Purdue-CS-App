@@ -111,7 +111,7 @@
                             </tableView>
                             <activityIndicatorView hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="large" id="3ip-yx-Ohz">
                                 <rect key="frame" x="0.0" y="0.0" width="385" height="812"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
@@ -195,11 +195,11 @@
             </objects>
             <point key="canvasLocation" x="1360.8" y="1119.4581280788177"/>
         </scene>
-        <!--Orgs-->
+        <!--Events-->
         <scene sceneID="3bh-wl-5AB">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="gcc-W6-vBM" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Orgs" image="house" catalog="system" id="fjh-CA-yq8"/>
+                    <tabBarItem key="tabBarItem" title="Events" image="calendar.circle" catalog="system" id="fjh-CA-yq8"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" largeTitles="YES" id="9EZ-K3-Ggd">
                         <rect key="frame" x="0.0" y="44" width="375" height="96"/>
@@ -217,7 +217,7 @@
     </scenes>
     <resources>
         <image name="bell.slash" catalog="system" width="128" height="128"/>
-        <image name="house" catalog="system" width="128" height="110"/>
+        <image name="calendar.circle" catalog="system" width="128" height="121"/>
         <image name="plus" catalog="system" width="128" height="113"/>
     </resources>
 </document>

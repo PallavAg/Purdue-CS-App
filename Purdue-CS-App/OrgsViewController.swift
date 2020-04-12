@@ -93,7 +93,8 @@ func calendarIDtoAPI(calendar_id: String) -> String {
     return url
 }
 
-class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+//Tab bar icons update
+class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UNUserNotificationCenterDelegate {
     
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var myActivityIndicator: UIActivityIndicatorView!
@@ -109,6 +110,7 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
     var tableEvents: [CalendarEvents.Items] = [] //Each event in calendar
     
     let defaults = UserDefaults.standard
+    var notInitialLoad = false
     
     var refControl: UIRefreshControl {
         let refresh = UIRefreshControl()
@@ -147,6 +149,7 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
             DispatchQueue.main.async {
                 self.myActivityIndicator.stopAnimating()
                 self.tableView.isScrollEnabled = true;
+                self.notInitialLoad = true
                 self.tableView.reloadData()
             }
         }
@@ -185,8 +188,8 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
             return getStartDate(event: left).timeIntervalSinceNow < getStartDate(event: right).timeIntervalSinceNow
         }
         
-        //Remove all items more than 24hrs in the past
-        tableEvents.removeAll (where: { getStartDate(event: $0).timeIntervalSinceNow < -86400 })
+        //Remove all items before today's date
+        tableEvents.removeAll (where: { getStartDate(event: $0).timeIntervalSinceNow < Calendar.current.startOfDay(for: Date()).timeIntervalSinceNow })
         
         allResults = tableEvents
         
@@ -199,7 +202,7 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
         loadDidView()
         
         for (index, event) in tableEvents.enumerated().reversed() {
-            if calendar_ids[event.organization!] == nil {
+            if calendar_ids[event.organization ?? ""] == nil {
                 tableEvents.remove(at: index)
             }
         }
@@ -232,7 +235,7 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
                 DispatchQueue.main.async {
                     
                     for (index, event) in self.tableEvents.enumerated().reversed() {
-                        if self.calendar_ids[event.organization!] == nil {
+                        if self.calendar_ids[event.organization ?? ""] == nil {
                             self.tableEvents.remove(at: index)
                         }
                     }
@@ -345,30 +348,62 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
     //Handle Bell Icon
     @objc func bellClicked(sender:UIButton) {
         
-        //Save ID
-        let buttonRow = sender.tag
-        let event = tableEvents[buttonRow]
+        let center = UNUserNotificationCenter.current()
+        let options: UNAuthorizationOptions = [.sound, .alert]
         
-        let eventID = event.id
-        let filledImage = UIImage(systemName: "bell.fill")
-        let emptyImage = UIImage(systemName: "bell.slash")
-        var savedIDs = defaults.object(forKey: "IDsArray") as? [String] ?? [String]()
+        var notifGranted = false
         
-        if let index = savedIDs.firstIndex(of: eventID) {
-            //Remove event notification
-            savedIDs.remove(at: index)
-            sender.setImage(emptyImage, for: .normal)
-            UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [eventID])
-        } else {
-            //Set event notification
-            savedIDs.append(eventID)
-            sender.setImage(filledImage, for: .normal)
-            
-            setupNotification(dateInput: getStartDate(event: event), event: event)
-            
+        let semaphore = DispatchSemaphore(value: 0)
+        
+        //Prompt for notification access
+        center.requestAuthorization(options: options) { (granted, error) in
+            semaphore.signal()
+            notifGranted = granted
+            if error != nil { print (error!) }
         }
         
-        defaults.set(savedIDs, forKey: "IDsArray")
+        semaphore.wait()
+        
+        //Check if notifications enabled
+        center.getNotificationSettings { settings in
+            guard settings.authorizationStatus == .authorized else { return }
+            notifGranted = (settings.alertSetting == .enabled)
+        }
+        
+        center.delegate = self
+        
+        if notifGranted {
+            
+            //Save ID
+            let buttonRow = sender.tag
+            let event = tableEvents[buttonRow]
+            
+            let eventID = event.id
+            let filledImage = UIImage(systemName: "bell.fill")
+            let emptyImage = UIImage(systemName: "bell.slash")
+            var savedIDs = defaults.object(forKey: "IDsArray") as? [String] ?? [String]()
+            
+            if let index = savedIDs.firstIndex(of: eventID) {
+                //Remove event notification
+                savedIDs.remove(at: index)
+                sender.setImage(emptyImage, for: .normal)
+                UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [eventID])
+            } else {
+                //Set event notification
+                savedIDs.append(eventID)
+                sender.setImage(filledImage, for: .normal)
+                
+                setupNotification(dateInput: getStartDate(event: event), event: event)
+                
+            }
+            
+            defaults.set(savedIDs, forKey: "IDsArray")
+            
+        } else {
+            let alert = UIAlertController(title:"Turn on Notifications", message:"To get event notifications. Please allow notifications in Settings.", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title:"Ok", style: .default, handler:nil))
+            present(alert, animated:true);
+        }
         
     }
     
@@ -383,7 +418,8 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if tableEvents.count == 0 {
+        if tableEvents.count == 0 && notInitialLoad {
+            print(notInitialLoad)
             tableView.setEmptyView(title: "No upcoming events.", message: "Tap the '+' icon to add organizations")
         }
         else {
@@ -424,11 +460,21 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
         cell.descriptionLabel.text = event.description
         
         //Location and Organization
-        var locationOrgLabel = ""
-        if let location = event.location {
-            locationOrgLabel += location + " | "
+        let boldAttribute = [NSAttributedString.Key.font: UIFont(name: "HelveticaNeue-Bold", size: 12.0)!]
+        let regularAttribute = [NSAttributedString.Key.font: UIFont(name: "HelveticaNeue-Light", size: 12.0)!]
+        
+        var orgString = event.organization ?? ""
+        if event.location != nil {
+            orgString = " | " + (event.organization ?? "")
         }
-        cell.orgLabel.text = locationOrgLabel + (event.organization ?? "")
+        
+        let boldLocation = NSAttributedString(string: event.location ?? "", attributes: boldAttribute)
+        let regularOrgs = NSAttributedString(string: orgString, attributes: regularAttribute)
+        let finalString = NSMutableAttributedString()
+        finalString.append(boldLocation)
+        finalString.append(regularOrgs)
+        
+        cell.orgLabel.attributedText = finalString
         
         //Notification Bell setup
         let eventID = event.id

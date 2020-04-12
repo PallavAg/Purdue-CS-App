@@ -11,19 +11,16 @@ import SafariServices
 
 class ResourcesViewController: UITableViewController, SFSafariViewControllerDelegate {
     
-    let labels = ["Lawson Hours & Key Fob", "Lawson Resources","LWSN Map", "HAAS Map", "CS News", "Concern Form", "Feedback", "About Us"];
+    let labels = ["Lawson Hours & Key Fob", "Lawson Resources", "Lawson Map", "CS News", "CS Concern Form", "Feedback", "About Us"];
     
-    let images = [UIImage(systemName: "antenna.radiowaves.left.and.right"), UIImage(systemName:"globe"), UIImage(systemName:"map"), UIImage(systemName:"map"),
-                  UIImage(systemName:"book"), UIImage(systemName:"paperplane"), UIImage(systemName:"mic"),
-                  UIImage(systemName:"person.3")];
+    let images = [UIImage(systemName: "antenna.radiowaves.left.and.right"), UIImage(systemName:"globe"), UIImage(systemName:"map"), UIImage(systemName:"book"), UIImage(systemName:"paperplane"), UIImage(systemName:"mic"), UIImage(systemName:"info.circle")];
     
     let hyperlinks = ["https://www.cs.purdue.edu/resources/docs/building_hours.pdf",
                       "https://www.cs.purdue.edu/resources/index.html",
                       "https://www.cs.purdue.edu/resources/lawson.html",
-                      "https://www.cs.purdue.edu/resources/haas.html",
                       "https://www.cs.purdue.edu/news/index.html",
                       "https://my.cs.purdue.edu/undergraduate/concern",
-                      "https://forms.gle/pbhq2KqMD1Q1T4Pw5"];
+                      "https://forms.gle/6d6nWN58j3DB38mR9"];
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -50,10 +47,10 @@ class ResourcesViewController: UITableViewController, SFSafariViewControllerDele
         let url: URL?
         let config = SFSafariViewController.Configuration()
         var viewController: SFSafariViewController?;
-        
-        if(indexPath.row == 7) {
+        print(indexPath.row)
+        if(indexPath.row == labels.count - 1) {
             tableView.deselectRow(at:indexPath, animated:true)
-            let alert = UIAlertController(title:"About Us", message:"Brought to you by Pallav Agarwal, Viraat Das and Kedar Abhyankar.", preferredStyle: .alert)
+            let alert = UIAlertController(title:"About", message:"This is an app to allow students in Computer Science at Purdue University to read the Oppurtunity Update, stay up to date on events by CS Organizations, and get CS Resources. Brought to you by Pallav Agarwal, Viraat Das and Kedar Abhyankar.", preferredStyle: .alert)
             alert.addAction(UIAlertAction(title:"Ok", style: .default, handler:nil))
             present(alert, animated:true);
         } else {

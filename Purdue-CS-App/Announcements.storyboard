@@ -86,7 +86,7 @@
         <scene sceneID="Trp-XQ-GZc">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="VtL-4s-COK" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Announcements" image="message" catalog="system" id="OKy-rG-Iuh"/>
+                    <tabBarItem key="tabBarItem" title="Announcements" image="bell.circle" catalog="system" id="OKy-rG-Iuh"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" largeTitles="YES" id="gea-nk-Nsz">
                         <rect key="frame" x="0.0" y="44" width="414" height="96"/>
@@ -103,6 +103,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="message" catalog="system" width="128" height="113"/>
+        <image name="bell.circle" catalog="system" width="128" height="121"/>
     </resources>
 </document>
