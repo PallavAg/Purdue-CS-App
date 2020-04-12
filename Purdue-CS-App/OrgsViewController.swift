@@ -399,7 +399,7 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
         let event = tableEvents[indexPath.row]
         
         //Title
-        cell.titleLabel.text = event.summary
+        cell.titleLabel.text = event.summary ?? "(No Title)"
         
         //Date and Time
         if event.start.dateTime != nil {
