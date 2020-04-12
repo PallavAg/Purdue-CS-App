@@ -23,7 +23,6 @@ class SearchOrgsViewController: UIViewController, UITableViewDelegate, UITableVi
     
     typealias FinishedFillingCalendar = () -> ()
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -39,13 +38,12 @@ class SearchOrgsViewController: UIViewController, UITableViewDelegate, UITableVi
         
         myRef?.observeSingleEvent(of: .value, with: { (snapshot) in
             
-            // handle data not found
+            //Handle data not found
             if !snapshot.exists() {
-                
                 return
             }
             
-            // data found
+            //Data found
             self.calendar_ids = snapshot.value as! [String: String]
             
             self.tableView.reloadData()

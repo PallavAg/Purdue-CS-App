@@ -16,10 +16,17 @@ struct cellData {
     var link = [String]() //Link to update
 }
 
+//Announcement in viewWillAppear
+//Orgs change URL to time
+
 class AnnouncementsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, SFSafariViewControllerDelegate {
     
     @IBOutlet weak var tableView: UITableView!
     var tableViewData = [cellData]()
+    
+    let opportunity_url = URL(string: "https://www.cs.purdue.edu/corporate/opportunity_update.html")
+    let base_url: String = "https://www.cs.purdue.edu/corporate/"
+    let sectionTitles = ["Careers", "Employment", "Announcements", "Events", "Internships", "Scholarships"]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,7 +34,36 @@ class AnnouncementsViewController: UIViewController, UITableViewDelegate, UITabl
         tableView.delegate = self
         tableView.dataSource = self
         
-        let opportunity_url = URL(string: "https://www.cs.purdue.edu/corporate/opportunity_update.html")
+        loadData()
+        
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        
+        let oldData = tableViewData
+        loadData()
+        let newTableData = tableViewData
+        
+        tableViewData = oldData
+        
+        if oldData.count == 0 {
+            tableViewData = newTableData
+            self.tableView.reloadData()
+        } else {
+            for (newData, oldData) in zip(newTableData, oldData) {
+                if newData.sectionData != oldData.sectionData {
+                    print(newData.sectionData)
+                    print(oldData.sectionData)
+                    tableViewData = newTableData
+                    self.tableView.reloadData()
+                }
+            }
+        }
+    }
+    
+    func loadData() {
+        tableViewData.removeAll(keepingCapacity: false)
+        
         let html = try! String(contentsOf: opportunity_url!, encoding: .utf8)
         
         // arrays to be used within tableViewData
@@ -41,18 +77,6 @@ class AnnouncementsViewController: UIViewController, UITableViewDelegate, UITabl
             
             // a with href
             let links: Elements? = try body?.select("a[href]") // a with href
-            
-            // Need to parse links with the following prefix
-            // careers/
-            // employment/
-            // announcements/
-            // events/
-            // internships/
-            // scholarships/
-            
-            let base_url: String = "https://www.cs.purdue.edu/corporate/"
-            
-            let sectionTitles = ["Careers", "Employment", "Announcements", "Events", "Internships", "Scholarships"]
             
             for title in sectionTitles {
                 opport_sections.updateValue([:], forKey: title)
@@ -102,6 +126,11 @@ class AnnouncementsViewController: UIViewController, UITableViewDelegate, UITabl
         //Sort by Title
         tableViewData.sort {
             $0.title < $1.title
+        }
+        
+        //Sort within each Title
+        for index in 0..<tableViewData.count {
+            tableViewData[index].sectionData.sort()
         }
         
     }
