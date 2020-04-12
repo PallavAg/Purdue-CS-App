@@ -16,9 +16,6 @@ struct cellData {
     var link = [String]() //Link to update
 }
 
-//Announcement in viewWillAppear
-//Orgs change URL to time
-
 class AnnouncementsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, SFSafariViewControllerDelegate {
     
     @IBOutlet weak var tableView: UITableView!

@@ -13,7 +13,7 @@ class ResourcesViewController: UITableViewController, SFSafariViewControllerDele
     
     let labels = ["Lawson Hours & Key Fob", "Lawson Resources","LWSN Map", "HAAS Map", "CS News", "Concern Form", "Feedback", "About Us"];
     
-    let images = [UIImage(systemName: "antenna.radiowaves.left.and.right"), UIImage(systemName:"globe"), UIImage(systemName:"map"), UIImage(named:"map"),
+    let images = [UIImage(systemName: "antenna.radiowaves.left.and.right"), UIImage(systemName:"globe"), UIImage(systemName:"map"), UIImage(systemName:"map"),
                   UIImage(systemName:"book"), UIImage(systemName:"paperplane"), UIImage(systemName:"mic"),
                   UIImage(systemName:"person.3")];
     
