@@ -423,8 +423,12 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
         //Description
         cell.descriptionLabel.text = event.description
         
-        //Organization
-        cell.orgLabel.text = event.organization
+        //Location and Organization
+        var locationOrgLabel = ""
+        if let location = event.location {
+            locationOrgLabel += location + " | "
+        }
+        cell.orgLabel.text = locationOrgLabel + (event.organization ?? "")
         
         //Notification Bell setup
         let eventID = event.id
