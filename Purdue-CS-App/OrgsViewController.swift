@@ -93,7 +93,7 @@ func calendarIDtoAPI(calendar_id: String) -> String {
     return url
 }
 
-//Tab bar icons update
+//MARK: - Subscribe to Orgs automatically
 class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UNUserNotificationCenterDelegate {
     
     @IBOutlet weak var tableView: UITableView!

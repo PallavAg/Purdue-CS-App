@@ -16,6 +16,7 @@ struct cellData {
     var link = [String]() //Link to update
 }
 
+//MARK: - Make sure it doesn't crash when there's no Wifi
 class AnnouncementsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, SFSafariViewControllerDelegate {
     
     @IBOutlet weak var tableView: UITableView!
