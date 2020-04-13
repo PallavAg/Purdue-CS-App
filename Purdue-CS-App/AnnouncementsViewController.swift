@@ -58,90 +58,96 @@ class AnnouncementsViewController: UIViewController, UITableViewDelegate, UITabl
     }
     
     func loadData() {
+        
         tableViewData.removeAll(keepingCapacity: false)
         
-        let html = try! String(contentsOf: opportunity_url!, encoding: .utf8)
-        
-        // arrays to be used within tableViewData
-        var opport_sections = [String: [String: String]]() //[Section Title: [Subtitle : Link]]
-        
         do {
-            let doc: Document = try SwiftSoup.parseBodyFragment(html)
+            let html = try String(contentsOf: opportunity_url!, encoding: .utf8)
             
-            // my body
-            let body = doc.body()
+            // arrays to be used within tableViewData
+            var opport_sections = [String: [String: String]]() //[Section Title: [Subtitle : Link]]
             
-            // a with href
-            let links: Elements? = try body?.select("a[href]") // a with href
-            
-            for title in sectionTitles {
-                opport_sections.updateValue([:], forKey: title)
-            }
-            
-            for link in links! {
-                let linkHref: String = try! link.attr("href")
-                let prefix = linkHref.components(separatedBy: "/")[0]
-                let linkText: String = try! link.text()
+            do {
+                let doc: Document = try SwiftSoup.parseBodyFragment(html)
+                
+                // my body
+                let body = doc.body()
+                
+                // a with href
+                let links: Elements? = try body?.select("a[href]") // a with href
                 
                 for title in sectionTitles {
-                    if prefix == title.lowercased() {
-                        var dict = opport_sections[title]
-                        dict?[linkText] = base_url + linkHref
-                        opport_sections.updateValue(dict ?? [:], forKey: title)
-                        break;
+                    opport_sections.updateValue([:], forKey: title)
+                }
+                
+                for link in links! {
+                    let linkHref: String = try! link.attr("href")
+                    let prefix = linkHref.components(separatedBy: "/")[0]
+                    let linkText: String = try! link.text()
+                    
+                    for title in sectionTitles {
+                        if prefix == title.lowercased() {
+                            var dict = opport_sections[title]
+                            dict?[linkText] = base_url + linkHref
+                            opport_sections.updateValue(dict ?? [:], forKey: title)
+                            break;
+                        }
                     }
+                    
                 }
                 
+            } catch Exception.Error(let type, let message) {
+                print("Type: \(type) \n\nMessage: \(message)")
+            } catch {
+                print("error")
             }
             
-        } catch Exception.Error(let type, let message) {
-            print("Type: \(type) \n\nMessage: \(message)")
+            //Populate tableViewData
+            for (title, dict) in opport_sections {
+                var titles = Array(dict.keys)
+                var links = Array(dict.values)
+                
+                //Fix blank cells and remove index.html links
+                for (index, _) in links.enumerated().reversed() {
+                    links[index] = links[index].replacingOccurrences(of: " ", with: "%20")
+                    if links[index].contains("index.html") {
+                        links.remove(at: index)
+                        titles.remove(at: index)
+                    }
+                    
+                }
+                
+                let entry = cellData(opened: false, title: title, sectionData: titles, link: links)
+                tableViewData.append(entry)
+            }
+            
+            //Sort by Title
+            tableViewData.sort {
+                $0.title < $1.title
+            }
+            
+            //Sort Subtitle and URL within each Title
+            for index in 0..<tableViewData.count {
+                
+                let array1 = tableViewData[index].sectionData
+                let array2 = tableViewData[index].link
+                
+                // use zip to combine the two arrays and sort that based on the first
+                let combined = zip(array1, array2).sorted {$0.0 < $1.0}
+                
+                // use map to extract the individual arrays
+                let sorted1 = combined.map {$0.0}
+                let sorted2 = combined.map {$0.1}
+                
+                tableViewData[index].sectionData = sorted1
+                tableViewData[index].link = sorted2
+                
+            }
         } catch {
-            print("error")
+            let alert = UIAlertController(title:"Network Error", message:"Unable to load data. Please check your internet connection.", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title:"Ok", style: .default, handler:nil))
+            present(alert, animated:true);
         }
-        
-        //Populate tableViewData
-        for (title, dict) in opport_sections {
-            var titles = Array(dict.keys)
-            var links = Array(dict.values)
-            
-            //Fix blank cells and remove index.html links
-            for (index, _) in links.enumerated().reversed() {
-                links[index] = links[index].replacingOccurrences(of: " ", with: "%20")
-                if links[index].contains("index.html") {
-                    links.remove(at: index)
-                    titles.remove(at: index)
-                }
-                
-            }
-            
-            let entry = cellData(opened: false, title: title, sectionData: titles, link: links)
-            tableViewData.append(entry)
-        }
-        
-        //Sort by Title
-        tableViewData.sort {
-            $0.title < $1.title
-        }
-        
-        //Sort Subtitle and URL within each Title
-        for index in 0..<tableViewData.count {
-            
-            let array1 = tableViewData[index].sectionData
-            let array2 = tableViewData[index].link
-
-            // use zip to combine the two arrays and sort that based on the first
-            let combined = zip(array1, array2).sorted {$0.0 < $1.0}
-
-            // use map to extract the individual arrays
-            let sorted1 = combined.map {$0.0}
-            let sorted2 = combined.map {$0.1}
-
-            tableViewData[index].sectionData = sorted1
-            tableViewData[index].link = sorted2
-            
-        }
-        
     }
     
     //Number of sections (Oppurtunity Update Categories)
