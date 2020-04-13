@@ -9,13 +9,13 @@
         <!--Resources-->
         <scene sceneID="Gye-hj-Eef">
             <objects>
-                <tableViewController title="Resources" id="EUP-My-HAc" customClass="ResourcesViewController" customModule="Purdue_CS_App" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController title="Resources" id="EUP-My-HAc" customClass="ResourcesViewController" customModule="Purdue_CS" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="WS1-8I-NrZ">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="ResourceCell" rowHeight="100" id="Wcq-Fo-5Ue" customClass="ResourceCell" customModule="Purdue_CS_App" customModuleProvider="target">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="ResourceCell" rowHeight="100" id="Wcq-Fo-5Ue" customClass="ResourceCell" customModule="Purdue_CS" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="28" width="414" height="100"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Wcq-Fo-5Ue" id="CPm-9Y-ypA">
@@ -26,7 +26,6 @@
                                             <rect key="frame" x="16" y="8" width="78" height="84"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" constant="78" id="AoF-dD-1Q1"/>
-                                                <constraint firstAttribute="height" constant="78" id="yC7-Ky-ieN"/>
                                             </constraints>
                                         </imageView>
                                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Q5T-2D-BgL">

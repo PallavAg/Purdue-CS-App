@@ -150,7 +150,9 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
                 self.myActivityIndicator.stopAnimating()
                 self.tableView.isScrollEnabled = true;
                 self.notInitialLoad = true
-                self.tableView.reloadData()
+                let range = NSMakeRange(0, self.tableView.numberOfSections)
+                let sections = NSIndexSet(indexesIn: range)
+                self.tableView.reloadSections(sections as IndexSet, with: .automatic)
             }
         }
         
@@ -208,7 +210,9 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
         }
         
         control.endRefreshing()
-        self.tableView.reloadData()
+        let range = NSMakeRange(0, self.tableView.numberOfSections)
+        let sections = NSIndexSet(indexesIn: range)
+        self.tableView.reloadSections(sections as IndexSet, with: .automatic)
         
     }
     
@@ -243,7 +247,9 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
                     self.myActivityIndicator.stopAnimating()
                     self.tableView.isScrollEnabled = true;
                     
-                    self.tableView.reloadData()
+                    let range = NSMakeRange(0, self.tableView.numberOfSections)
+                    let sections = NSIndexSet(indexesIn: range)
+                    self.tableView.reloadSections(sections as IndexSet, with: .automatic)
                     
                 }
             }

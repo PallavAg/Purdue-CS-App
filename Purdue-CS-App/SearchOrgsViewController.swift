@@ -21,8 +21,6 @@ class SearchOrgsViewController: UIViewController, UITableViewDelegate, UITableVi
     var calendars = [String]()
     static var selectedCalendars = UserDefaults.standard.object(forKey: "OrgsArray") as? [String : String] ?? [:]
     
-    typealias FinishedFillingCalendar = () -> ()
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -48,16 +46,16 @@ class SearchOrgsViewController: UIViewController, UITableViewDelegate, UITableVi
             //Data found
             self.calendar_ids = snapshot.value as! [String: String]
             
-            self.tableView.reloadData()
             self.sortCalendarEntries()
         })
     }
     
-    
     func sortCalendarEntries() {
         self.calendars = Array(calendar_ids.keys)
         self.calendars.sort()
-        tableView.reloadData()
+        let range = NSMakeRange(0, self.tableView.numberOfSections)
+        let sections = NSIndexSet(indexesIn: range)
+        self.tableView.reloadSections(sections as IndexSet, with: .automatic)
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

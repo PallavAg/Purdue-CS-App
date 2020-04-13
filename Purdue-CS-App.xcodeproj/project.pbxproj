@@ -32,7 +32,7 @@
 		76013C0F243CFA3400C99A02 /* EventCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventCell.swift; sourceTree = "<group>"; };
 		765FFBE22432B0DB005FB5E4 /* Announcements.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Announcements.storyboard; sourceTree = "<group>"; };
 		765FFBE52432B116005FB5E4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Resources.storyboard; sourceTree = "<group>"; };
-		76728B58240DCD480017EE2A /* Purdue CS App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Purdue CS App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		76728B58240DCD480017EE2A /* Purdue CS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Purdue CS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		76728B5B240DCD480017EE2A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		76728B5D240DCD480017EE2A /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		76728B62240DCD480017EE2A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -86,7 +86,7 @@
 		76728B59240DCD480017EE2A /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				76728B58240DCD480017EE2A /* Purdue CS App.app */,
+				76728B58240DCD480017EE2A /* Purdue CS.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -145,7 +145,7 @@
 			);
 			name = "Purdue-CS-App";
 			productName = "Purdue-CS-App";
-			productReference = 76728B58240DCD480017EE2A /* Purdue CS App.app */;
+			productReference = 76728B58240DCD480017EE2A /* Purdue CS.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -423,7 +423,7 @@
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.LWSN.PurdueCS-App";
-				PRODUCT_NAME = "Purdue CS App";
+				PRODUCT_NAME = "Purdue CS";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -442,7 +442,7 @@
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.LWSN.PurdueCS-App";
-				PRODUCT_NAME = "Purdue CS App";
+				PRODUCT_NAME = "Purdue CS";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

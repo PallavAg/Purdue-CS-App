@@ -50,8 +50,6 @@ class AnnouncementsViewController: UIViewController, UITableViewDelegate, UITabl
         } else {
             for (newData, oldData) in zip(newTableData, oldData) {
                 if newData.sectionData != oldData.sectionData {
-                    print(newData.sectionData)
-                    print(oldData.sectionData)
                     tableViewData = newTableData
                     self.tableView.reloadData()
                 }
@@ -126,9 +124,22 @@ class AnnouncementsViewController: UIViewController, UITableViewDelegate, UITabl
             $0.title < $1.title
         }
         
-        //Sort within each Title
+        //Sort Subtitle and URL within each Title
         for index in 0..<tableViewData.count {
-            tableViewData[index].sectionData.sort()
+            
+            let array1 = tableViewData[index].sectionData
+            let array2 = tableViewData[index].link
+
+            // use zip to combine the two arrays and sort that based on the first
+            let combined = zip(array1, array2).sorted {$0.0 < $1.0}
+
+            // use map to extract the individual arrays
+            let sorted1 = combined.map {$0.0}
+            let sorted2 = combined.map {$0.1}
+
+            tableViewData[index].sectionData = sorted1
+            tableViewData[index].link = sorted2
+            
         }
         
     }
