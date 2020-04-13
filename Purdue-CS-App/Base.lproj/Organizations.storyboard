@@ -10,7 +10,7 @@
         <!--Upcoming Events-->
         <scene sceneID="dG5-v2-Fep">
             <objects>
-                <viewController id="FUq-Dw-Bwi" customClass="OrgsViewController" customModule="Purdue_CS_App" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="FUq-Dw-Bwi" customClass="OrgsViewController" customModule="Purdue_CS" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="za4-Cd-6Zk">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -19,7 +19,7 @@
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="EventCell" rowHeight="126" id="EXd-KJ-pkK" customClass="EventCell" customModule="Purdue_CS_App" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="EventCell" rowHeight="126" id="EXd-KJ-pkK" customClass="EventCell" customModule="Purdue_CS" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="28" width="375" height="126"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="EXd-KJ-pkK" id="gLD-4y-LC4">
@@ -124,6 +124,7 @@
                         <viewLayoutGuide key="safeArea" id="lqF-0C-Ky4"/>
                     </view>
                     <navigationItem key="navigationItem" title="Upcoming Events" largeTitleDisplayMode="always" id="Big-4d-BBM">
+                        <barButtonItem key="backBarButtonItem" title="Done" id="AS1-7W-jIZ"/>
                         <barButtonItem key="rightBarButtonItem" title="Item" image="plus" catalog="system" id="6KD-Ik-pMj">
                             <connections>
                                 <segue destination="KPy-NE-KCW" kind="show" identifier="toOrgs" id="neY-Gu-UdW"/>
@@ -142,7 +143,7 @@
         <!--SearchOrgsViewController-->
         <scene sceneID="LVF-56-yxG">
             <objects>
-                <viewController title="SearchOrgsViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="KPy-NE-KCW" customClass="SearchOrgsViewController" customModule="Purdue_CS_App" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="SearchOrgsViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="KPy-NE-KCW" customClass="SearchOrgsViewController" customModule="Purdue_CS" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="mk0-YW-Ps9">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -151,7 +152,7 @@
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" accessoryType="checkmark" indentationWidth="10" reuseIdentifier="OrgCell" editingAccessoryType="checkmark" textLabel="Vr2-1I-2bD" style="IBUITableViewCellStyleDefault" id="cS8-kb-UEB" customClass="OrgCell" customModule="Purdue_CS_App" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" accessoryType="checkmark" indentationWidth="10" reuseIdentifier="OrgCell" editingAccessoryType="checkmark" textLabel="Vr2-1I-2bD" style="IBUITableViewCellStyleDefault" id="cS8-kb-UEB" customClass="OrgCell" customModule="Purdue_CS" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="28" width="375" height="43.666667938232422"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="cS8-kb-UEB" id="bW0-Kx-Wcb">
