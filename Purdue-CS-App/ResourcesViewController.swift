@@ -9,6 +9,7 @@
 import UIKit
 import SafariServices
 
+//Add Lab Availabilities
 class ResourcesViewController: UITableViewController, SFSafariViewControllerDelegate {
     
     let labels = ["Lawson Hours & Key Fob", "Lawson Resources", "Lawson Map", "CS News", "CS Concern Form", "Feedback", "About"];

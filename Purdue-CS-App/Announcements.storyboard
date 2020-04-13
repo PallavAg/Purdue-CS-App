@@ -10,7 +10,7 @@
         <!--Opportunity Update-->
         <scene sceneID="JXf-1X-q9G">
             <objects>
-                <viewController id="jcY-qx-kHH" customClass="AnnouncementsViewController" customModule="Purdue_CS_App" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="jcY-qx-kHH" customClass="AnnouncementsViewController" customModule="Purdue_CS" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Gl8-ws-e2o">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

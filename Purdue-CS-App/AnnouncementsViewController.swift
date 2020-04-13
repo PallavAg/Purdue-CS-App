@@ -173,7 +173,7 @@ class AnnouncementsViewController: UIViewController, UITableViewDelegate, UITabl
         if indexPath.row == 0 {
             //Cell is section header
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "cell") else {return UITableViewCell()}
-            
+            cell.backgroundColor = UIColor(named: "TableColor")
             //Title is the section index title
             cell.textLabel?.text = tableViewData[indexPath.section].title
             
