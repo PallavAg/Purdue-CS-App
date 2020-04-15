@@ -30,12 +30,12 @@ Science at Purdue. Allows students to be aware of upcoming events, company recru
         - https://www.cs.purdue.edu/corporate/opportunity_update.html
     - The tableview is sectioned off by the headers on the oppurtunity update and can be collapsed by the header
         - The items in the sections are sorted by when they were last added. 
-- [ ] 2) **Organization + CS events**
+- [x] 2) **Organization + CS events**
     - Subscribing to organizations
     - Viewing org events
     - Uses GCal to parse events
 
-- [ ] 3) **Resources**
+- [x] 3) **Resources**
     - Get Key Fob instructions
     - Get CS Merch
     - Lawson Map
