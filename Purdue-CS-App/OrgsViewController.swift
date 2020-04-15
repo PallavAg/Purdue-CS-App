@@ -97,7 +97,6 @@ func calendarIDtoAPI(calendar_id: String) -> String {
 //Subscribe to Orgs automatically
 //Fix notifications for a changed event
 //Fix for when a calendar is removed
-//Add haptic feedback on bell-icon tap
 //Add Social media to resources
 //Parse from the different oppurtunity update page. Check for last updated?
 class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UNUserNotificationCenterDelegate {
@@ -395,6 +394,9 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
             let emptyImage = UIImage(systemName: "bell.slash")
             var savedIDs = defaults.object(forKey: "IDsArray") as? [String] ?? [String]()
             
+            let generator = UIImpactFeedbackGenerator(style: .medium)
+            generator.impactOccurred()
+            
             if let index = savedIDs.firstIndex(of: eventID) {
                 //Remove event notification
                 savedIDs.remove(at: index)
@@ -412,6 +414,8 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
             defaults.set(savedIDs, forKey: "IDsArray")
             
         } else {
+            let generator = UINotificationFeedbackGenerator()
+            generator.notificationOccurred(.error)
             let alert = UIAlertController(title:"Turn on Notifications", message:"To get event notifications. Please allow notifications in Settings.", preferredStyle: .alert)
             alert.addAction(UIAlertAction(title:"Ok", style: .default, handler:nil))
             present(alert, animated:true);
