@@ -154,7 +154,12 @@ Milestone 1 implemented user story:
 
 <img src='http://g.recordit.co/KJuLa5O1Yd.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
 
-### Milestone 1
-Milestone 1 implemented user story:
+### Milestone 2
+Milestone 2 implemented user story:
 
 <img src='http://g.recordit.co/yd2rU9XGfB.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+
+### Milestone 3
+Milestone 3 implemented user story:
+
+<img src='http://g.recordit.co/0lCYF6XVjW.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />

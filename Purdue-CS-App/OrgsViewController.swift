@@ -93,7 +93,13 @@ func calendarIDtoAPI(calendar_id: String) -> String {
     return url
 }
 
-//MARK: - Subscribe to Orgs automatically
+//MARK: - Features ToDo
+//Subscribe to Orgs automatically
+//Fix notifications for a changed event
+//Fix for when a calendar is removed
+//Add haptic feedback on bell-icon tap
+//Add Social media to resources
+//Parse from the different oppurtunity update page. Check for last updated?
 class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UNUserNotificationCenterDelegate {
     
     @IBOutlet weak var tableView: UITableView!
