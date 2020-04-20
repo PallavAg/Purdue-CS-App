@@ -99,6 +99,7 @@ func calendarIDtoAPI(calendar_id: String) -> String {
 //Fix for when a calendar is removed
 //Add Social media to resources
 //Parse from the different oppurtunity update page. Check for last updated?
+//Make URLs hyperlinks
 class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UNUserNotificationCenterDelegate {
     
     @IBOutlet weak var tableView: UITableView!
