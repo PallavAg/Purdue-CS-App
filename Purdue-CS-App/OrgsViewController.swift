@@ -103,6 +103,7 @@ func calendarIDtoAPI(calendar_id: String) -> String {
 //Parse from the different oppurtunity update page. Check for last updated?
 //Make URLs hyperlinks
 //Fix light mode location color
+//Wrap around the titles
 class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UNUserNotificationCenterDelegate {
     
     @IBOutlet weak var tableView: UITableView!

@@ -2,7 +2,7 @@
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16096" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="gcc-W6-vBM">
     <device id="retina5_9" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16086"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -26,7 +26,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="126"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="BoilerMake" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gsx-LY-yJ1">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="BoilerMake" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="12" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gsx-LY-yJ1">
                                                     <rect key="frame" x="15" y="14" width="135" height="21"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="21" id="uQY-iV-Rzx"/>
@@ -35,7 +35,7 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="LWSN 1182 | Purdue CS" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="h8h-8D-dZ4">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="LWSN 1182 | Purdue CS" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="h8h-8D-dZ4">
                                                     <rect key="frame" x="15" y="36" width="135" height="18"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="18" id="Pbk-j7-M70"/>
@@ -93,7 +93,7 @@
                                                 <constraint firstItem="h8h-8D-dZ4" firstAttribute="leading" secondItem="gLD-4y-LC4" secondAttribute="leading" constant="15" id="ij4-3M-yxX"/>
                                                 <constraint firstItem="6mS-h6-Nxw" firstAttribute="leading" secondItem="ve6-w2-zow" secondAttribute="leading" id="kHq-5w-xyl"/>
                                                 <constraint firstItem="gsx-LY-yJ1" firstAttribute="top" secondItem="gLD-4y-LC4" secondAttribute="top" constant="14" id="rPe-3J-l3d"/>
-                                                <constraint firstItem="ve6-w2-zow" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="gsx-LY-yJ1" secondAttribute="trailing" constant="4" id="sgD-iJ-hwm"/>
+                                                <constraint firstItem="ve6-w2-zow" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="gsx-LY-yJ1" secondAttribute="trailing" constant="8" id="sgD-iJ-hwm"/>
                                                 <constraint firstItem="6mS-h6-Nxw" firstAttribute="top" secondItem="ve6-w2-zow" secondAttribute="bottom" constant="3" id="spu-JN-ZQQ"/>
                                                 <constraint firstAttribute="trailing" secondItem="QV2-fq-rFS" secondAttribute="trailing" constant="10" id="vWJ-dk-Iew"/>
                                             </constraints>
