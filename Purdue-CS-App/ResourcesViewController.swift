@@ -26,6 +26,7 @@ class ResourcesViewController: UITableViewController, SFSafariViewControllerDele
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        tableView.tableFooterView = UIView()
         tableView.rowHeight = 100;
     }
     

@@ -57,6 +57,7 @@ extension Date {
 
 extension UITableView {
     func setEmptyView(title: String, message: String) {
+        self.isScrollEnabled = false;
         let emptyView = UIView(frame: CGRect(x: self.center.x, y: self.center.y, width: self.bounds.size.width, height: self.bounds.size.height))
         let titleLabel = UILabel()
         let messageLabel = UILabel()
@@ -84,6 +85,7 @@ extension UITableView {
     func restore() {
         self.backgroundView = nil
         self.separatorStyle = .singleLine
+        //self.isScrollEnabled = true;
     }
 }
 
@@ -100,6 +102,7 @@ func calendarIDtoAPI(calendar_id: String) -> String {
 //Add Social media to resources
 //Parse from the different oppurtunity update page. Check for last updated?
 //Make URLs hyperlinks
+//Fix light mode location color
 class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UNUserNotificationCenterDelegate {
     
     @IBOutlet weak var tableView: UITableView!
@@ -126,6 +129,7 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        tableView.tableFooterView = UIView()
         tableView.addSubview(refControl)
         if defaults.object(forKey: "IDArray") == nil {
             defaults.set([String](), forKey: "IDArray")

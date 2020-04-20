@@ -23,7 +23,7 @@ class SearchOrgsViewController: UIViewController, UITableViewDelegate, UITableVi
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        tableView.tableFooterView = UIView()
         tableView.dataSource = self
         tableView.delegate = self
         
