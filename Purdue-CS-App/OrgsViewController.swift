@@ -104,6 +104,7 @@ func calendarIDtoAPI(calendar_id: String) -> String {
 //Make URLs hyperlinks
 //Fix light mode location color
 //Wrap around the titles
+//Pull to refresh on 'no events' page of table
 class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UNUserNotificationCenterDelegate {
     
     @IBOutlet weak var tableView: UITableView!
