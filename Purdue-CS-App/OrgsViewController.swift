@@ -105,6 +105,10 @@ func calendarIDtoAPI(calendar_id: String) -> String {
 //Fix light mode location color
 //Wrap around the titles
 //Pull to refresh on 'no events' page of table
+//'No upcoming events' to 'No orgs subscribed'
+//Improve pull to refresh
+//Improve loading of announcements page
+//Make org titles easier to see
 class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UNUserNotificationCenterDelegate {
     
     @IBOutlet weak var tableView: UITableView!
