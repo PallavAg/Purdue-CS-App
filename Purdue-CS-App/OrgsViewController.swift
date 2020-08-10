@@ -28,8 +28,10 @@ struct CalendarEvents: Decodable {
             let date: String?
         }
         
-        let start: Start
-        let end: End
+        let start: Start?
+        let end: End?
+        
+        let status: String
         
         var organization: String?
     }
@@ -100,6 +102,7 @@ func calendarIDtoAPI(calendar_id: String) -> String {
 // 3. 'No upcoming events' to 'No orgs subscribed'
 // 4. Fix notification bell error
 // 5. Add loader to orgs page
+// 6. Subscribe to all orgs by default
 
 // Fix for when a calendar is removed
 // Fix notifications for a changed event
@@ -199,7 +202,7 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
         }
     }
     
-    func loadDidView() {
+    func loadDidView(toRemoveCount: Int? = 0) {
         
         for (org_name, urlString) in calendars {
             let url = URL(string: urlString)!
@@ -210,8 +213,12 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
                     do {
                         var events = try JSONDecoder().decode(CalendarEvents.self, from: data)
                         
-                        for (i, _) in events.items.enumerated() {
-                            events.items[i].organization = org_name
+                        for (i, _) in events.items.enumerated().reversed() {
+                            if events.items[i].status == "cancelled" {
+                                events.items.remove(at: i)
+                            } else {
+                                events.items[i].organization = org_name
+                            }
                         }
                         
                         self.tableEvents.append(contentsOf: events.items)
@@ -225,6 +232,8 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
             
             semaphore.wait()
         }
+        
+        tableEvents.removeSubrange(0..<(toRemoveCount ?? 0))
         
         //Sort items by start date
         tableEvents.sort { (left, right) -> Bool in
@@ -241,9 +250,8 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
     @objc func refreshScreen() {
         
         DispatchQueue.global(qos: .background).async { [self] in
-            tableEvents.removeAll(keepingCapacity: true)
             
-            loadDidView()
+            loadDidView(toRemoveCount: tableEvents.count)
             
             for (index, event) in tableEvents.enumerated().reversed() {
                 if calendar_ids[event.organization ?? ""] == nil {
@@ -303,20 +311,20 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     func getStartDate(event: CalendarEvents.Items) -> Date {
         
-        if event.start.dateTime != nil {
-            return convertToDateTime(dateString: event.start.dateTime!)
+        if event.start!.dateTime != nil {
+            return convertToDateTime(dateString: event.start!.dateTime!)
         } else {
-            return convertToDate(dateString: event.start.date!)
+            return convertToDate(dateString: event.start!.date!)
         }
         
     }
     
     func getEndDate(event: CalendarEvents.Items) -> Date {
         
-        if event.end.dateTime != nil {
-            return convertToDateTime(dateString: event.end.dateTime!)
+        if event.end!.dateTime != nil {
+            return convertToDateTime(dateString: event.end!.dateTime!)
         } else {
-            return convertToDate(dateString: event.end.date!)
+            return convertToDate(dateString: event.end!.date!)
         }
         
     }
@@ -505,10 +513,10 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
         cell.titleLabel.text = event.summary ?? "(No Title)"
         
         //Date and Time
-        if event.start.dateTime != nil {
+        if event.start!.dateTime != nil {
             
-            let startDateTime = convertToDateTime(dateString: event.start.dateTime!)
-            let endDateTime = convertToDateTime(dateString: event.end.dateTime!)
+            let startDateTime = convertToDateTime(dateString: event.start!.dateTime!)
+            let endDateTime = convertToDateTime(dateString: event.end!.dateTime!)
             
             let startTime = startDateTime.toString(dateFormat: "h:mm a")
             let endTime = endDateTime.toString(dateFormat: "h:mm a")
@@ -519,7 +527,7 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
         } else {
             cell.timeLabel.text = "All Day"
             
-            let startDate = convertToDate(dateString: event.start.date!)
+            let startDate = convertToDate(dateString: event.start!.date!)
             cell.dateLabel.text = startDate.toString(dateFormat: "E, MMM d, yyyy")
         }
         
