@@ -10,7 +10,6 @@ import UIKit
 import Foundation
 import UserNotifications
 
-
 struct CalendarEvents: Decodable {
     
     struct Items: Decodable {
@@ -95,28 +94,28 @@ func calendarIDtoAPI(calendar_id: String) -> String {
     return url
 }
 
-//MARK: - Features ToDo
-//Subscribe to Orgs automatically
-//Fix notifications for a changed event
-//Fix for when a calendar is removed
-//Add Social media to resources
-//Parse from the different oppurtunity update page. Check for last updated?
-//Make URLs hyperlinks
-//Fix light mode location color
-//Wrap around the titles
-//Pull to refresh on 'no events' page of table
-//'No upcoming events' to 'No orgs subscribed'
-//Improve pull to refresh
-//Improve loading of announcements page
-//Make org titles easier to see
+// MARK: - Features ToDo
+// 1. Improve pull to refresh of events
+// Fix notifications for a changed event
+// Fix for when a calendar is removed
+// Add Social media to resources and USB
+// Parse from the different oppurtunity update page. Check for last updated?
+// Make URLs hyperlinks. HTML parser?
+// Fix light mode location color
+// Pull to refresh on 'no events' page of table
+// 'No upcoming events' to 'No orgs subscribed'
+// Improve loading of announcements page
+// Make org titles easier to see. 2 lines if location exists. Else just org.
+// Fix notification bell error
+// Fix broken labs
+// Empty announcement should say 'no items'
 class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UNUserNotificationCenterDelegate {
     
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var myActivityIndicator: UIActivityIndicatorView!
     
-    //List of calendars
-    //LEAVE COMMENT FOR TESTING
-    //  var calendar_ids: [String: String] = ["Purdue CS": "sodicmhprbq87022es0t74blk8@group.calendar.google.com", "Purdue Hackers": "purduehackers@gmail.com", "CS Events": "256h9v68bnbnponkp0upmfq07s@group.calendar.google.com", "CS Seminars": "t3gdpe5uft0cbfsq9bipl7ofq0@group.calendar.google.com"]
+    /*List of calendars
+    //  var calendar_ids: [String: String] = ["Purdue CS": "sodicmhprbq87022es0t74blk8@group.calendar.google.com", "Purdue Hackers": "purduehackers@gmail.com", "CS Events": "256h9v68bnbnponkp0upmfq07s@group.calendar.google.com", "CS Seminars": "t3gdpe5uft0cbfsq9bipl7ofq0@group.calendar.google.com"]*/
     var calendar_ids = SearchOrgsViewController.selectedCalendars
     var calendars = [String:String]()
     
@@ -127,16 +126,11 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
     let defaults = UserDefaults.standard
     var notInitialLoad = false
     
-    var refControl: UIRefreshControl {
-        let refresh = UIRefreshControl()
-        refresh.addTarget(self, action: #selector(refreshScreen(_:)), for: .valueChanged)
-        return refresh
-    }
+    let refreshControl = UIRefreshControl()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableView.tableFooterView = UIView()
-        tableView.addSubview(refControl)
+
         if defaults.object(forKey: "IDArray") == nil {
             defaults.set([String](), forKey: "IDArray")
         }
@@ -150,6 +144,11 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
         tableView.dataSource = self
         tableView.delegate = self
         tableView.rowHeight = 126
+        tableView.tableFooterView = UIView()
+        
+        // Setup Pull to Refresh
+        refreshControl.addTarget(self, action:  #selector(refreshScreen), for: .valueChanged)
+        tableView.addSubview(refreshControl)
         
         for (calendar_name, id) in calendar_ids  {
             calendars[calendar_name] = calendarIDtoAPI(calendar_id: id)
@@ -213,22 +212,25 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
         
     }
     
-    @objc func refreshScreen(_ control: UIRefreshControl) {
+    @objc func refreshScreen() {
         
-        tableEvents.removeAll(keepingCapacity: true)
-        
-        loadDidView()
-        
-        for (index, event) in tableEvents.enumerated().reversed() {
-            if calendar_ids[event.organization ?? ""] == nil {
-                tableEvents.remove(at: index)
+        DispatchQueue.global(qos: .background).async { [self] in
+            tableEvents.removeAll(keepingCapacity: true)
+            
+            loadDidView()
+            
+            for (index, event) in tableEvents.enumerated().reversed() {
+                if calendar_ids[event.organization ?? ""] == nil {
+                    tableEvents.remove(at: index)
+                }
+            }
+            DispatchQueue.main.async {
+                refreshControl.endRefreshing()
+                let range = NSMakeRange(0, self.tableView.numberOfSections)
+                let sections = NSIndexSet(indexesIn: range)
+                self.tableView.reloadSections(sections as IndexSet, with: .automatic)
             }
         }
-        
-        control.endRefreshing()
-        let range = NSMakeRange(0, self.tableView.numberOfSections)
-        let sections = NSIndexSet(indexesIn: range)
-        self.tableView.reloadSections(sections as IndexSet, with: .automatic)
         
     }
     
