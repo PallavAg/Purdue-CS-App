@@ -9,6 +9,7 @@
 import UIKit
 import Foundation
 import UserNotifications
+import Firebase
 
 struct CalendarEvents: Decodable {
     
@@ -102,6 +103,7 @@ func calendarIDtoAPI(calendar_id: String) -> String {
 
 // Fix for when a calendar is removed
 // Fix notifications for a changed event
+
 // Add Social media and USB to resources
 // Parse from the different oppurtunity update page. Check for last updated?
 // Make URLs hyperlinks. HTML parser?
@@ -109,13 +111,11 @@ func calendarIDtoAPI(calendar_id: String) -> String {
 // Make org titles easier to see. 2 lines if location exists. Else just org.
 // Fix broken labs
 // Empty announcement should say 'no items'
+// Support for repeating and multi-day filtered by end instead of start
 class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UNUserNotificationCenterDelegate {
     
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var myActivityIndicator: UIActivityIndicatorView!
-    
-    /*List of calendars
-     //  var calendar_ids: [String: String] = ["Purdue CS": "sodicmhprbq87022es0t74blk8@group.calendar.google.com", "Purdue Hackers": "purduehackers@gmail.com", "CS Events": "256h9v68bnbnponkp0upmfq07s@group.calendar.google.com", "CS Seminars": "t3gdpe5uft0cbfsq9bipl7ofq0@group.calendar.google.com"]*/
     
     var calendar_ids = SearchOrgsViewController.selectedCalendars
     var calendars = [String:String]()
@@ -132,16 +132,6 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if defaults.object(forKey: "IDArray") == nil {
-            defaults.set([String](), forKey: "IDArray")
-        }
-        
-        if defaults.object(forKey: "OrgsArray") == nil {
-            defaults.set(calendar_ids, forKey: "OrgsArray")
-        } else {
-            calendar_ids = defaults.object(forKey: "OrgsArray") as! [String : String]
-        }
-        
         tableView.dataSource = self
         tableView.delegate = self
         tableView.rowHeight = 126
@@ -151,12 +141,48 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
         refreshControl.addTarget(self, action:  #selector(refreshScreen), for: .valueChanged)
         tableView.addSubview(refreshControl)
         
+        self.myActivityIndicator.startAnimating()
+        tableView.isScrollEnabled = false;
+        
+        if defaults.object(forKey: "IDArray") == nil {
+            defaults.set([String](), forKey: "IDArray")
+        }
+        
+        if defaults.object(forKey: "OrgsArray") == nil {
+            
+            var ref: DatabaseReference?
+            
+            ref = Database.database().reference() // Init database reference
+            let myRef = ref?.child("calendar_ids")
+            
+            myRef?.observeSingleEvent(of: .value, with: { [self] (snapshot) in
+                //Handle data not found
+                if !snapshot.exists() {
+                    return
+                }
+                
+                //Data found
+                calendar_ids = snapshot.value as? [String: String] ?? [String: String]()
+                
+                SearchOrgsViewController.selectedCalendars = calendar_ids
+                defaults.set(SearchOrgsViewController.selectedCalendars, forKey: "OrgsArray")
+                
+                initializeCalendarArray()
+            })
+            
+        } else {
+            calendar_ids = defaults.object(forKey: "OrgsArray") as? [String : String] ?? [String : String]()
+            initializeCalendarArray()
+        }
+        
+    }
+    
+    // Load all events onto the screen
+    func initializeCalendarArray() {
+
         for (calendar_name, id) in calendar_ids  {
             calendars[calendar_name] = calendarIDtoAPI(calendar_id: id)
         }
-        
-        self.myActivityIndicator.startAnimating()
-        tableView.isScrollEnabled = false;
         
         DispatchQueue.global(qos: .background).async {
             
@@ -171,7 +197,6 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
                 self.tableView.reloadSections(sections as IndexSet, with: .automatic)
             }
         }
-        
     }
     
     func loadDidView() {
@@ -238,7 +263,7 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
     //TableEvents only keeps selected items.
     override func viewDidAppear(_ animated: Bool) {
         let previousCals = calendar_ids
-        calendar_ids = defaults.object(forKey: "OrgsArray") as! [String : String]
+        calendar_ids = defaults.object(forKey: "OrgsArray") as? [String : String] ?? [String : String]()
         
         if previousCals != calendar_ids {
             
@@ -458,7 +483,7 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if tableEvents.count == 0 && notInitialLoad {
             
-            if calendar_ids.count == 0 {
+            if SearchOrgsViewController.selectedCalendars.count == 0 {
                 tableView.setEmptyView(title: "No organizations subscribed.", message: "Tap the '+' icon to add organizations")
             } else {
                 tableView.setEmptyView(title: "No upcoming events.", message: "Tap the '+' icon to add more organizations")
