@@ -19,13 +19,15 @@ class SearchOrgsViewController: UIViewController, UITableViewDelegate, UITableVi
     var calendar_ids: [String: String] = [:]
     
     var calendars = [String]()
-    static var selectedCalendars = UserDefaults.standard.object(forKey: "OrgsArray") as? [String : String] ?? [:]
+    static var selectedCalendars = UserDefaults.standard.object(forKey: "OrgsArray") as? [String : String] ?? [String : String]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.tableFooterView = UIView()
         tableView.dataSource = self
         tableView.delegate = self
+        
+        showActivityIndicator("Fetching Organzations")
         
         self.tableView.rowHeight = 70
         
@@ -56,6 +58,7 @@ class SearchOrgsViewController: UIViewController, UITableViewDelegate, UITableVi
         let range = NSMakeRange(0, self.tableView.numberOfSections)
         let sections = NSIndexSet(indexesIn: range)
         self.tableView.reloadSections(sections as IndexSet, with: .automatic)
+        removeActivityIndicator()
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -94,6 +97,60 @@ class SearchOrgsViewController: UIViewController, UITableViewDelegate, UITableVi
         
         UserDefaults.standard.set(SearchOrgsViewController.selectedCalendars, forKey: "OrgsArray")
         
+    }
+    
+    var strLabel = UILabel()
+    var effectView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
+    var activityIndicator = UIActivityIndicatorView()
+    
+    func showActivityIndicator(_ title: String) {
+        DispatchQueue.main.async { [self] in
+            view.isUserInteractionEnabled = false
+            strLabel.removeFromSuperview()
+            activityIndicator.removeFromSuperview()
+            effectView.removeFromSuperview()
+            
+            strLabel = UILabel()
+            strLabel.text = title
+            strLabel.font = .systemFont(ofSize: 14, weight: .medium)
+            strLabel.textColor = UIColor(white: 0.9, alpha: 0.7)
+            strLabel.frame = CGRect(x: 50, y: 0, width: strLabel.intrinsicContentSize.width, height: 46)
+            
+            if traitCollection.userInterfaceStyle == .light {
+                effectView = UIVisualEffectView(effect: UIBlurEffect(style: .systemMaterialLight))
+                strLabel.textColor = UIColor(white: 0.1, alpha: 0.7)
+            }
+            
+            effectView.frame = CGRect(x: view.frame.midX - (strLabel.frame.width + 66)/2, y: view.frame.midY - strLabel.frame.height/2 , width: strLabel.intrinsicContentSize.width + 66, height: 46)
+            effectView.layer.cornerRadius = 15
+            effectView.layer.masksToBounds = true
+            
+            activityIndicator = UIActivityIndicatorView(style: .medium)
+            activityIndicator.frame = CGRect(x: 0, y: 0, width: 46, height: 46)
+            activityIndicator.startAnimating()
+
+            effectView.contentView.addSubview(activityIndicator)
+            effectView.contentView.addSubview(strLabel)
+            
+            effectView.alpha = 0
+            UIView.animate(withDuration: 0.2) {
+                effectView.alpha = 1
+                view.addSubview(effectView)
+            }
+            
+        }
+    }
+    
+    // Remove activity indicator from screen and re-enable interaction
+    func removeActivityIndicator() {
+        DispatchQueue.main.async {
+            UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseIn, animations: {
+                self.effectView.alpha = 0.0
+            }, completion: { (_) in
+                self.effectView.removeFromSuperview()
+                self.view.isUserInteractionEnabled = true
+            })
+        }
     }
     
 }

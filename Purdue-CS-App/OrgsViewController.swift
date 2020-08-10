@@ -98,10 +98,11 @@ func calendarIDtoAPI(calendar_id: String) -> String {
 // 2. Pull to refresh on 'no events' page of table
 // 3. 'No upcoming events' to 'No orgs subscribed'
 // 4. Fix notification bell error
+// 5. Add loader to orgs page
 
-// Fix notifications for a changed event
 // Fix for when a calendar is removed
-// Add Social media to resources and USB
+// Fix notifications for a changed event
+// Add Social media and USB to resources
 // Parse from the different oppurtunity update page. Check for last updated?
 // Make URLs hyperlinks. HTML parser?
 // Improve loading of announcements page
