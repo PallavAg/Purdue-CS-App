@@ -56,7 +56,6 @@ extension Date {
 
 extension UITableView {
     func setEmptyView(title: String, message: String) {
-        self.isScrollEnabled = false;
         let emptyView = UIView(frame: CGRect(x: self.center.x, y: self.center.y, width: self.bounds.size.width, height: self.bounds.size.height))
         let titleLabel = UILabel()
         let messageLabel = UILabel()
@@ -96,14 +95,14 @@ func calendarIDtoAPI(calendar_id: String) -> String {
 
 // MARK: - Features ToDo
 // 1. Improve pull to refresh of events
+// 2. Pull to refresh on 'no events' page of table
+// 3. 'No upcoming events' to 'No orgs subscribed'
 // Fix notifications for a changed event
 // Fix for when a calendar is removed
 // Add Social media to resources and USB
 // Parse from the different oppurtunity update page. Check for last updated?
 // Make URLs hyperlinks. HTML parser?
 // Fix light mode location color
-// Pull to refresh on 'no events' page of table
-// 'No upcoming events' to 'No orgs subscribed'
 // Improve loading of announcements page
 // Make org titles easier to see. 2 lines if location exists. Else just org.
 // Fix notification bell error
@@ -116,6 +115,7 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     /*List of calendars
     //  var calendar_ids: [String: String] = ["Purdue CS": "sodicmhprbq87022es0t74blk8@group.calendar.google.com", "Purdue Hackers": "purduehackers@gmail.com", "CS Events": "256h9v68bnbnponkp0upmfq07s@group.calendar.google.com", "CS Seminars": "t3gdpe5uft0cbfsq9bipl7ofq0@group.calendar.google.com"]*/
+    
     var calendar_ids = SearchOrgsViewController.selectedCalendars
     var calendars = [String:String]()
     
@@ -448,8 +448,12 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if tableEvents.count == 0 && notInitialLoad {
-            print(notInitialLoad)
-            tableView.setEmptyView(title: "No upcoming events.", message: "Tap the '+' icon to add organizations")
+
+            if calendar_ids.count == 0 {
+                tableView.setEmptyView(title: "No organizations subscribed.", message: "Tap the '+' icon to add organizations")
+            } else {
+                tableView.setEmptyView(title: "No upcoming events.", message: "Tap the '+' icon to add more organizations")
+            }
         }
         else {
             tableView.restore()
