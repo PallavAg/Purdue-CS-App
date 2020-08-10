@@ -97,15 +97,15 @@ func calendarIDtoAPI(calendar_id: String) -> String {
 // 1. Improve pull to refresh of events
 // 2. Pull to refresh on 'no events' page of table
 // 3. 'No upcoming events' to 'No orgs subscribed'
+// 4. Fix notification bell error
+
 // Fix notifications for a changed event
 // Fix for when a calendar is removed
 // Add Social media to resources and USB
 // Parse from the different oppurtunity update page. Check for last updated?
 // Make URLs hyperlinks. HTML parser?
-// Fix light mode location color
 // Improve loading of announcements page
 // Make org titles easier to see. 2 lines if location exists. Else just org.
-// Fix notification bell error
 // Fix broken labs
 // Empty announcement should say 'no items'
 class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UNUserNotificationCenterDelegate {
@@ -114,7 +114,7 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
     @IBOutlet weak var myActivityIndicator: UIActivityIndicatorView!
     
     /*List of calendars
-    //  var calendar_ids: [String: String] = ["Purdue CS": "sodicmhprbq87022es0t74blk8@group.calendar.google.com", "Purdue Hackers": "purduehackers@gmail.com", "CS Events": "256h9v68bnbnponkp0upmfq07s@group.calendar.google.com", "CS Seminars": "t3gdpe5uft0cbfsq9bipl7ofq0@group.calendar.google.com"]*/
+     //  var calendar_ids: [String: String] = ["Purdue CS": "sodicmhprbq87022es0t74blk8@group.calendar.google.com", "Purdue Hackers": "purduehackers@gmail.com", "CS Events": "256h9v68bnbnponkp0upmfq07s@group.calendar.google.com", "CS Seminars": "t3gdpe5uft0cbfsq9bipl7ofq0@group.calendar.google.com"]*/
     
     var calendar_ids = SearchOrgsViewController.selectedCalendars
     var calendars = [String:String]()
@@ -130,7 +130,7 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         if defaults.object(forKey: "IDArray") == nil {
             defaults.set([String](), forKey: "IDArray")
         }
@@ -373,65 +373,73 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
     @objc func bellClicked(sender:UIButton) {
         
         let center = UNUserNotificationCenter.current()
+        center.delegate = self
         let options: UNAuthorizationOptions = [.sound, .alert]
         
         var notifGranted = false
         
-        let semaphore = DispatchSemaphore(value: 0)
-        
-        //Prompt for notification access
-        center.requestAuthorization(options: options) { (granted, error) in
-            semaphore.signal()
-            notifGranted = granted
-            if error != nil { print (error!) }
-        }
-        
-        semaphore.wait()
-        
-        //Check if notifications enabled
-        center.getNotificationSettings { settings in
-            guard settings.authorizationStatus == .authorized else { return }
-            notifGranted = (settings.alertSetting == .enabled)
-        }
-        
-        center.delegate = self
-        
-        if notifGranted {
-            
-            //Save ID
-            let buttonRow = sender.tag
-            let event = tableEvents[buttonRow]
-            
-            let eventID = event.id
-            let filledImage = UIImage(systemName: "bell.fill")
-            let emptyImage = UIImage(systemName: "bell.slash")
-            var savedIDs = defaults.object(forKey: "IDsArray") as? [String] ?? [String]()
-            
-            let generator = UIImpactFeedbackGenerator(style: .medium)
-            generator.impactOccurred()
-            
-            if let index = savedIDs.firstIndex(of: eventID) {
-                //Remove event notification
-                savedIDs.remove(at: index)
-                sender.setImage(emptyImage, for: .normal)
-                UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [eventID])
-            } else {
-                //Set event notification
-                savedIDs.append(eventID)
-                sender.setImage(filledImage, for: .normal)
+        DispatchQueue.main.async {
+            //Prompt for notification access
+            center.requestAuthorization(options: options) { (granted, error) in
+                notifGranted = granted
+                if error != nil { print (error!) }
                 
-                setupNotification(dateInput: getStartDate(event: event), event: event)
+                DispatchQueue.main.async {
+                    if !notifGranted {
+                        UINotificationFeedbackGenerator().notificationOccurred(.error)
+                        let alert = UIAlertController(title:"Turn on Notifications", message:"To get event notifications. Please allow notifications in Settings.", preferredStyle: .alert)
+                        alert.addAction(UIAlertAction(title:"Ok", style: .default, handler:nil))
+                        self.present(alert, animated:true);
+                    }
+                }
+                
+                //Check if notifications enabled
+                center.getNotificationSettings { [self] settings in
+                    guard settings.authorizationStatus == .authorized else { return }
+                    notifGranted = (settings.alertSetting == .enabled)
+                    
+                    DispatchQueue.main.async {
+                        // Continue bell handling
+                        if notifGranted {
+                            
+                            //Save ID
+                            let buttonRow = sender.tag
+                            let event = tableEvents[buttonRow]
+                            
+                            let eventID = event.id
+                            let filledImage = UIImage(systemName: "bell.fill")
+                            let emptyImage = UIImage(systemName: "bell.slash")
+                            var savedIDs = defaults.object(forKey: "IDsArray") as? [String] ?? [String]()
+                            
+                            let generator = UIImpactFeedbackGenerator(style: .medium)
+                            generator.impactOccurred()
+                            
+                            if let index = savedIDs.firstIndex(of: eventID) {
+                                //Remove event notification
+                                savedIDs.remove(at: index)
+                                sender.setImage(emptyImage, for: .normal)
+                                UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [eventID])
+                            } else {
+                                //Set event notification
+                                savedIDs.append(eventID)
+                                sender.setImage(filledImage, for: .normal)
+                                
+                                setupNotification(dateInput: getStartDate(event: event), event: event)
+                            }
+                            
+                            defaults.set(savedIDs, forKey: "IDsArray")
+                            
+                        } else {
+                            UINotificationFeedbackGenerator().notificationOccurred(.error)
+                            let alert = UIAlertController(title:"Turn on Notifications", message:"To get event notifications. Please allow notifications in Settings.", preferredStyle: .alert)
+                            alert.addAction(UIAlertAction(title:"Ok", style: .default, handler:nil))
+                            present(alert, animated:true);
+                        }
+                    }
+                    
+                }
                 
             }
-            
-            defaults.set(savedIDs, forKey: "IDsArray")
-            
-        } else {
-            let generator = UINotificationFeedbackGenerator()
-            generator.notificationOccurred(.error)
-            let alert = UIAlertController(title:"Turn on Notifications", message:"To get event notifications. Please allow notifications in Settings.", preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title:"Ok", style: .default, handler:nil))
-            present(alert, animated:true);
         }
         
     }
@@ -448,7 +456,7 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if tableEvents.count == 0 && notInitialLoad {
-
+            
             if calendar_ids.count == 0 {
                 tableView.setEmptyView(title: "No organizations subscribed.", message: "Tap the '+' icon to add organizations")
             } else {
