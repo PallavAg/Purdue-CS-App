@@ -99,8 +99,8 @@ extension UITableView {
 // 6. Subscribe to all orgs by default
 // 7. Fix for cancelled events and pull to refresh bug
 // 8. Fix for when a calendar is removed
+// 9. Fix notifications for a changed event
 
-// Fix notifications for a changed event
 // Add Social media and USB to resources
 // Parse from the different oppurtunity update page. Check for last updated?
 // Make URLs hyperlinks. HTML parser?
@@ -135,6 +135,9 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
         tableView.delegate = self
         tableView.rowHeight = 126
         tableView.tableFooterView = UIView()
+        
+        // Remove notificatons since they will be setup in the tableView.
+        UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
         
         // Setup Pull to Refresh
         refreshControl.addTarget(self, action:  #selector(refreshScreen), for: .valueChanged)
@@ -199,6 +202,7 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
                 self.notInitialLoad = true
                 let range = NSMakeRange(0, self.tableView.numberOfSections)
                 let sections = NSIndexSet(indexesIn: range)
+                UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
                 self.tableView.reloadSections(sections as IndexSet, with: .automatic)
             }
         }
@@ -264,6 +268,7 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
                 refreshControl.endRefreshing()
                 let range = NSMakeRange(0, self.tableView.numberOfSections)
                 let sections = NSIndexSet(indexesIn: range)
+                UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
                 self.tableView.reloadSections(sections as IndexSet, with: .automatic)
             }
         }
@@ -303,6 +308,7 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
                     
                     let range = NSMakeRange(0, self.tableView.numberOfSections)
                     let sections = NSIndexSet(indexesIn: range)
+                    UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
                     self.tableView.reloadSections(sections as IndexSet, with: .automatic)
                     
                 }
@@ -491,6 +497,7 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
         if tableEvents.count == 0 && notInitialLoad {
             
             if SearchOrgsViewController.selectedCalendars.count == 0 {
@@ -557,6 +564,8 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
         let eventID = event.id
         let filledImage = UIImage(systemName: "bell.fill")
         let emptyImage = UIImage(systemName: "bell.slash")
+        
+        // Notifications IDs of events with a notification.
         let savedIDs = defaults.object(forKey: "IDsArray") as? [String] ?? [String]()
         
         if savedIDs.firstIndex(of: eventID) != nil {
