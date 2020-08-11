@@ -102,15 +102,15 @@ extension UITableView {
 // 9. Fix notifications for a changed event
 // 10. Fix Launch Screen Image
 
-// Add Social media and USB to resources
-// Parse from the different oppurtunity update page. Check for last updated?
-// Make URLs hyperlinks. HTML parser?
-// Improve loading of announcements page
 // Make org titles easier to see. 2 lines if location exists. Else just org.
-// Fix broken labs
+// Improve loading of announcements page
+// Make URLs hyperlinks. HTML parser?
 // Empty announcement should say 'no items'
-// Support for repeating and multi-day filtered by end instead of start
 // Remove the sempahores for loading JSON data
+// Fix broken labs
+// Add Social media and USB to resources
+// Support for repeating and multi-day filtered by end instead of start
+// Parse from the different oppurtunity update page. Check for last updated?
 class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UNUserNotificationCenterDelegate {
     
     @IBOutlet weak var tableView: UITableView!
