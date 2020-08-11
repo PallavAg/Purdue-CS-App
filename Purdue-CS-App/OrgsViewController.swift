@@ -100,6 +100,7 @@ extension UITableView {
 // 7. Fix for cancelled events and pull to refresh bug
 // 8. Fix for when a calendar is removed
 // 9. Fix notifications for a changed event
+// 10. Fix Launch Screen Image
 
 // Add Social media and USB to resources
 // Parse from the different oppurtunity update page. Check for last updated?
@@ -109,7 +110,6 @@ extension UITableView {
 // Fix broken labs
 // Empty announcement should say 'no items'
 // Support for repeating and multi-day filtered by end instead of start
-// Fix Launch Screen
 // Remove the sempahores for loading JSON data
 class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UNUserNotificationCenterDelegate {
     
