@@ -9,7 +9,7 @@
 import UIKit
 import Foundation
 import UserNotifications
-import Firebase
+import FirebaseDatabase
 
 struct CalendarEvents: Decodable {
     
@@ -90,12 +90,6 @@ extension UITableView {
     }
 }
 
-//Calendar link to API
-func calendarIDtoAPI(calendar_id: String) -> String {
-    let url = "https://www.googleapis.com/calendar/v3/calendars/" + calendar_id + "/events?maxResults=2000&timeMin=" + Date().getFormat() + "&key=" + API.API_KEY
-    return url
-}
-
 // MARK: - Features ToDo
 // 1. Improve pull to refresh of events
 // 2. Pull to refresh on 'no events' page of table
@@ -103,10 +97,10 @@ func calendarIDtoAPI(calendar_id: String) -> String {
 // 4. Fix notification bell error
 // 5. Add loader to orgs page
 // 6. Subscribe to all orgs by default
+// 7. Fix for cancelled events and pull to refresh bug
+// 8. Fix for when a calendar is removed
 
-// Fix for when a calendar is removed
 // Fix notifications for a changed event
-
 // Add Social media and USB to resources
 // Parse from the different oppurtunity update page. Check for last updated?
 // Make URLs hyperlinks. HTML parser?
@@ -115,6 +109,8 @@ func calendarIDtoAPI(calendar_id: String) -> String {
 // Fix broken labs
 // Empty announcement should say 'no items'
 // Support for repeating and multi-day filtered by end instead of start
+// Fix Launch Screen
+// Remove the sempahores for loading JSON data
 class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UNUserNotificationCenterDelegate {
     
     @IBOutlet weak var tableView: UITableView!
@@ -180,6 +176,12 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
         
     }
     
+    //Calendar link to API
+    func calendarIDtoAPI(calendar_id: String) -> String {
+        let url = "https://www.googleapis.com/calendar/v3/calendars/" + calendar_id + "/events?maxResults=2000&timeMin=" + Date().getFormat() + "&key=" + API.API_KEY
+        return url
+    }
+    
     // Load all events onto the screen
     func initializeCalendarArray() {
 
@@ -224,7 +226,7 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
                         self.tableEvents.append(contentsOf: events.items)
                         
                     } catch let error {
-                        print(error)
+                        print("Error with \(org_name) in parsing \(urlString) with Error:\n\(error)")
                     }
                 }
                 semaphore.signal()

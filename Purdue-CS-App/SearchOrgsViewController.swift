@@ -7,19 +7,18 @@
 //
 
 import UIKit
-import Firebase
+import FirebaseDatabase
 
 class SearchOrgsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     @IBOutlet weak var tableView: UITableView!
     var ref: DatabaseReference?
     
-    // LEAVE COMMENT FOR TESTING PURPOSE
-    //  var calendar_ids: [String: String] = ["Purdue CS": "sodicmhprbq87022es0t74blk8@group.calendar.google.com", "Purdue Hackers": "purduehackers@gmail.com", "CS Events": "256h9v68bnbnponkp0upmfq07s@group.calendar.google.com", "CS Seminars": "t3gdpe5uft0cbfsq9bipl7ofq0@group.calendar.google.com"]
+    var calendar_ids = [String: String]() // Calendars and corresponding API IDs
+    var calendarNames = [String]() // Calendar Titles
     
-    var calendar_ids = [String: String]() // Calendars and corresponding IDs
-    var calendars = [String]() // Calendar Titles
-    static var selectedCalendars = UserDefaults.standard.object(forKey: "OrgsArray") as? [String : String] ?? [String : String]()
+    // Global variable with all the subscribed calendars and API IDs
+    static var selectedCalendars = UserDefaults.standard.object(forKey: "OrgsArray") as? [String: String] ?? [String: String]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,7 +26,7 @@ class SearchOrgsViewController: UIViewController, UITableViewDelegate, UITableVi
         tableView.dataSource = self
         tableView.delegate = self
         
-        showActivityIndicator("Fetching Organzations")
+        showActivityIndicator("Loading Organzations")
         
         self.tableView.rowHeight = 70
         
@@ -43,40 +42,50 @@ class SearchOrgsViewController: UIViewController, UITableViewDelegate, UITableVi
             
             //Handle data not found
             if !snapshot.exists() {
+                showActivityIndicator("Error. Please contact Support.")
                 return
             }
             
-            //Data found
+            //Fetch data
             calendar_ids = snapshot.value as? [String: String] ?? [String: String]()
             
-            self.sortCalendarEntries()
+            calendarNames = Array(calendar_ids.keys)
+            calendarNames.sort()
+            
+            // Remove any calendars that were previously selected that no longer exist
+            for (name, ID) in SearchOrgsViewController.selectedCalendars {
+                // If the name or ID no longer exists, it is no longer selected
+                if calendar_ids[name] == nil || calendar_ids[name] != ID {
+                    SearchOrgsViewController.selectedCalendars.removeValue(forKey: name)
+                }
+            }
+            UserDefaults.standard.set(SearchOrgsViewController.selectedCalendars, forKey: "OrgsArray")
+            
+            let range = NSMakeRange(0, self.tableView.numberOfSections)
+            let sections = NSIndexSet(indexesIn: range)
+            DispatchQueue.main.async {
+                self.tableView.reloadSections(sections as IndexSet, with: .automatic)
+            }
+            removeActivityIndicator()
+            
         })
     }
     
-    func sortCalendarEntries() {
-        self.calendars = Array(calendar_ids.keys)
-        self.calendars.sort()
-        let range = NSMakeRange(0, self.tableView.numberOfSections)
-        let sections = NSIndexSet(indexesIn: range)
-        self.tableView.reloadSections(sections as IndexSet, with: .automatic)
-        removeActivityIndicator()
-    }
-    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return calendars.count
+        return calendarNames.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "OrgCell") as! OrgCell
         
-        let selectedCalendar = calendars[indexPath.row]
+        let selectedCalendarName = calendarNames[indexPath.row]
         
-        cell.textLabel?.text = selectedCalendar
+        cell.textLabel?.text = selectedCalendarName
         
         let selected = UITableViewCell.AccessoryType.checkmark
         let unselected = UITableViewCell.AccessoryType.none
         
-        if SearchOrgsViewController.selectedCalendars[selectedCalendar] != nil {
+        if SearchOrgsViewController.selectedCalendars[selectedCalendarName] != nil {
             cell.accessoryType = selected
         } else {
             cell.accessoryType = unselected
@@ -90,14 +99,14 @@ class SearchOrgsViewController: UIViewController, UITableViewDelegate, UITableVi
         let selected = UITableViewCell.AccessoryType.checkmark
         let unselected = UITableViewCell.AccessoryType.none
         
-        let selectedCalendar = calendars[indexPath.row]
+        let selectedCalendarName = calendarNames[indexPath.row]
         
         if tableView.cellForRow(at: indexPath)?.accessoryType == selected {
             tableView.cellForRow(at: indexPath)?.accessoryType = unselected
-            SearchOrgsViewController.selectedCalendars.removeValue(forKey: selectedCalendar)
+            SearchOrgsViewController.selectedCalendars.removeValue(forKey: selectedCalendarName)
         } else {
             tableView.cellForRow(at: indexPath)?.accessoryType = selected
-            SearchOrgsViewController.selectedCalendars[selectedCalendar] = calendar_ids[selectedCalendar]
+            SearchOrgsViewController.selectedCalendars[selectedCalendarName] = calendar_ids[selectedCalendarName]
         }
         
         UserDefaults.standard.set(SearchOrgsViewController.selectedCalendars, forKey: "OrgsArray")
@@ -159,3 +168,6 @@ class SearchOrgsViewController: UIViewController, UITableViewDelegate, UITableVi
     }
     
 }
+
+/* LEAVE COMMENT FOR TESTING PURPOSE
+//  var calendar_ids: [String: String] = ["Purdue CS": "sodicmhprbq87022es0t74blk8@group.calendar.google.com", "Purdue Hackers": "purduehackers@gmail.com", "CS Events": "256h9v68bnbnponkp0upmfq07s@group.calendar.google.com", "CS Seminars": "t3gdpe5uft0cbfsq9bipl7ofq0@group.calendar.google.com"]*/
