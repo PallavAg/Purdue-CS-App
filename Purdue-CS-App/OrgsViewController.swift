@@ -488,11 +488,14 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         
-        if tableEvents[indexPath.row].description?.count == nil {
-            return 70;
-        } else {
-            return 126;
-        }
+        let noLocation = (tableEvents[indexPath.row].location?.count == nil)
+        let noDescription = (tableEvents[indexPath.row].description?.count == nil)
+        
+        if noLocation && noDescription { return 70 }
+        if noDescription { return 82 } // Has location, no description
+        if noLocation { return 110 } // Has description, no location
+        
+        return 126 // Has both location and description
         
     }
     
@@ -549,7 +552,7 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         var orgString = event.organization ?? ""
         if event.location != nil {
-            orgString = " | " + (event.organization ?? "")
+            orgString = "\n" + (event.organization ?? "")
         }
         
         let boldLocation = NSAttributedString(string: event.location ?? "", attributes: boldAttribute)
