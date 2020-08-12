@@ -103,8 +103,8 @@ extension UITableView {
 // 10. Fix Launch Screen Image
 // 11. Make org titles easier to see. 2 lines if location exists. Else just org.
 // 12. Improved Loading UI for Events Page
+// 13. Remove the sempahores for loading JSON data
 
-// Remove the sempahores for loading JSON data
 // Empty announcement should say 'no items'
 // Make URLs hyperlinks. HTML parser?
 // Fix broken labs
@@ -210,9 +210,14 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     func loadDidView(toRemoveCount: Int? = 0) {
         
+        let group = DispatchGroup()
+        
+        for _ in 0..<calendars.count {
+            group.enter()
+        }
+        
         for (org_name, urlString) in calendars {
             let url = URL(string: urlString)!
-            let semaphore = DispatchSemaphore(value: 0)
             
             URLSession.shared.dataTask(with: url) { data, response, error in
                 if let data = data {
@@ -233,11 +238,12 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
                         print("Error with \(org_name) in parsing \(urlString) with Error:\n\(error)")
                     }
                 }
-                semaphore.signal()
+                group.leave()
             }.resume()
             
-            semaphore.wait()
         }
+        
+        group.wait()
         
         tableEvents.removeSubrange(0..<(toRemoveCount ?? 0))
         
