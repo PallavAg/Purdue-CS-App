@@ -11,16 +11,16 @@ import SafariServices
 
 class LabsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, SFSafariViewControllerDelegate {
     
-    let labs =
+    var labs =
     [
     0: ["HAAS G40", "https://www.cs.purdue.edu/cams-delayed/HAASG040.jpg", "https://www.cs.purdue.edu/resources/facilities/haasg40.html"],
-    1: ["HAAS G56", "https://www.cs.purdue.edu/cams-delayed/HAASG056.jpg", "https://www.cs.purdue.edu/resources/facilities/haasg56.html"],
-    2: ["HAAS 257", "https://www.cs.purdue.edu/cams-delayed/HAAS257.jpg", "https://www.cs.purdue.edu/resources/facilities/haas257.html"],
-    3: ["LWSN B131", "https://www.cs.purdue.edu/cams-delayed/LWSNB131.jpg", "https://www.cs.purdue.edu/resources/facilities/lwsnb131.html"],
-    4: ["LWSN B146", "https://www.cs.purdue.edu/cams-delayed/LWSNB146.jpg", "https://www.cs.purdue.edu/resources/facilities/lwsnb146.html"],
-    5: ["LWSN B148", "https://www.cs.purdue.edu/cams-delayed/LWSNB148.jpg", "https://www.cs.purdue.edu/resources/facilities/lwsnb148.html"],
-    6: ["LWSN B158", "https://www.cs.purdue.edu/cams-delayed/LWSNB158.jpg", "https://www.cs.purdue.edu/resources/facilities/lwsnb158.html"],
-    7: ["LWSN B160", "https://www.cs.purdue.edu/cams-delayed/LWSNB160.jpg", "https://www.cs.purdue.edu/resources/facilities/lwsnb160.html"]
+    7: ["HAAS G56 - Under Construction", "https://www.cs.purdue.edu/cams-delayed/HAASG056.jpg", "https://www.cs.purdue.edu/resources/facilities/haasg56.html"],
+    1: ["HAAS 257", "https://www.cs.purdue.edu/cams-delayed/HAAS257.jpg", "https://www.cs.purdue.edu/resources/facilities/haas257.html"],
+    2: ["LWSN B131", "https://www.cs.purdue.edu/cams-delayed/LWSNB131.jpg", "https://www.cs.purdue.edu/resources/facilities/lwsnb131.html"],
+    3: ["LWSN B146", "https://www.cs.purdue.edu/cams-delayed/LWSNB146.jpg", "https://www.cs.purdue.edu/resources/facilities/lwsnb146.html"],
+    4: ["LWSN B148", "https://www.cs.purdue.edu/cams-delayed/LWSNB148.jpg", "https://www.cs.purdue.edu/resources/facilities/lwsnb148.html"],
+    5: ["LWSN B158", "https://www.cs.purdue.edu/cams-delayed/LWSNB158.jpg", "https://www.cs.purdue.edu/resources/facilities/lwsnb158.html"],
+    6: ["LWSN B160", "https://www.cs.purdue.edu/cams-delayed/LWSNB160.jpg", "https://www.cs.purdue.edu/resources/facilities/lwsnb160.html"]
     ]
 
     @IBOutlet weak var tableView: UITableView!
