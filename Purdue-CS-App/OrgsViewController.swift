@@ -102,19 +102,19 @@ extension UITableView {
 // 9. Fix notifications for a changed event
 // 10. Fix Launch Screen Image
 // 11. Make org titles easier to see. 2 lines if location exists. Else just org.
+// 12. Improved Loading UI for Events Page
 
-// Improve loading of announcements page
-// Make URLs hyperlinks. HTML parser?
-// Empty announcement should say 'no items'
 // Remove the sempahores for loading JSON data
+// Empty announcement should say 'no items'
+// Make URLs hyperlinks. HTML parser?
 // Fix broken labs
 // Add Social media and USB to resources
 // Support for repeating and multi-day filtered by end instead of start
 // Parse from the different oppurtunity update page. Check for last updated?
+// Improve loading of announcements page
 class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UNUserNotificationCenterDelegate {
     
     @IBOutlet weak var tableView: UITableView!
-    @IBOutlet weak var myActivityIndicator: UIActivityIndicatorView!
     
     var calendar_ids = SearchOrgsViewController.selectedCalendars
     var calendars = [String:String]()
@@ -143,9 +143,7 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
         refreshControl.addTarget(self, action:  #selector(refreshScreen), for: .valueChanged)
         tableView.addSubview(refreshControl)
         
-        myActivityIndicator.backgroundColor = UIColor(white: 0.0, alpha: 0.4)
-        
-        self.myActivityIndicator.startAnimating()
+        showActivityIndicator("Loading Events")
         tableView.isScrollEnabled = false;
         
         if defaults.object(forKey: "IDArray") == nil {
@@ -199,7 +197,7 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
             self.loadDidView()
             
             DispatchQueue.main.async {
-                self.myActivityIndicator.stopAnimating()
+                self.removeActivityIndicator()
                 self.tableView.isScrollEnabled = true;
                 self.notInitialLoad = true
                 let range = NSMakeRange(0, self.tableView.numberOfSections)
@@ -286,7 +284,7 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
             
             tableView.isScrollEnabled = false;
             tableView.restore()
-            self.myActivityIndicator.startAnimating()
+            showActivityIndicator("Loading Events")
             
             for (calendar_name, id) in calendar_ids  {
                 calendars[calendar_name] = calendarIDtoAPI(calendar_id: id)
@@ -305,7 +303,7 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
                         }
                     }
                     
-                    self.myActivityIndicator.stopAnimating()
+                    self.removeActivityIndicator()
                     self.tableView.isScrollEnabled = true;
                     
                     let range = NSMakeRange(0, self.tableView.numberOfSections)
@@ -415,10 +413,6 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     //Handle Bell Icon
     @objc func bellClicked(sender:UIButton) {
-        
-        if myActivityIndicator.isAnimating {
-            return
-        }
         
         let center = UNUserNotificationCenter.current()
         center.delegate = self
@@ -593,5 +587,58 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
         return cell
     }
     
+    var strLabel = UILabel()
+    var effectView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
+    var activityIndicator = UIActivityIndicatorView()
+    
+    func showActivityIndicator(_ title: String) {
+        DispatchQueue.main.async { [self] in
+            view.isUserInteractionEnabled = false
+            strLabel.removeFromSuperview()
+            activityIndicator.removeFromSuperview()
+            effectView.removeFromSuperview()
+            
+            strLabel = UILabel()
+            strLabel.text = title
+            strLabel.font = .systemFont(ofSize: 14, weight: .medium)
+            strLabel.textColor = UIColor(white: 0.9, alpha: 0.7)
+            strLabel.frame = CGRect(x: 50, y: 0, width: strLabel.intrinsicContentSize.width, height: 46)
+            
+            if traitCollection.userInterfaceStyle == .light {
+                effectView = UIVisualEffectView(effect: UIBlurEffect(style: .systemMaterialLight))
+                strLabel.textColor = UIColor(white: 0.1, alpha: 0.7)
+            }
+            
+            effectView.frame = CGRect(x: view.frame.midX - (strLabel.frame.width + 66)/2, y: view.frame.midY - strLabel.frame.height/2 , width: strLabel.intrinsicContentSize.width + 66, height: 46)
+            effectView.layer.cornerRadius = 15
+            effectView.layer.masksToBounds = true
+            
+            activityIndicator = UIActivityIndicatorView(style: .medium)
+            activityIndicator.frame = CGRect(x: 0, y: 0, width: 46, height: 46)
+            activityIndicator.startAnimating()
+
+            effectView.contentView.addSubview(activityIndicator)
+            effectView.contentView.addSubview(strLabel)
+            
+            effectView.alpha = 0
+            UIView.animate(withDuration: 0.2) {
+                effectView.alpha = 1
+                view.addSubview(effectView)
+            }
+            
+        }
+    }
+    
+    // Remove activity indicator from screen and re-enable interaction
+    func removeActivityIndicator() {
+        DispatchQueue.main.async {
+            UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseIn, animations: {
+                self.effectView.alpha = 0.0
+            }, completion: { (_) in
+                self.effectView.removeFromSuperview()
+                self.view.isUserInteractionEnabled = true
+            })
+        }
+    }
     
 }

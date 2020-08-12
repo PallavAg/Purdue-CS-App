@@ -111,10 +111,6 @@
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
-                            <activityIndicatorView hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="large" id="3ip-yx-Ohz">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                            </activityIndicatorView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="lqF-0C-Ky4"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -134,7 +130,6 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="myActivityIndicator" destination="3ip-yx-Ohz" id="tvd-0m-5VB"/>
                         <outlet property="tableView" destination="yRq-Mf-u2W" id="WSY-tK-7Vp"/>
                     </connections>
                 </viewController>
