@@ -40,7 +40,7 @@ struct CalendarEvents: Decodable {
     
 }
 
-// MARK: - Features ToDo
+// MARK: - Features Updated
 // 1. Improve pull to refresh of events
 // 2. Pull to refresh on 'no events' page of table
 // 3. 'No upcoming events' to 'No orgs subscribed'
@@ -56,9 +56,10 @@ struct CalendarEvents: Decodable {
 // 13. Remove the sempahores for loading JSON data
 // 14. Empty announcement should say 'no items'
 // 15. Description Text HTML is parsed
+// 16. Fix broken labs
+// 17. Add Social media and USB to resources
 
-// Fix broken labs
-// Add Social media and USB to resources
+// Future ToDo:
 // Support for repeating and multi-day filtered by end instead of start
 // Parse from the different oppurtunity update page. Check for last updated?
 // Improve loading of announcements page
@@ -115,8 +116,10 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
                 
                 //Data found
                 calendar_ids = snapshot.value as? [String: String] ?? [String: String]()
+                calendar_ids.removeValue(forKey: "Departmental Events") // Don't add this calendar by default
                 
                 SearchOrgsViewController.selectedCalendars = calendar_ids
+                
                 defaults.set(SearchOrgsViewController.selectedCalendars, forKey: "OrgsArray")
                 
                 initializeCalendarArray()

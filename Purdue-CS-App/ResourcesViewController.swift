@@ -12,9 +12,9 @@ import SafariServices
 //Add Lab Availabilities
 class ResourcesViewController: UITableViewController, SFSafariViewControllerDelegate {
     
-    let labels = ["View Lab Availabilities", "Lawson Hours & Key Fob", "Lawson Resources", "Lawson Map", "CS News", "CS Concern Form", "Feedback", "About"];
+    let labels = ["View Lab Availabilities", "Lawson Hours & Key Fob", "Lawson Resources", "Lawson Map", "CS News", "CS Concern Form", "Undergraduate Student Board", "Feedback", "CS Deparment Socials", "About"];
     
-    let images = [UIImage(systemName: "desktopcomputer"), UIImage(systemName: "antenna.radiowaves.left.and.right"), UIImage(systemName:"globe"), UIImage(systemName:"map"), UIImage(systemName:"book"), UIImage(systemName:"paperplane"), UIImage(systemName:"mic"), UIImage(systemName:"info.circle")];
+    let images = [UIImage(systemName: "desktopcomputer"), UIImage(systemName: "antenna.radiowaves.left.and.right"), UIImage(systemName:"globe"), UIImage(systemName:"map"), UIImage(systemName:"book"), UIImage(systemName:"paperplane"), UIImage(systemName: "person.3"), UIImage(systemName:"mic"), UIImage(systemName: "square.and.arrow.up"), UIImage(systemName:"info.circle")];
     
     let hyperlinks = ["",
                       "https://www.cs.purdue.edu/resources/docs/building_hours.pdf",
@@ -22,16 +22,13 @@ class ResourcesViewController: UITableViewController, SFSafariViewControllerDele
                       "https://www.cs.purdue.edu/resources/lawson.html",
                       "https://www.cs.purdue.edu/news/index.html",
                       "https://my.cs.purdue.edu/undergraduate/concern",
-                      "https://forms.gle/6d6nWN58j3DB38mR9"];
+                      "https://bit.ly/USBCS",
+                      "https://forms.gle/8tjaHyqiZdtQzYYB9"];
     
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.tableFooterView = UIView()
         tableView.rowHeight = 100;
-    }
-    
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -49,14 +46,18 @@ class ResourcesViewController: UITableViewController, SFSafariViewControllerDele
         
         tableView.deselectRow(at:indexPath, animated:true)
         
-        if indexPath.row == labels.count - 1 {
+        if labels[indexPath.row] == "About" {
             tableView.deselectRow(at:indexPath, animated:true)
             let alert = UIAlertController(title:"About", message:"This is an app to allow students in Computer Science at Purdue University to read the Oppurtunity Update, stay up to date on events by CS Organizations, and get CS Resources. Notifications are sent 30 minutes before an event. Brought to you by Pallav Agarwal, Viraat Das and Kedar Abhyankar.", preferredStyle: .alert)
             alert.addAction(UIAlertAction(title:"Ok", style: .default, handler:nil))
             present(alert, animated:true);
-        } else if indexPath.row == 0 {
+        } else if labels[indexPath.row] == "View Lab Availabilities" {
             
             performSegue(withIdentifier: "ShowLabs", sender: nil)
+            
+        } else if labels[indexPath.row] == "Deparment Socials" {
+            
+            performSegue(withIdentifier: "ShowSocials", sender: nil)
             
         } else {
             let url = URL(string: hyperlinks[indexPath.row])
