@@ -104,8 +104,8 @@ extension UITableView {
 // 11. Make org titles easier to see. 2 lines if location exists. Else just org.
 // 12. Improved Loading UI for Events Page
 // 13. Remove the sempahores for loading JSON data
+// 14. Empty announcement should say 'no items'
 
-// Empty announcement should say 'no items'
 // Make URLs hyperlinks. HTML parser?
 // Fix broken labs
 // Add Social media and USB to resources

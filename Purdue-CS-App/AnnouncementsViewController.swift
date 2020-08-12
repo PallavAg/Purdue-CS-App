@@ -159,8 +159,13 @@ class AnnouncementsViewController: UIViewController, UITableViewDelegate, UITabl
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if tableViewData[section].opened == true {
             
+            // Show 'no items' if a certain section is empty
+            if tableViewData[section].sectionData.count == 0 {
+                return tableViewData[section].sectionData.count + 2
+            }
+            
             //Return the number of items in the section of 'section'
-            return tableViewData[section].sectionData.count+1
+            return tableViewData[section].sectionData.count + 1
         } else {
             //Return 1 for the header if the section is closed
             return 1
@@ -189,8 +194,14 @@ class AnnouncementsViewController: UIViewController, UITableViewDelegate, UITabl
             //Using different cell identifier here for subsections. Cell is subsection.
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "SubCell") else {return UITableViewCell()}
             
-            //Text is the section's sectionData at the row
-            cell.textLabel?.text = tableViewData[indexPath.section].sectionData[dataIndex]
+            if tableViewData[indexPath.section].sectionData.count == 0 {
+                cell.textLabel?.text = "No Items"
+                cell.accessoryType = .none
+                cell.isUserInteractionEnabled = false
+            } else {
+                //Text is the section's sectionData at the row
+                cell.textLabel?.text = tableViewData[indexPath.section].sectionData[dataIndex]
+            }
             
             return cell
         }
