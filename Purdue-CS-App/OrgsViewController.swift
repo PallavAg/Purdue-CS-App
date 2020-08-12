@@ -40,56 +40,6 @@ struct CalendarEvents: Decodable {
     
 }
 
-extension Date {
-    func toString(dateFormat format: String) -> String {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = format
-        return dateFormatter.string(from: self)
-    }
-    
-    func getFormat() -> String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd"
-        formatter.timeZone = NSTimeZone.system
-        formatter.locale = Locale(identifier: "en_US_POSIX")
-        return formatter.string(from: Date()) + "T00:00:00.000Z"
-    }
-    
-}
-
-extension UITableView {
-    func setEmptyView(title: String, message: String) {
-        let emptyView = UIView(frame: CGRect(x: self.center.x, y: self.center.y, width: self.bounds.size.width, height: self.bounds.size.height))
-        let titleLabel = UILabel()
-        let messageLabel = UILabel()
-        titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        messageLabel.translatesAutoresizingMaskIntoConstraints = false
-        titleLabel.textColor = UIColor.lightGray
-        titleLabel.font = UIFont(name: "HelveticaNeue-Bold", size: 18)
-        messageLabel.textColor = UIColor.lightGray
-        messageLabel.font = UIFont(name: "HelveticaNeue-Regular", size: 17)
-        emptyView.addSubview(titleLabel)
-        emptyView.addSubview(messageLabel)
-        titleLabel.centerYAnchor.constraint(equalTo: emptyView.centerYAnchor).isActive = true
-        titleLabel.centerXAnchor.constraint(equalTo: emptyView.centerXAnchor).isActive = true
-        messageLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 10).isActive = true
-        messageLabel.leftAnchor.constraint(equalTo: emptyView.leftAnchor, constant: 10).isActive = true
-        messageLabel.rightAnchor.constraint(equalTo: emptyView.rightAnchor, constant: -10).isActive = true
-        titleLabel.text = title
-        messageLabel.text = message
-        messageLabel.numberOfLines = 0
-        messageLabel.textAlignment = .center
-        self.backgroundView = emptyView
-        self.separatorStyle = .none
-    }
-    
-    func restore() {
-        self.backgroundView = nil
-        self.separatorStyle = .singleLine
-        //self.isScrollEnabled = true;
-    }
-}
-
 // MARK: - Features ToDo
 // 1. Improve pull to refresh of events
 // 2. Pull to refresh on 'no events' page of table
@@ -105,8 +55,8 @@ extension UITableView {
 // 12. Improved Loading UI for Events Page
 // 13. Remove the sempahores for loading JSON data
 // 14. Empty announcement should say 'no items'
+// 15. Description Text HTML is parsed
 
-// Make URLs hyperlinks. HTML parser?
 // Fix broken labs
 // Add Social media and USB to resources
 // Support for repeating and multi-day filtered by end instead of start
@@ -549,8 +499,8 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
             cell.dateLabel.text = startDate.toString(dateFormat: "E, MMM d, yyyy")
         }
         
-        //Description
-        cell.descriptionLabel.text = event.description
+        //Description with removed HTML Tags
+        cell.descriptionLabel.text = event.description?.htmlToString.trimmingCharacters(in: .whitespacesAndNewlines)
         
         //Location and Organization
         let boldAttribute = [NSAttributedString.Key.font: UIFont(name: "HelveticaNeue-Bold", size: 12.0)!]
@@ -647,4 +597,68 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
         }
     }
     
+}
+
+extension Date {
+    func toString(dateFormat format: String) -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = format
+        return dateFormatter.string(from: self)
+    }
+    
+    func getFormat() -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd"
+        formatter.timeZone = NSTimeZone.system
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        return formatter.string(from: Date()) + "T00:00:00.000Z"
+    }
+    
+}
+
+extension UITableView {
+    func setEmptyView(title: String, message: String) {
+        let emptyView = UIView(frame: CGRect(x: self.center.x, y: self.center.y, width: self.bounds.size.width, height: self.bounds.size.height))
+        let titleLabel = UILabel()
+        let messageLabel = UILabel()
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        messageLabel.translatesAutoresizingMaskIntoConstraints = false
+        titleLabel.textColor = UIColor.lightGray
+        titleLabel.font = UIFont(name: "HelveticaNeue-Bold", size: 18)
+        messageLabel.textColor = UIColor.lightGray
+        messageLabel.font = UIFont(name: "HelveticaNeue-Regular", size: 17)
+        emptyView.addSubview(titleLabel)
+        emptyView.addSubview(messageLabel)
+        titleLabel.centerYAnchor.constraint(equalTo: emptyView.centerYAnchor).isActive = true
+        titleLabel.centerXAnchor.constraint(equalTo: emptyView.centerXAnchor).isActive = true
+        messageLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 10).isActive = true
+        messageLabel.leftAnchor.constraint(equalTo: emptyView.leftAnchor, constant: 10).isActive = true
+        messageLabel.rightAnchor.constraint(equalTo: emptyView.rightAnchor, constant: -10).isActive = true
+        titleLabel.text = title
+        messageLabel.text = message
+        messageLabel.numberOfLines = 0
+        messageLabel.textAlignment = .center
+        self.backgroundView = emptyView
+        self.separatorStyle = .none
+    }
+    
+    func restore() {
+        self.backgroundView = nil
+        self.separatorStyle = .singleLine
+        //self.isScrollEnabled = true;
+    }
+}
+
+extension String {
+    var htmlToAttributedString: NSAttributedString? {
+        guard let data = data(using: .utf8) else { return nil }
+        do {
+            return try NSAttributedString(data: data, options: [.documentType: NSAttributedString.DocumentType.html, .characterEncoding:String.Encoding.utf8.rawValue], documentAttributes: nil)
+        } catch {
+            return nil
+        }
+    }
+    var htmlToString: String {
+        return htmlToAttributedString?.string ?? ""
+    }
 }
