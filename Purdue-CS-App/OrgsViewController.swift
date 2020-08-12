@@ -101,8 +101,8 @@ extension UITableView {
 // 8. Fix for when a calendar is removed
 // 9. Fix notifications for a changed event
 // 10. Fix Launch Screen Image
+// 11. Make org titles easier to see. 2 lines if location exists. Else just org.
 
-// Make org titles easier to see. 2 lines if location exists. Else just org.
 // Improve loading of announcements page
 // Make URLs hyperlinks. HTML parser?
 // Empty announcement should say 'no items'
@@ -142,6 +142,8 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
         // Setup Pull to Refresh
         refreshControl.addTarget(self, action:  #selector(refreshScreen), for: .valueChanged)
         tableView.addSubview(refreshControl)
+        
+        myActivityIndicator.backgroundColor = UIColor(white: 0.0, alpha: 0.4)
         
         self.myActivityIndicator.startAnimating()
         tableView.isScrollEnabled = false;
@@ -413,6 +415,10 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     //Handle Bell Icon
     @objc func bellClicked(sender:UIButton) {
+        
+        if myActivityIndicator.isAnimating {
+            return
+        }
         
         let center = UNUserNotificationCenter.current()
         center.delegate = self
