@@ -55,7 +55,7 @@ class ResourcesViewController: UITableViewController, SFSafariViewControllerDele
             
             performSegue(withIdentifier: "ShowLabs", sender: nil)
             
-        } else if labels[indexPath.row] == "Deparment Socials" {
+        } else if labels[indexPath.row] == "CS Deparment Socials" {
             
             performSegue(withIdentifier: "ShowSocials", sender: nil)
             
