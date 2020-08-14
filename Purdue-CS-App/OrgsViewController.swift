@@ -60,6 +60,7 @@ struct CalendarEvents: Decodable {
 // 17. Add Social media and USB to resources
 
 // Future ToDo:
+// Support for sorting events
 // Support for repeating and multi-day filtered by end instead of start
 // Parse from the different oppurtunity update page. Check for last updated?
 // Improve loading of announcements page
@@ -69,8 +70,6 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     var calendar_ids = SearchOrgsViewController.selectedCalendars
     var calendars = [String:String]()
-    
-    var allResults: [CalendarEvents.Items] = []
     
     var tableEvents: [CalendarEvents.Items] = [] //Each event in calendar
     
@@ -161,8 +160,9 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
         }
     }
     
-    func loadDidView(toRemoveCount: Int? = 0) {
+    func loadDidView() {
         
+        var newtableEvents: [CalendarEvents.Items] = []
         let group = DispatchGroup()
         
         for _ in 0..<calendars.count {
@@ -185,7 +185,7 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
                             }
                         }
                         
-                        self.tableEvents.append(contentsOf: events.items)
+                        newtableEvents.append(contentsOf: events.items)
                         
                     } catch let error {
                         print("Error with \(org_name) in parsing \(urlString) with Error:\n\(error)")
@@ -198,17 +198,15 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         group.wait()
         
-        tableEvents.removeSubrange(0..<(toRemoveCount ?? 0))
-        
         //Sort items by start date
-        tableEvents.sort { (left, right) -> Bool in
+        newtableEvents.sort { (left, right) -> Bool in
             return getStartDate(event: left).timeIntervalSinceNow < getStartDate(event: right).timeIntervalSinceNow
         }
         
         //Remove all items before today's date
-        tableEvents.removeAll (where: { getStartDate(event: $0).timeIntervalSinceNow < Calendar.current.startOfDay(for: Date()).timeIntervalSinceNow })
+        newtableEvents.removeAll (where: { getStartDate(event: $0).timeIntervalSinceNow < Calendar.current.startOfDay(for: Date()).timeIntervalSinceNow })
         
-        allResults = tableEvents
+        tableEvents = newtableEvents
         
     }
     
@@ -216,8 +214,9 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         DispatchQueue.global(qos: .background).async { [self] in
             
-            loadDidView(toRemoveCount: tableEvents.count)
+            loadDidView()
             
+            // Remove any events whose calendars no longer exists
             for (index, event) in tableEvents.enumerated().reversed() {
                 if calendar_ids[event.organization ?? ""] == nil {
                     tableEvents.remove(at: index)
