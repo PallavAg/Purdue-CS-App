@@ -60,6 +60,9 @@ struct CalendarEvents: Decodable {
 // 17. Add Social media and USB to resources
 
 // Future ToDo:
+// Firebase support
+// Reload table when the view is opened from app launch
+// Make location a tappable link
 // Support for sorting events
 // Support for repeating and multi-day filtered by end instead of start
 // Parse from the different oppurtunity update page. Check for last updated?
@@ -114,14 +117,14 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
                 }
                 
                 //Data found
-                calendar_ids = snapshot.value as? [String: String] ?? [String: String]()
-                calendar_ids.removeValue(forKey: "Departmental Events") // Don't add this calendar by default
+                self.calendar_ids = snapshot.value as? [String: String] ?? [String: String]()
+                self.calendar_ids.removeValue(forKey: "Departmental Events") // Don't add this calendar by default
                 
-                SearchOrgsViewController.selectedCalendars = calendar_ids
+                SearchOrgsViewController.selectedCalendars = self.calendar_ids
                 
-                defaults.set(SearchOrgsViewController.selectedCalendars, forKey: "OrgsArray")
+                self.defaults.set(SearchOrgsViewController.selectedCalendars, forKey: "OrgsArray")
                 
-                initializeCalendarArray()
+                self.initializeCalendarArray()
             })
             
         } else {
@@ -214,16 +217,16 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         DispatchQueue.global(qos: .background).async { [self] in
             
-            loadDidView()
+            self.loadDidView()
             
             // Remove any events whose calendars no longer exists
-            for (index, event) in tableEvents.enumerated().reversed() {
-                if calendar_ids[event.organization ?? ""] == nil {
-                    tableEvents.remove(at: index)
+            for (index, event) in self.tableEvents.enumerated().reversed() {
+                if self.calendar_ids[event.organization ?? ""] == nil {
+                    self.tableEvents.remove(at: index)
                 }
             }
             DispatchQueue.main.async {
-                refreshControl.endRefreshing()
+                self.refreshControl.endRefreshing()
                 let range = NSMakeRange(0, self.tableView.numberOfSections)
                 let sections = NSIndexSet(indexesIn: range)
                 UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
@@ -404,12 +407,12 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
                             
                             //Save ID
                             let buttonRow = sender.tag
-                            let event = tableEvents[buttonRow]
+                            let event = self.tableEvents[buttonRow]
                             
                             let eventID = event.id
                             let filledImage = UIImage(systemName: "bell.fill")
                             let emptyImage = UIImage(systemName: "bell.slash")
-                            var savedIDs = defaults.object(forKey: "IDsArray") as? [String] ?? [String]()
+                            var savedIDs = self.defaults.object(forKey: "IDsArray") as? [String] ?? [String]()
                             
                             let generator = UIImpactFeedbackGenerator(style: .medium)
                             generator.impactOccurred()
@@ -424,16 +427,16 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
                                 savedIDs.append(eventID)
                                 sender.setImage(filledImage, for: .normal)
                                 
-                                setupNotification(dateInput: getStartDate(event: event), event: event)
+                                self.setupNotification(dateInput: self.getStartDate(event: event), event: event)
                             }
                             
-                            defaults.set(savedIDs, forKey: "IDsArray")
+                            self.defaults.set(savedIDs, forKey: "IDsArray")
                             
                         } else {
                             UINotificationFeedbackGenerator().notificationOccurred(.error)
                             let alert = UIAlertController(title:"Turn on Notifications", message:"To get event notifications. Please allow notifications in Settings.", preferredStyle: .alert)
                             alert.addAction(UIAlertAction(title:"Ok", style: .default, handler:nil))
-                            present(alert, animated:true);
+                            self.present(alert, animated:true);
                         }
                     }
                     
@@ -551,37 +554,37 @@ class OrgsViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     func showActivityIndicator(_ title: String) {
         DispatchQueue.main.async { [self] in
-            view.isUserInteractionEnabled = false
-            strLabel.removeFromSuperview()
-            activityIndicator.removeFromSuperview()
-            effectView.removeFromSuperview()
+            self.view.isUserInteractionEnabled = false
+            self.strLabel.removeFromSuperview()
+            self.activityIndicator.removeFromSuperview()
+            self.effectView.removeFromSuperview()
             
-            strLabel = UILabel()
-            strLabel.text = title
-            strLabel.font = .systemFont(ofSize: 14, weight: .medium)
-            strLabel.textColor = UIColor(white: 0.9, alpha: 0.7)
-            strLabel.frame = CGRect(x: 50, y: 0, width: strLabel.intrinsicContentSize.width, height: 46)
+            self.strLabel = UILabel()
+            self.strLabel.text = title
+            self.strLabel.font = .systemFont(ofSize: 14, weight: .medium)
+            self.strLabel.textColor = UIColor(white: 0.9, alpha: 0.7)
+            self.strLabel.frame = CGRect(x: 50, y: 0, width: self.strLabel.intrinsicContentSize.width, height: 46)
             
-            if traitCollection.userInterfaceStyle == .light {
-                effectView = UIVisualEffectView(effect: UIBlurEffect(style: .systemMaterialLight))
-                strLabel.textColor = UIColor(white: 0.1, alpha: 0.7)
+            if self.traitCollection.userInterfaceStyle == .light {
+                self.effectView = UIVisualEffectView(effect: UIBlurEffect(style: .systemMaterialLight))
+                self.strLabel.textColor = UIColor(white: 0.1, alpha: 0.7)
             }
             
-            effectView.frame = CGRect(x: view.frame.midX - (strLabel.frame.width + 66)/2, y: view.frame.midY - strLabel.frame.height/2 , width: strLabel.intrinsicContentSize.width + 66, height: 46)
-            effectView.layer.cornerRadius = 15
-            effectView.layer.masksToBounds = true
+            self.effectView.frame = CGRect(x: self.view.frame.midX - (self.strLabel.frame.width + 66)/2, y: self.view.frame.midY - self.strLabel.frame.height/2 , width: self.strLabel.intrinsicContentSize.width + 66, height: 46)
+            self.effectView.layer.cornerRadius = 15
+            self.effectView.layer.masksToBounds = true
             
-            activityIndicator = UIActivityIndicatorView(style: .medium)
-            activityIndicator.frame = CGRect(x: 0, y: 0, width: 46, height: 46)
-            activityIndicator.startAnimating()
+            self.activityIndicator = UIActivityIndicatorView(style: .medium)
+            self.activityIndicator.frame = CGRect(x: 0, y: 0, width: 46, height: 46)
+            self.activityIndicator.startAnimating()
 
-            effectView.contentView.addSubview(activityIndicator)
-            effectView.contentView.addSubview(strLabel)
+            self.effectView.contentView.addSubview(self.activityIndicator)
+            self.effectView.contentView.addSubview(self.strLabel)
             
-            effectView.alpha = 0
+            self.effectView.alpha = 0
             UIView.animate(withDuration: 0.2) {
-                effectView.alpha = 1
-                view.addSubview(effectView)
+                self.effectView.alpha = 1
+                self.view.addSubview(self.effectView)
             }
             
         }

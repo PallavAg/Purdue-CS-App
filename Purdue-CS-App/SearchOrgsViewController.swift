@@ -42,20 +42,20 @@ class SearchOrgsViewController: UIViewController, UITableViewDelegate, UITableVi
             
             //Handle data not found
             if !snapshot.exists() {
-                showActivityIndicator("Error. Please contact Support.")
+                self.showActivityIndicator("Error. Please contact Support.")
                 return
             }
             
             //Fetch data
-            calendar_ids = snapshot.value as? [String: String] ?? [String: String]()
+            self.calendar_ids = snapshot.value as? [String: String] ?? [String: String]()
             
-            calendarNames = Array(calendar_ids.keys)
-            calendarNames.sort()
+            self.calendarNames = Array(self.calendar_ids.keys)
+            self.calendarNames.sort()
             
             // Remove any calendars that were previously selected that no longer exist
             for (name, ID) in SearchOrgsViewController.selectedCalendars {
                 // If the name or ID no longer exists, it is no longer selected
-                if calendar_ids[name] == nil || calendar_ids[name] != ID {
+                if self.calendar_ids[name] == nil || self.calendar_ids[name] != ID {
                     SearchOrgsViewController.selectedCalendars.removeValue(forKey: name)
                 }
             }
@@ -66,7 +66,7 @@ class SearchOrgsViewController: UIViewController, UITableViewDelegate, UITableVi
             DispatchQueue.main.async {
                 self.tableView.reloadSections(sections as IndexSet, with: .automatic)
             }
-            removeActivityIndicator()
+            self.removeActivityIndicator()
             
         })
     }
@@ -119,37 +119,37 @@ class SearchOrgsViewController: UIViewController, UITableViewDelegate, UITableVi
     
     func showActivityIndicator(_ title: String) {
         DispatchQueue.main.async { [self] in
-            view.isUserInteractionEnabled = false
-            strLabel.removeFromSuperview()
-            activityIndicator.removeFromSuperview()
-            effectView.removeFromSuperview()
+            self.view.isUserInteractionEnabled = false
+            self.strLabel.removeFromSuperview()
+            self.activityIndicator.removeFromSuperview()
+            self.effectView.removeFromSuperview()
             
-            strLabel = UILabel()
-            strLabel.text = title
-            strLabel.font = .systemFont(ofSize: 14, weight: .medium)
-            strLabel.textColor = UIColor(white: 0.9, alpha: 0.7)
-            strLabel.frame = CGRect(x: 50, y: 0, width: strLabel.intrinsicContentSize.width, height: 46)
+            self.strLabel = UILabel()
+            self.strLabel.text = title
+            self.strLabel.font = .systemFont(ofSize: 14, weight: .medium)
+            self.strLabel.textColor = UIColor(white: 0.9, alpha: 0.7)
+            self.strLabel.frame = CGRect(x: 50, y: 0, width: self.strLabel.intrinsicContentSize.width, height: 46)
             
-            if traitCollection.userInterfaceStyle == .light {
-                effectView = UIVisualEffectView(effect: UIBlurEffect(style: .systemMaterialLight))
-                strLabel.textColor = UIColor(white: 0.1, alpha: 0.7)
+            if self.traitCollection.userInterfaceStyle == .light {
+                self.effectView = UIVisualEffectView(effect: UIBlurEffect(style: .systemMaterialLight))
+                self.strLabel.textColor = UIColor(white: 0.1, alpha: 0.7)
             }
             
-            effectView.frame = CGRect(x: view.frame.midX - (strLabel.frame.width + 66)/2, y: view.frame.midY - strLabel.frame.height/2 , width: strLabel.intrinsicContentSize.width + 66, height: 46)
-            effectView.layer.cornerRadius = 15
-            effectView.layer.masksToBounds = true
+            self.effectView.frame = CGRect(x: self.view.frame.midX - (self.strLabel.frame.width + 66)/2, y: self.view.frame.midY - self.strLabel.frame.height/2 , width: self.strLabel.intrinsicContentSize.width + 66, height: 46)
+            self.effectView.layer.cornerRadius = 15
+            self.effectView.layer.masksToBounds = true
             
-            activityIndicator = UIActivityIndicatorView(style: .medium)
-            activityIndicator.frame = CGRect(x: 0, y: 0, width: 46, height: 46)
-            activityIndicator.startAnimating()
+            self.activityIndicator = UIActivityIndicatorView(style: .medium)
+            self.activityIndicator.frame = CGRect(x: 0, y: 0, width: 46, height: 46)
+            self.activityIndicator.startAnimating()
 
-            effectView.contentView.addSubview(activityIndicator)
-            effectView.contentView.addSubview(strLabel)
+            self.effectView.contentView.addSubview(self.activityIndicator)
+            self.effectView.contentView.addSubview(self.strLabel)
             
-            effectView.alpha = 0
+            self.effectView.alpha = 0
             UIView.animate(withDuration: 0.2) {
-                effectView.alpha = 1
-                view.addSubview(effectView)
+                self.effectView.alpha = 1
+                self.view.addSubview(self.effectView)
             }
             
         }
